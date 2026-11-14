@@ -28,40 +28,39 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 @media(min-width:1400px){.rail{grid-auto-columns:calc((100% - 64px)/5)}}
 @media(min-width:601px) and (max-width:1100px){.catalog-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 
-/* Unified LIS smoked-glass system — warm graphite/olive tint */
+/* Unified neutral transparent smoked-glass system */
 :root{
-  --glass:rgba(34,35,29,.48);
-  --panel:rgba(31,32,27,.54);
-  --line:rgba(190,164,112,.25);
+  --glass:rgba(28,30,34,.34);
+  --panel:rgba(28,30,34,.38);
+  --line:rgba(255,255,255,.22);
 }
 .header-action,.btn,.pill,.season,.episode,.channel,.searchbox,
 .select-wrap select,.panel,.info-item,.profile-menu button,.list-row,
 .tag,.rating,.quality,.year,.bottom-nav{
-  background:linear-gradient(135deg,rgba(77,72,52,.42),rgba(20,23,21,.58) 55%,rgba(58,55,42,.38)) !important;
-  border:1px solid rgba(190,164,112,.30) !important;
-  -webkit-backdrop-filter:blur(28px) saturate(145%) !important;
-  backdrop-filter:blur(28px) saturate(145%) !important;
-  box-shadow:inset 0 1px 1px rgba(255,244,211,.16),inset 0 -1px 0 rgba(255,255,255,.035),0 10px 28px rgba(0,0,0,.22);
+  background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(125,132,145,.09) 52%,rgba(255,255,255,.12)) !important;
+  border:1px solid rgba(255,255,255,.24) !important;
+  -webkit-backdrop-filter:blur(30px) saturate(165%) !important;
+  backdrop-filter:blur(30px) saturate(165%) !important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.23),inset 0 -1px 0 rgba(255,255,255,.07),0 10px 28px rgba(0,0,0,.22);
 }
 .btn.primary,.pill.active,.season.active,.episode.active,.channel.active{
-  color:#f4e6bd !important;
-  background:linear-gradient(135deg,rgba(123,101,57,.48),rgba(38,39,31,.70) 60%,rgba(90,76,48,.42)) !important;
-  border-color:rgba(224,188,105,.52) !important;
-  box-shadow:inset 0 1px 1px rgba(255,235,180,.24),inset 0 -1px 0 rgba(255,255,255,.05),0 8px 24px rgba(0,0,0,.24) !important;
+  color:#fff !important;
+  background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(170,177,190,.14) 55%,rgba(255,255,255,.18)) !important;
+  border-color:rgba(255,255,255,.34) !important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.24) !important;
 }
 .bottom-nav{
-  background:linear-gradient(115deg,rgba(56,53,40,.78),rgba(19,25,22,.78) 52%,rgba(57,52,39,.76)) !important;
-  border:1px solid rgba(190,164,112,.42) !important;
-  box-shadow:inset 0 1px 1px rgba(255,245,215,.20),inset 0 -1px 0 rgba(255,255,255,.06),0 14px 40px rgba(0,0,0,.38) !important;
+  background:linear-gradient(115deg,rgba(255,255,255,.19),rgba(104,111,124,.13) 52%,rgba(255,255,255,.16)) !important;
+  border:1px solid rgba(255,255,255,.30) !important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.27),inset 0 -1px 0 rgba(255,255,255,.08),0 14px 40px rgba(0,0,0,.38) !important;
 }
-.nav-item{color:rgba(238,235,221,.84)}
+.nav-item{color:rgba(245,246,249,.82)}
 .nav-item.active{
-  color:#f4c84f !important;
-  background:linear-gradient(145deg,rgba(121,96,48,.54),rgba(66,58,39,.62)) !important;
-  border:1px solid rgba(224,188,105,.30) !important;
-  box-shadow:inset 0 1px 1px rgba(255,239,190,.22),0 4px 18px rgba(0,0,0,.20) !important;
+  color:#17191e !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(210,216,226,.58)) !important;
+  border:1px solid rgba(255,255,255,.42) !important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.72),0 4px 18px rgba(0,0,0,.20) !important;
 }
-.nav-item.active svg{color:#f4c84f}
 </style></head><body>
 <main id="app"></main>
 <nav class="bottom-nav" id="bottomNav" aria-label="Основная навигация">
