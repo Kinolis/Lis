@@ -63,9 +63,61 @@ function setActive(){document.querySelectorAll('.nav-item').forEach(b=>b.classLi
 function go(p){page=p;setActive();render();window.scrollTo({top:0,behavior:'smooth'})}
 function render(){const app=document.getElementById('app');if(page==='Главная')app.innerHTML=home();else if(page==='Каталог')app.innerHTML=catalog();else if(page==='Поиск')app.innerHTML=searchPage();else if(page==='Моё')app.innerHTML=myPage();else if(page==='Профиль')app.innerHTML=profilePage();else if(page==='ТВ')app.innerHTML=tvPage();else app.innerHTML=home()}
 function home(){let h=movies[heroIndex%10];return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span><span>'+h.genre+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+heroIndex+')">▶ Смотреть</button><button class="btn" onclick="toggleSave('+heroIndex+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:10},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',[movies[0],movies[3],movies[4]])+rail('Популярное',movies.slice(0,8))+rail('Новинки',movies.slice(1,9))+rail('Рекомендации',movies.slice(4,12))+rail('Фильмы',movies.filter(x=>x.type==='Фильм'))+rail('Сериалы',movies.filter(x=>x.type==='Сериал'))+rail('Лучшие оценки',[...movies].sort((a,b)=>b.rating-a.rating).slice(0,8))+rail('Скоро выйдут',movies.slice(10,15))+rail('Подборки по жанрам',movies.slice(2,10))+rail('Смотреть позже',later.map(i=>movies[i]))+'</div>'}
-function catalog(){let types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'];let typeMap={'Фильмы':'Фильм','Сериалы':'Сериал','Мультфильмы':'Мультфильм','Аниме':'Аниме','Шоу':'Шоу'};let list=activeType==='ТВ'?[]:movies.filter(m=>m.type===typeMap[activeType]);return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" onclick="activeType=\''+t+'\';render()">'+t+'</button>').join('')+'</div><div class="toolbar"><strong>Все '+activeType.toLowerCase()+'</strong><div class="filters"><button class="pill">Фильтры</button><button class="pill">Сортировка</button></div></div>'+(activeType==='ТВ'?'<button class="btn primary" onclick="go(\'ТВ\')">Открыть телеканалы →</button>':'<div class="catalog-grid">'+list.map(card).join('')+'</div>')+'</div>'}
-function searchPage(){let types=['Фильм','Сериал','Мультфильм','Аниме','Шоу','ТВ'];let q=query.toLowerCase();let filtered=movies.filter(m=>m.title.toLowerCase().includes(q));return '<div class="content"><h1 class="page-title">Поиск</h1><input class="searchbox" placeholder="Название фильма, сериала или другого контента" value="'+query.replace(/"/g,'&quot;')+'" oninput="query=this.value;renderSearchResults()"><div id="searchResults" class="search-results">'+(query?types.map(t=>rail(t==='Фильм'?'Фильмы':t==='Сериал'?'Сериалы':t==='ТВ'?'ТВ':t,filtered.filter(m=>m.type===t))).join(''):'<p class="muted">Начни вводить название — результаты появятся здесь.</p>')+'</div>'+(history.length?'<div class="section"><div class="section-head"><h2>История поиска</h2><button class="text-btn" onclick="history=[];localStorage.removeItem(\'lis-history\');render()">Очистить</button></div>'+history.map(q=>'<button class="pill" onclick="query=\''+q.replace(/'/g,'\\\'')+'\';render()">'+q+'</button>').join(' ')+'</div>':'')+'</div>'}
-function renderSearchResults(){let inp=document.querySelector('.searchbox');if(inp){query=inp.value;let res=document.getElementById('searchResults');let types=['Фильм','Сериал','Мультфильм','Аниме','Шоу','ТВ'];let filtered=movies.filter(m=>m.title.toLowerCase().includes(query.toLowerCase()));res.innerHTML=query?types.map(t=>rail(t==='Фильм'?'Фильмы':t==='Сериал'?'Сериалы':t,filtered.filter(m=>m.type===t))).join(''):'<p class="muted">Начни вводить название — результаты появятся здесь.</p>';}}
+let liveMovies=[],liveShows=[],liveTop=[],liveUpcoming=[],searchTimer=null;
+function fromTMDB(item,kind){
+  const isTV=kind==='tv';
+  const date=item.release_date||'';
+  return {id:item.id,title:item.title||'',year:date?date.slice(0,4):'—',type:isTV?'Сериал':'Фильм',rating:Number(item.vote_average||0).toFixed(1),quality:'',genre:'',poster:(item.poster_path||'').replace(/^\\//,''),back:(item.backdrop_path||item.poster_path||'').replace(/^\\//,''),desc:item.overview||'',tmdbId:item.id,mediaType:kind};
+}
+async function tmdbList(kind,category='popular',pageNo=1){
+  const r=await fetch('/api/tmdb?action=discover&type='+kind+'&category='+category+'&page='+pageNo);
+  if(!r.ok) throw new Error('TMDB '+r.status);
+  const d=await r.json();return (d.results||[]).map(x=>fromTMDB(x,kind));
+}
+async function loadRealCatalog(){
+  try{
+    const [films,shows,top,upcoming]=await Promise.all([
+      tmdbList('movie','popular'),tmdbList('tv','popular'),tmdbList('movie','top_rated'),tmdbList('movie','upcoming')
+    ]);
+    liveMovies=films;liveShows=shows;liveTop=top;liveUpcoming=upcoming;
+    const all=[...films,...shows];
+    const seen=new Set();const merged=all.filter(m=>{const k=m.mediaType+':'+m.tmdbId;if(seen.has(k))return false;seen.add(k);return true;});
+    movies.splice(0,movies.length,...merged);
+    if(page==='Главная'||page==='Каталог')render();
+  }catch(e){console.warn('TMDB catalog unavailable',e);}
+}
+function catalog(){
+  let types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'];
+  let list=activeType==='ТВ'?[]:activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveMovies.filter(m=>false):activeType==='Аниме'?liveShows.filter(m=>false):[];
+  const label=activeType==='Фильмы'?'Фильмы':activeType==='Сериалы'?'Сериалы':activeType;
+  return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" onclick="activeType=\\''+t+'\\';render()">'+t+'</button>').join('')+'</div><div class="toolbar"><strong>'+(activeType==='ТВ'?'Телевидение':'Популярное · '+label.toLowerCase())+'</strong><div class="filters"><button class="pill">Фильтры</button><button class="pill">Сортировка</button></div></div>'+(activeType==='ТВ'?'<button class="btn primary" onclick="go(\\'ТВ\\')">Открыть телеканалы →</button>':'<div class="catalog-grid">'+(list.length?list.map(card).join(''):'<p class="muted">В этой категории пока нет отдельной подборки TMDB.</p>')+'</div><button class="btn" style="margin-top:22px" onclick="loadMoreCatalog()">Загрузить ещё</button>')+'</div>';
+}
+async function loadMoreCatalog(){
+  const kind=activeType==='Сериалы'?'tv':'movie';
+  const list=await tmdbList(kind,'popular',2);
+  const target=kind==='tv'?liveShows:liveMovies;target.push(...list);movies.push(...list);render();
+}
+function searchPage(){
+  return '<div class="content"><h1 class="page-title">Поиск</h1><input class="searchbox" placeholder="Название фильма, сериала или другого контента" value="'+query.replace(/"/g,'&quot;')+'" oninput="query=this.value;renderSearchResults()"><div id="searchResults" class="search-results">'+(query?'<p class="muted">Ищем в каталоге TMDB…</p>':'<p class="muted">Начни вводить название — результаты появятся здесь.</p>')+'</div></div>';
+}
+async function renderSearchResults(){
+  clearTimeout(searchTimer);
+  const q=query.trim();const res=document.getElementById('searchResults');if(!res)return;
+  if(!q){res.innerHTML='<p class="muted">Начни вводить название — результаты появятся здесь.</p>';return;}
+  res.innerHTML='<p class="muted">Ищем в каталоге TMDB…</p>';
+  searchTimer=setTimeout(async()=>{
+    try{
+      const [a,b]=await Promise.all(['movie','tv'].map(async kind=>{
+        const r=await fetch('/api/tmdb?action=search&type='+kind+'&q='+encodeURIComponent(q));
+        if(!r.ok)throw new Error('Search failed');const d=await r.json();return (d.results||[]).map(x=>fromTMDB(x,kind));
+      }));
+      const films=a.filter(x=>x.poster),shows=b.filter(x=>x.poster);
+      const group=(name,items)=>items.length?rail(name,items):'';
+      res.innerHTML=group('Фильмы',films)+group('Сериалы',shows)||'<p class="muted">Ничего не найдено.</p>';
+      [...films,...shows].forEach(m=>{if(!movies.some(x=>x.mediaType===m.mediaType&&x.tmdbId===m.tmdbId))movies.push(m);});
+    }catch(e){res.innerHTML='<p class="muted">Не удалось выполнить поиск. Попробуй ещё раз.</p>';}
+  },350);
+}
 function myPage(){let list=saved.map(i=>movies[i]);let watch=later.map(i=>movies[i]);return '<div class="content"><h1 class="page-title">Моё</h1><div class="tabs"><button class="pill active">Продолжить</button><button class="pill" onclick="document.getElementById(\'mySaved\').scrollIntoView({behavior:\'smooth\'})">Избранное</button><button class="pill" onclick="document.getElementById(\'myLater\').scrollIntoView({behavior:\'smooth\'})">Смотреть позже</button><button class="pill" onclick="document.getElementById(\'myHistory\').scrollIntoView({behavior:\'smooth\'})">История</button><button class="pill">Мои списки</button></div>'+rail('Продолжить просмотр',[movies[0],movies[3],movies[4]])+'<div id="mySaved">'+rail('Избранное',list)+'</div><div id="myLater">'+rail('Смотреть позже',watch)+'</div><div id="myHistory">'+rail('История просмотров',history.map(i=>movies[i]).filter(Boolean))+'</div></div>'}
 function profilePage(){return '<div class="content"><h1 class="page-title">Профиль</h1><div class="panel profile-head"><div class="avatar">☺</div><div><h2 style="margin:0 0 5px">Мой профиль</h2><div class="muted">Войди в аккаунт, чтобы синхронизировать библиотеку</div></div></div><div class="profile-menu"><button><strong>Аккаунт</strong><small>Личные данные и пароль</small></button><button><strong>Подписка</strong><small>Тариф и платежи</small></button><button><strong>Язык интерфейса</strong><small>Русский</small></button><button><strong>Качество видео</strong><small>Автоматически</small></button><button><strong>Озвучка и субтитры</strong><small>Предпочитаемые дорожки</small></button><button><strong>Автовоспроизведение</strong><small>Следующая серия</small></button><button><strong>Уведомления</strong><small>Настройки оповещений</small></button><button><strong>Устройства и безопасность</strong><small>Активные сеансы</small></button><button><strong>Помощь и поддержка</strong><small>Связаться с нами</small></button><button><strong>О приложении LIS</strong><small>Версия и документы</small></button></div></div>'}
 function tvPage(){return '<div class="content"><h1 class="page-title">ТВ</h1><div class="panel"><div class="section-head"><h2>'+channel+'</h2><span class="muted">● ПРЯМОЙ ЭФИР</span></div><div class="tv-player">▶　Окно прямого эфира</div><div class="actions" style="margin-top:14px"><button class="btn primary">▶ Смотреть эфир</button><button class="btn">Аудиодорожка</button><button class="btn">Субтитры</button></div></div><section class="section" style="margin-top:28px"><h2>Телеканалы</h2><div class="channel-row">'+channels.map(c=>'<button class="channel '+(channel===c?'active':'')+'" onclick="channel=\''+c+'\';render()">'+c+'</button>').join('')+'</div></section><section class="section"><h2>Программа передач</h2><div class="tabs">'+['Сейчас','Далее','Сегодня','Завтра'].map(t=>'<button class="pill '+(tvTab===t?'active':'')+'" onclick="tvTab=\''+t+'\';render()">'+t+'</button>').join('')+'</div>'+[['14:00–15:00','Текущая передача'],['15:00–16:00','Следующая передача'],['16:00–17:00','Вечерняя программа']].map(x=>'<div class="program"><strong>'+x[1]+'</strong><small>'+x[0]+'</small></div>').join('')+'</section></div>'}
