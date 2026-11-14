@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#20232a"/><stop offset="1" stop-color="#090a0d"/></linearGradient>
+ <linearGradient id="fur" x1=".12" y1="0" x2=".85" y2="1"><stop stop-color="#ff9b35"/><stop offset=".48" stop-color="#f05b16"/><stop offset="1" stop-color="#a92c12"/></linearGradient>
+ <linearGradient id="cream" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2dc"/><stop offset="1" stop-color="#d8c4ae"/></linearGradient>
+ <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".34"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#bg)"/>
+<rect x="3" y="3" width="506" height="506" rx="109" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="5"/>
+<ellipse cx="255" cy="408" rx="145" ry="28" fill="#000" opacity=".45" filter="url(#shadow)"/>
+<!-- ears -->
+<path d="M117 236 126 75 Q130 49 150 72 L242 176 270 177 365 76 Q385 55 390 84 L398 246Z" fill="url(#fur)" stroke="#ffb15d" stroke-width="5" stroke-linejoin="round"/>
+<path d="m151 105 18 108 57-42zM365 108l-18 108-59-43z" fill="#4a211b"/>
+<path d="m163 116 16 75 35-26zM353 119l-15 73-36-27z" fill="#f8c5a0"/>
+<!-- head silhouette -->
+<path d="M93 252 Q103 155 203 151 Q256 125 309 151 Q410 169 421 260 Q430 328 354 389 Q310 426 256 457 Q202 426 158 389 Q82 328 93 252Z" fill="url(#fur)" stroke="#ff9b49" stroke-width="5"/>
+<!-- cream cheek blaze -->
+<path d="M256 198 Q225 234 203 261 Q166 290 137 291 Q128 338 180 380 Q213 407 256 438 Q299 407 332 380 Q384 338 375 291 Q346 290 309 261 Q287 234 256 198Z" fill="url(#cream)"/>
+<!-- orange forehead mask -->
+<path d="M122 245 Q140 177 211 174 Q239 171 256 204 Q273 171 301 174 Q372 177 390 245 Q347 239 313 263 Q282 286 256 310 Q230 286 199 263 Q165 239 122 245Z" fill="url(#fur)"/>
+<!-- eyes -->
+<path d="M164 268 Q194 242 226 264 Q202 289 171 282Z" fill="#17191e"/>
+<path d="M286 264 Q318 242 348 268 L341 282 Q310 289 286 264Z" fill="#17191e"/>
+<ellipse cx="199" cy="269" rx="5" ry="9" fill="#f8e8cf"/><ellipse cx="313" cy="269" rx="5" ry="9" fill="#f8e8cf"/>
+<!-- muzzle -->
+<path d="M201 310 Q227 288 256 307 Q285 288 311 310 Q302 352 256 367 Q210 352 201 310Z" fill="#f5e5d2"/>
+<path d="M240 312 Q256 300 272 312 Q270 330 256 333 Q242 330 240 312Z" fill="#17171a"/>
+<path d="M256 333 Q255 350 238 356 M256 333 Q257 350 274 356" fill="none" stroke="#57352d" stroke-width="5" stroke-linecap="round"/>
+<path d="M110 242 Q135 165 212 163 Q248 152 256 197 Q266 152 302 163 Q379 165 402 242" fill="none" stroke="url(#shine)" stroke-width="10" stroke-linecap="round"/>
+</svg>
