@@ -71,7 +71,7 @@ let liveMovies=[],liveShows=[],liveAnimation=[],liveAnime=[],liveTop=[],liveUpco
 function fromTMDB(item,kind){
   const isTV=kind==='tv';
   const date=item.release_date||'';
-  return {id:item.id,title:item.title||'',year:date?date.slice(0,4):'—',type:isTV?'Сериал':'Фильм',rating:Number(item.vote_average||0).toFixed(1),quality:'',genre:'',poster:(item.poster_path||'').replace(/^\\//,''),back:(item.backdrop_path||item.poster_path||'').replace(/^\\//,''),desc:item.overview||'',tmdbId:item.id,mediaType:kind};
+  return {id:item.id,title:item.title||'',year:date?date.slice(0,4):'—',type:isTV?'Сериал':'Фильм',rating:Number(item.vote_average||0).toFixed(1),quality:'',genre:'',poster:(item.poster_path||'').replace(/^\//,''),back:(item.backdrop_path||item.poster_path||'').replace(/^\//,''),desc:item.overview||'',tmdbId:item.id,mediaType:kind};
 }
 async function tmdbList(kind,category='popular',pageNo=1){
   const r=await fetch('/api/tmdb?action=discover&type='+kind+'&category='+category+'&page='+pageNo);
