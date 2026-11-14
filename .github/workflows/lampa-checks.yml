@@ -34,3 +34,29 @@ jobs:
       - name: Run upstream tests
         working-directory: vendor/lampa-source
         run: npm test -- --run
+
+  lis-static-build:
+    name: Verify LIS static site build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout LIS with pinned Lampa submodule
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify pinned upstream revision
+        run: |
+          test "$(git -C vendor/lampa-source rev-parse HEAD)" = "4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0"
+
+      - name: Build LIS static site
+        run: |
+          npm run build
+          test -s dist/index.html
+
+      - name: Check Lampa launcher syntax
+        run: bash -n scripts/start-lampa-dev.sh
