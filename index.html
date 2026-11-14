@@ -475,7 +475,8 @@ async function openPlayer(i){
   app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS SOURCES</span></div><h2 style="font:700 23px Manrope;margin:10px 0 6px">Выбери источник</h2><p class="muted" style="margin:0 0 18px">'+escapeHTML(query)+'</p><div class="source-list"><article class="source-card"><div><strong>Видео</strong><div class="muted">Поиск доступных видео</div></div><span class="source-status">Поиск…</span></article></div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
   window.scrollTo(0,0);
   try{
-    const response=await fetch('/api/rutube?q='+encodeURIComponent(query));
+    const mediaKind=m.mediaType==='tv'||m.type==='Сериал'?'tv':'movie';
+    const response=await fetch('/api/rutube?q='+encodeURIComponent(query)+'&type='+mediaKind);
     if(!response.ok)throw new Error('RUTUBE search failed');
     const data=await response.json(),items=data.results||[];
     const list=document.querySelector('.source-list');if(!list)return;
