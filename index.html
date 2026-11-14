@@ -472,30 +472,22 @@ async function hydratePosters(){
 
 async function loadLegalProviders(m,kind){
   const host=document.getElementById('legalProviders');if(!host)return;
-  const title=escapeHTML(m.title||'');
-  const searchUrl='https://www.justwatch.com/ru/search?q='+encodeURIComponent([m.title,m.year].filter(Boolean).join(' '));
-  const fanfilmUrl='https://v17.fanfilm4k.media/4k-films/';
-  if(!m.tmdbId){
-    host.innerHTML='<h3 style="font:700 18px Manrope">Где посмотреть</h3><p class="muted">Для этого названия пока нет идентификатора каталога. Можно поискать его на JustWatch.</p><a class="btn" href="'+searchUrl+'" target="_blank" rel="noopener noreferrer">Искать на JustWatch ↗</a>';
-    return;
-  }
+  if(!m.tmdbId){host.innerHTML='<h3 style="font:700 18px Manrope">Где смотреть легально в России</h3><p class="muted">Для этого названия пока нет идентификатора каталога.</p>';return;}
   try{
     const response=await fetch('/api/tmdb?action=providers&type='+kind+'&id='+encodeURIComponent(m.tmdbId));
     if(!response.ok)throw new Error('Providers unavailable');
     const data=await response.json(),groups=data.providers||[];
-    const seen=new Set(),items=groups.filter(p=>p.provider_name&&p.link&&!seen.has(p.provider_name+'|'+(p.type||''))&&(seen.add(p.provider_name+'|'+(p.type||'')),true));
-    const cards=items.map(p=>'<a href="'+escapeHTML(p.link)+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid rgba(255,255,255,.22);border-radius:13px;color:#fff;text-decoration:none;background:rgba(255,255,255,.06)">'+(p.logo?'<img src="https://image.tmdb.org/t/p/w92'+escapeHTML(p.logo)+'" alt="" style="width:28px;height:28px;border-radius:7px">':'')+'<span>'+escapeHTML(p.provider_name)+(p.type?' · '+escapeHTML(p.type):'')+'</span> ↗</a>').join('');
-    host.innerHTML='<h3 style="font:700 18px Manrope">Где посмотреть «'+title+'»</h3><p class="muted">Данные о доступности для России. Наличие подписки, аренды или покупки уточняй на площадке.</p>'+(cards?'<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">'+cards+'</div>':'<p class="muted">TMDB пока не показывает доступные площадки для этого названия.</p>')+'<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px"><a class="btn" href="'+searchUrl+'" target="_blank" rel="noopener noreferrer">Проверить варианты на JustWatch ↗</a><a class="btn" href="'+fanfilmUrl+'" target="_blank" rel="noopener noreferrer">Открыть каталог Fanfilm4K ↗</a></div><p class="muted" style="margin-top:16px">Fanfilm4K пока открывается как внешний каталог. Встроенное воспроизведение не подключено: разрешение на встраивание его плеера ещё не подтверждено.</p>';
-  }catch(e){
-    host.innerHTML='<h3 style="font:700 18px Manrope">Где посмотреть «'+title+'»</h3><p class="muted">Не удалось загрузить список площадок из каталога.</p><a class="btn" href="'+searchUrl+'" target="_blank" rel="noopener noreferrer">Искать на JustWatch ↗</a>';
-  }
+    const seen=new Set(),items=groups.filter(p=>p.provider_name&&p.link&&!seen.has(p.provider_name)&&(seen.add(p.provider_name),true));
+    if(!items.length){host.innerHTML='<h3 style="font:700 18px Manrope">Где смотреть легально в России</h3><p class="muted">TMDB пока не показывает доступные площадки для этого фильма или сериала.</p>';return;}
+    host.innerHTML='<h3 style="font:700 18px Manrope">Где смотреть легально в России</h3><p class="muted">Доступность и условия уточняй на площадке.</p><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">'+items.map(p=>'<a href="'+escapeHTML(p.link)+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid rgba(255,255,255,.22);border-radius:13px;color:#fff;text-decoration:none;background:rgba(255,255,255,.06)">'+(p.logo?'<img src="https://image.tmdb.org/t/p/w92'+escapeHTML(p.logo)+'" alt="" style="width:28px;height:28px;border-radius:7px">':'')+'<span>'+escapeHTML(p.provider_name)+(p.type?' · '+escapeHTML(p.type):'')+'</span> ↗</a>').join('')+'</div>';
+  }catch(e){host.innerHTML='<h3 style="font:700 18px Manrope">Где смотреть легально в России</h3><p class="muted">Не удалось загрузить список площадок. Попробуй позже.</p>';}
 }
 async function openPlayer(i){
   const m=movies[i];if(!m)return;
   detailIndex=i;page='Плеер';setActive();
   const app=document.getElementById('app');
   const query=[m.title,m.year].filter(Boolean).join(' ');
-  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS SOURCES</span></div><h2 style="font:700 23px Manrope;margin:10px 0 6px">Где посмотреть</h2><p class="muted" style="margin:0 0 18px">'+escapeHTML(query)+'</p><div class="legal-providers" id="legalProviders"><h3 style="font:700 18px Manrope">Ищем доступные площадки…</h3></div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
+  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS SOURCES</span></div><h2 style="font:700 23px Manrope;margin:10px 0 6px">Где смотреть</h2><p class="muted" style="margin:0 0 18px">'+escapeHTML(query)+'</p><div class="legal-providers" id="legalProviders"><h3 style="font:700 18px Manrope">Где смотреть легально в России</h3><p class="muted">Проверяем доступные площадки…</p></div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
   window.scrollTo(0,0);
   const mediaKind=m.mediaType==='tv'||m.type==='Сериал'?'tv':'movie';
   loadLegalProviders(m,mediaKind);
