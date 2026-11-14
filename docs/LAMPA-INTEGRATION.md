@@ -83,3 +83,23 @@ Every change must record: affected files, risk color, reason, test performed, re
 - Upstream `package.json` currently declares `license: ISC`, while the repository's `LICENSE` file is the full GPL-2.0 text. Do not silently choose one: retain both pieces of evidence and obtain maintainer clarification before publishing a redistributed derivative.
 - No Lampa source files have been imported in this commit. The connected GitHub actions available in this session do not expose a repository-fork or bulk Git-clone/import operation; creating placeholder files would falsely imply a working import. The actual source import must be done as a real upstream fork/clone, preserving history and all notices, then pushed to this experiment branch.
 - Next technical gate after import: run the upstream Gulp build unchanged and verify the generated app locally before connecting LIS UI or any provider backend.
+
+
+## Source architecture map (read-only audit)
+
+- `src/app.js` is the application entry point. It wires core services, UI interactions, the player, search, TMDB and the plugin subsystem into the Lampa runtime.
+- `gulpfile.js` bundles `src/app.js` with Rollup (IIFE output), Babel, CommonJS/node resolution and the web-worker plugin. Development server is BrowserSync; build output is written under `dest/`.
+- `src/core/api/api.js` routes catalog operations (main/category/full/search and discovery) through source adapters. Current built-in sources include TMDB and CUB.
+- `src/interaction/player.js` orchestrates the playback UI and playback subsystems (video, panel, subtitles, audio tracks, playlist, external players, etc.). This is the real playback runtime, not a visual placeholder.
+- `src/interaction/search/global.js` owns global search UI and composes search sources.
+- `src/core/plugins.js` reads enabled plugin URLs from persistent storage and loads enabled plugins dynamically. This is a security-sensitive extension boundary: never preload arbitrary third-party plugin URLs by default; require an explicit allowlist and review.
+- `src/core/manifest.js` contains upstream identity/version and service-domain configuration. LIS branding should be implemented in a separate adapter/configuration layer, not by casually editing upstream identity fields.
+- `src/core/api/sources/parser.js` integrates a parser/torrent source and related playback-card behavior. Do not enable this provider path automatically; audit the backend and content rights first.
+- `UPGRADE.md` documents Lampa 3's modular class system through `Lampa.Maker`, including module replacement/mapping. Treat this as a candidate customization API, but verify each override against the pinned version and tests.
+
+## Import decision
+
+- 🟢 Read-only source architecture audit completed for the files listed above.
+- 🟡 Next safe engineering step: establish an upstream fork or a reproducible source sync that preserves the upstream commit and notices; run the unmodified upstream build before any LIS branding/customization.
+- 🔴 Do not enable arbitrary plugin URLs, parser/torrent providers, or unauthenticated backend endpoints as part of the initial import.
+- No upstream runtime files have been copied into LIS yet. The source import is still pending; this branch currently contains planning/audit documentation only.
