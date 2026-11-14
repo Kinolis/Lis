@@ -94,6 +94,8 @@ jobs:
         run: |
           npm run build
           test -s dist/index.html
+          test -s dist/lampa/index.html
+          test -s dist/lampa/app.min.js
 
       - name: Check Lampa launcher syntax
         run: bash -n scripts/start-lampa-dev.sh
