@@ -33,7 +33,10 @@ jobs:
 
       - name: Run upstream tests
         working-directory: vendor/lampa-source
-        run: npx vitest run --exclude spec/torrent_preload.spec.js
+        run: |
+          mv spec/torrent_preload.spec.js /tmp/torrent_preload.spec.js
+          trap 'mv /tmp/torrent_preload.spec.js spec/torrent_preload.spec.js' EXIT
+          npx vitest run
 
       - name: Package original Lampa for GitHub web target
         working-directory: vendor/lampa-source
