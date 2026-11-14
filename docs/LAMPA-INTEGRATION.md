@@ -120,3 +120,13 @@ Every change must record: affected files, risk color, reason, test performed, re
 - LIS branch: `experiment/lampa-source`; production `main` remains unchanged.
 - Upstream source is available through the pinned Git submodule at `vendor/lampa-source`.
 - No local npm install, Gulp build, or browser playback test has been completed yet. The next gate is a clean, unmodified upstream run; only after that should LIS-owned UI integration begin.
+
+
+## Local upstream runtime launcher
+
+- Added `scripts/start-lampa-dev.sh` on the experiment branch.
+- Run it from a clone of the experiment branch with: `bash scripts/start-lampa-dev.sh`.
+- The script initializes the pinned submodule, checks for Node.js/npm, installs upstream npm dependencies if `node_modules` is absent, then runs the upstream `npm run start` command.
+- Upstream `start` maps to Gulp's default task: file watching plus BrowserSync serving `build/web/`. This is a local development workflow, not a production build or deployment.
+- The script does not modify upstream tracked source files or LIS `index.html`; npm may create local dependency artifacts inside the submodule working directory.
+- This launcher has been added to GitHub but has not been executed in this environment. Successful startup and playback remain unverified.
