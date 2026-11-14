@@ -19,7 +19,7 @@ The layout is a target, not a claim that these components are already installed.
 
 1. Pin exact upstream repository, commit/tag, and license before importing code.
 2. Keep upstream copyright and license files with every copied source tree.
-3. Lampa source repository contains a GPL-2.0 LICENSE file, while its package.json currently says ISC. This is a license metadata conflict; do not import or distribute the source until the upstream owner clarifies which terms apply. Review the complete license and distribution obligations before bundling or modifying it.
+3. Both yumata/lampa-source and the main yumata/lampa repository expose a GPL-2.0 LICENSE file. The lampa-source package.json nevertheless declares `license: ISC`. Treat this as an unresolved licensing metadata conflict; do not bundle/distribute source until the project owner clarifies the applicable terms. Preserve the full LICENSE and notices if permission is confirmed.
 4. Lampac NextGen identifies itself as AGPL-3.0. Review network-use and source-disclosure obligations before deploying a modified service.
 5. Do not copy third-party plugins or provider implementations without reviewing their individual licenses and content rights.
 6. Only integrate sources and playback links that are authorized for the intended territories and use.
@@ -36,15 +36,23 @@ The layout is a target, not a claim that these components are already installed.
 |---|---|---|---|
 | Inspect current LIS frontend and deployment shape | DONE | 🟢 | Static HTML frontend; package build copies index.html to dist. |
 | Create isolated integration branch | DONE | 🟢 | Work is isolated from main. |
-| Verify upstream Lampa source and license | BLOCKED | 🟡 | Inspected LICENSE (GPL-2.0) and package.json (license: ISC); these conflict. Obtain clarification from upstream and pin an exact commit before import. |
+| Verify upstream Lampa source and license | BLOCKED | 🟡 | Rechecked both yumata/lampa-source and yumata/lampa: LICENSE is GPL-2.0; lampa-source/package.json says ISC. Main repo also has GPL-2.0. Obtain owner clarification and pin exact commits before bundling. |
 | Verify Lampac backend API and license | IN PROGRESS | 🟡 | Inspected LICENSE (AGPL-3.0), docker-compose (service exposes 9118), and Online/README (plugin /online.js; provider routes /lite/{provider}; externalids). |
 | Map Lampa UI/runtime boundaries | IN PROGRESS | 🟡 | Lampa 3 migration guide documents modular classes via Lampa.Maker; identify safe theme/extension points before overriding UI. |
 | Import immutable upstream snapshot | TODO | 🟡 | Only after license review; preserve upstream tree and attribution. |
 | Build LIS adapter against documented interfaces | TODO | 🟡 | Avoid monkey-patching core or depending on private internals. |
 | Add LIS visual shell | TODO | 🟢 | Must remain separate from upstream runtime. |
 | Validate plugins, search, detail pages, playback, subtitles and audio tracks | TODO | 🟡 | Use test sources that are authorized for embedding. |
-| Security review of third-party plugins | TODO | 🔴 | Plugins can execute code; do not grant unrestricted access to LIS credentials or user data. |
+| Security review of third-party plugins | IN PROGRESS | 🔴 | Confirmed upstream Lampac warning about publicly exposed modules lacking request sanitization. Require firewall, reverse proxy and authentication; audit each plugin before enabling. |
 | Production deployment | TODO | 🟡 | Requires a separately hosted backend for Lampac; static Pages alone cannot run its .NET service. |
+
+## Detailed verification notes
+
+- Lampa source README says the repository contains the application source and gives the Gulp-based local run workflow (`npm install`, `npm run start`). The `UPGRADE.md` documents Lampa 3 modular classes and `Lampa.Maker` extension points.
+- License evidence is inconsistent: both the source repository LICENSE and main application LICENSE are GPL-2.0, but source package metadata says ISC. The repository metadata alone does not resolve the legal conflict; upstream clarification is required.
+- Lampac README describes it as a self-hosted Lampa backend, with 70+ provider modules and a default port of 9118. Its LICENSE is AGPL-3.0.
+- Lampac README explicitly warns that Catalog, Tracks, Transcoding, GStreamer and other selected modules do not sanitize incoming requests as a public API; do not expose them publicly without firewall, reverse proxy and authentication.
+- Lampac Online module documentation confirms `/online.js`, `/lite/*` provider routes and `/externalids` integration.
 
 ## Initial repository audit
 
