@@ -194,7 +194,12 @@ const movies=[
 const channels=['Первый','Россия 1','НТВ','СТС','ТНТ','РЕН ТВ','Пятница!','Матч ТВ'];
 let page='Главная',activeType='Фильмы',heroIndex=0,season=1,episode=1,expanded=false,history=JSON.parse(localStorage.getItem('lis-history')||'[]'),saved=JSON.parse(localStorage.getItem('lis-saved')||'[0,3]'),later=JSON.parse(localStorage.getItem('lis-later')||'[1,4]'),channel='Первый',tvTab='Сейчас',query='';
 const img=(m)=>'https://image.tmdb.org/t/p/w500/'+m.poster;
-function card(m){return '<article class="poster-card" onclick="openDetail('+movies.indexOf(m)+')"><div class="poster" style="background-image:url('+img(m)+')"><span class="tag">'+m.type+'</span><span class="rating">★ '+m.rating+'</span><span class="year">'+m.year+'</span></div><div class="poster-name">'+m.title+'</div><div class="poster-sub">'+m.year+' · '+m.type+'</div></article>'}
+function card(m){
+  let index=movies.indexOf(m);
+  if(index<0&&m.tmdbId!=null)index=movies.findIndex(x=>String(x.tmdbId)===String(m.tmdbId)&&x.mediaType===m.mediaType);
+  if(index<0){movies.push(m);index=movies.length-1;}
+  return '<article class="poster-card" role="button" tabindex="0" onclick="openDetail('+index+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetail('+index+')}"><div class="poster" style="background-image:url('+img(m)+')"><span class="tag">'+m.type+'</span><span class="rating">★ '+m.rating+'</span><span class="year">'+m.year+'</span></div><div class="poster-name">'+m.title+'</div><div class="poster-sub">'+m.year+' · '+m.type+'</div></article>'
+}
 function rail(title,list){if(!list.length)return '';return '<section class="section"><div class="section-head"><h2>'+title+'</h2><span class="muted">Смотреть все →</span></div><div class="rail">'+list.map(card).join('')+'</div></section>'}
 function setActive(){document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
 function go(p){page=p;setActive();render();window.scrollTo({top:0,behavior:'smooth'})}
