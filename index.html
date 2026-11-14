@@ -67,7 +67,7 @@ function home(){
   const h=featured[heroIndex%featured.length];
   return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+movies.indexOf(h)+')">▶ Смотреть</button><button class="btn" onclick="toggleSave('+movies.indexOf(h)+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:Math.min(10,featured.length)},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',movies.slice(0,3))+rail('Популярное',movies.slice(0,12))+rail('Новинки',liveUpcoming.length?liveUpcoming:movies.slice(8,16))+rail('Рекомендации',liveTop.length?liveTop.slice(0,12):movies.slice(4,16))+rail('Фильмы',liveMovies.slice(0,12))+rail('Сериалы',liveShows.slice(0,12))+rail('Лучшие оценки',liveTop.slice(0,12))+rail('Скоро выйдут',liveUpcoming.slice(0,12))+rail('Подборки по жанрам',movies.slice(12,24))+rail('Смотреть позже',later.map(i=>movies[i]).filter(Boolean))+'</div>';
 }
-let liveMovies=[],liveShows=[],liveTop=[],liveUpcoming=[],searchTimer=null;
+let liveMovies=[],liveShows=[],liveAnimation=[],liveAnime=[],liveTop=[],liveUpcoming=[],searchTimer=null;
 function fromTMDB(item,kind){
   const isTV=kind==='tv';
   const date=item.release_date||'';
@@ -92,7 +92,7 @@ async function loadRealCatalog(){
 }
 function catalog(){
   let types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'];
-  let list=activeType==='ТВ'?[]:activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveMovies.filter(m=>false):activeType==='Аниме'?liveShows.filter(m=>false):[];
+  let list=activeType==='ТВ'?[]:activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:[];
   const label=activeType==='Фильмы'?'Фильмы':activeType==='Сериалы'?'Сериалы':activeType;
   return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" onclick="activeType=\\''+t+'\\';render()">'+t+'</button>').join('')+'</div><div class="toolbar"><strong>'+(activeType==='ТВ'?'Телевидение':'Популярное · '+label.toLowerCase())+'</strong><div class="filters"><button class="pill">Фильтры</button><button class="pill">Сортировка</button></div></div>'+(activeType==='ТВ'?'<button class="btn primary" onclick="go(\\'ТВ\\')">Открыть телеканалы →</button>':'<div class="catalog-grid">'+(list.length?list.map(card).join(''):'<p class="muted">В этой категории пока нет отдельной подборки TMDB.</p>')+'</div><button class="btn" style="margin-top:22px" onclick="loadMoreCatalog()">Загрузить ещё</button>')+'</div>';
 }
