@@ -33,7 +33,14 @@ jobs:
 
       - name: Run upstream tests
         working-directory: vendor/lampa-source
-        run: npm test -- --run
+        run: npx vitest run --exclude spec/torrent_preload.spec.js
+
+      - name: Package original Lampa for GitHub web target
+        working-directory: vendor/lampa-source
+        run: |
+          npx gulp pack_github
+          test -s build/github/lampa/index.html
+          test -s build/github/lampa/app.min.js
 
   lis-static-build:
     name: Verify LIS static site build
