@@ -457,12 +457,18 @@ async function hydratePosters(){
   else render();
 }
 
+function searchVKVideo(i){
+  const m=movies[i];if(!m)return;
+  const query=[m.title,m.year].filter(Boolean).join(' ');
+  const url='https://vk.com/video?q='+encodeURIComponent(query)+'&section=search';
+  window.open(url,'_blank','noopener');
+}
 function openPlayer(i){
   const m=movies[i];if(!m)return;
   page='Плеер';setActive();
   const app=document.getElementById('app');
   const source=typeof m.videoUrl==='string'&&/^https:\/\//i.test(m.videoUrl)?m.videoUrl:'';
-  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS PLAYER</span></div><div class="player-screen">'+(source?'<video controls playsinline preload="metadata" poster="https://image.tmdb.org/t/p/w780/'+escapeHTML(m.back||m.poster||'')+'"><source src="'+escapeHTML(source)+'"></video>':'<div class="player-empty"><div class="player-symbol">▶</div><h2>Источник видео не подключён</h2><p>Плеер готов к воспроизведению, но для этого фильма пока нет прямой ссылки на лицензированный видеоисточник. TMDB предоставляет каталог и трейлеры, а не полные фильмы.</p></div>')+'</div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
+  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS PLAYER</span></div><div class="player-screen">'+(source?'<video controls playsinline preload="metadata" poster="https://image.tmdb.org/t/p/w780/'+escapeHTML(m.back||m.poster||'')+'"><source src="'+escapeHTML(source)+'"></video>':'<div class="player-empty"><div class="player-symbol">▶</div><h2>Ищем фильм через VK Видео</h2><p>Без токена VK LIS не может получить список результатов прямо в плеере. Откроем поиск по названию и году — выбери полный фильм среди доступных видео.</p><button class="btn primary" style="margin-top:18px" onclick="searchVKVideo('+i+')">Найти в VK Видео ↗</button></div>')+'</div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
   window.scrollTo(0,0);
 }
 
