@@ -130,3 +130,11 @@ Every change must record: affected files, risk color, reason, test performed, re
 - Upstream `start` maps to Gulp's default task: file watching plus BrowserSync serving `build/web/`. This is a local development workflow, not a production build or deployment.
 - The script does not modify upstream tracked source files or LIS `index.html`; npm may create local dependency artifacts inside the submodule working directory.
 - This launcher has been added to GitHub but has not been executed in this environment. Successful startup and playback remain unverified.
+
+
+## Automated upstream checks
+
+- Added `.github/workflows/lampa-checks.yml` on `experiment/lampa-source`.
+- The workflow checks out LIS with recursive submodules, installs the pinned Lampa source dependencies on Node.js 20, and runs the upstream Vitest suite with `npm test -- --run`.
+- It runs on pushes and pull requests targeting the experiment branch, and can be started manually with GitHub Actions.
+- This is a source test workflow, not a production build or browser playback test. Its first GitHub Actions run is still pending; record the actual result before treating the upstream runtime as verified.
