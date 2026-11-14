@@ -80,11 +80,12 @@ async function tmdbList(kind,category='popular',pageNo=1){
 }
 async function loadRealCatalog(){
   try{
-    const [films,shows,top,upcoming]=await Promise.all([
-      tmdbList('movie','popular'),tmdbList('tv','popular'),tmdbList('movie','top_rated'),tmdbList('movie','upcoming')
+    const [films,shows,animation,anime,top,upcoming]=await Promise.all([
+      tmdbList('movie','popular'),tmdbList('tv','popular'),tmdbList('movie','animation'),tmdbList('tv','anime'),tmdbList('movie','top_rated'),tmdbList('movie','upcoming')
     ]);
-    liveMovies=films;liveShows=shows;liveTop=top;liveUpcoming=upcoming;
-    const all=[...films,...shows];
+    animation.forEach(m=>m.type='Мультфильм');anime.forEach(m=>m.type='Аниме');
+    liveMovies=films;liveShows=shows;liveAnimation=animation;liveAnime=anime;liveTop=top;liveUpcoming=upcoming;
+    const all=[...films,...shows,...animation,...anime];
     const seen=new Set();const merged=all.filter(m=>{const k=m.mediaType+':'+m.tmdbId;if(seen.has(k))return false;seen.add(k);return true;});
     movies.splice(0,movies.length,...merged);
     if(page==='Главная'||page==='Каталог')render();
@@ -94,7 +95,7 @@ function catalog(){
   let types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'];
   let list=activeType==='ТВ'?[]:activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:[];
   const label=activeType==='Фильмы'?'Фильмы':activeType==='Сериалы'?'Сериалы':activeType;
-  return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" onclick="activeType=\\''+t+'\\';render()">'+t+'</button>').join('')+'</div><div class="toolbar"><strong>'+(activeType==='ТВ'?'Телевидение':'Популярное · '+label.toLowerCase())+'</strong><div class="filters"><button class="pill">Фильтры</button><button class="pill">Сортировка</button></div></div>'+(activeType==='ТВ'?'<button class="btn primary" onclick="go(\\'ТВ\\')">Открыть телеканалы →</button>':'<div class="catalog-grid">'+(list.length?list.map(card).join(''):'<p class="muted">В этой категории пока нет отдельной подборки TMDB.</p>')+'</div><button class="btn" style="margin-top:22px" onclick="loadMoreCatalog()">Загрузить ещё</button>')+'</div>';
+  return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" onclick="activeType=\''+t+'\';render()">'+t+'</button>').join('')+'</div><div class="toolbar"><strong>'+(activeType==='ТВ'?'Телевидение':'Популярное · '+label.toLowerCase())+'</strong><div class="filters"><button class="pill">Фильтры</button><button class="pill">Сортировка</button></div></div>'+(activeType==='ТВ'?'<button class="btn primary" onclick="go(\'ТВ\')">Открыть телеканалы →</button>':'<div class="catalog-grid">'+(list.length?list.map(card).join(''):'<p class="muted">В этой категории пока нет отдельной подборки TMDB.</p>')+'</div><button class="btn" style="margin-top:22px" onclick="loadMoreCatalog()">Загрузить ещё</button>')+'</div>';
 }
 async function loadMoreCatalog(){
   const kind=activeType==='Сериалы'?'tv':'movie';
