@@ -262,9 +262,9 @@ function home(){
   const best=distinct([...liveTop].sort((a,b)=>Number(b.rating)-Number(a.rating)).slice(0,18));
   const genreMix=distinct([...liveAnimation.slice(0,8),...liveAnime.slice(0,8)]);
   const savedLater=distinct(later.map(i=>movies[i]).filter(Boolean));
-  return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+movies.indexOf(h)+')">Смотреть</button><button class="btn" onclick="toggleSave('+movies.indexOf(h)+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:Math.min(10,featured.length)},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',continueItems)+rail('Популярное',popular)+rail('Новинки',newItems)+rail('Рекомендации',recommendations)+rail('Фильмы',films)+rail('Сериалы',shows)+rail('Лучшие оценки',best)+rail('Анимация и аниме',genreMix)+rail('Смотреть позже',savedLater)+'</div>';
+  return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+movies.indexOf(h)+')">Смотреть</button><button class="btn" onclick="toggleSave('+movies.indexOf(h)+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:Math.min(10,featured.length)},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',continueItems)+rail('Популярное',popular)+rail('Новинки',newItems)+rail('Рекомендации',recommendations)+rail('Фильмы',films)+rail('Сериалы',shows)+rail('Лучшие оценки',best)+rail('Анимация и аниме',genreMix)+rail('Классика кино',distinct(liveClassics.slice(0,18)))+rail('Смотреть позже',savedLater)+'</div>';
 }
-let liveMovies=[],liveShows=[],liveAnimation=[],liveAnime=[],liveTop=[],liveUpcoming=[],searchTimer=null;
+let liveMovies=[],liveShows=[],liveAnimation=[],liveAnime=[],liveTop=[],liveUpcoming=[],liveClassics=[],searchTimer=null;
 function fromTMDB(item,kind){
   const isTV=kind==='tv';
   const date=item.release_date||'';
@@ -277,12 +277,12 @@ async function tmdbList(kind,category='popular',pageNo=1){
 }
 async function loadRealCatalog(){
   try{
-    const [films,shows,animation,anime,top,upcoming]=await Promise.all([
-      tmdbList('movie','popular'),tmdbList('tv','popular'),tmdbList('movie','animation'),tmdbList('tv','anime'),tmdbList('movie','top_rated'),tmdbList('movie','upcoming')
+    const [films,shows,animation,anime,top,upcoming,classics]=await Promise.all([
+      tmdbList('movie','popular'),tmdbList('tv','popular'),tmdbList('movie','animation'),tmdbList('tv','anime'),tmdbList('movie','top_rated'),tmdbList('movie','upcoming'),tmdbList('movie','classics')
     ]);
     animation.forEach(m=>m.type='Мультфильм');anime.forEach(m=>m.type='Аниме');
-    liveMovies=films;liveShows=shows;liveAnimation=animation;liveAnime=anime;liveTop=top;liveUpcoming=upcoming;
-    const all=[...films,...shows,...animation,...anime];
+    liveMovies=films;liveShows=shows;liveAnimation=animation;liveAnime=anime;liveTop=top;liveUpcoming=upcoming;liveClassics=classics;
+    const all=[...films,...shows,...animation,...anime,...classics];
     const seen=new Set();const merged=all.filter(m=>{const k=m.mediaType+':'+m.tmdbId;if(seen.has(k))return false;seen.add(k);return true;});
     movies.splice(0,movies.length,...merged);
     await finishStartup();
@@ -290,7 +290,7 @@ async function loadRealCatalog(){
 }
 let catalogGenre='all',catalogYear='all',catalogMinRating=0,catalogSort='popular',catalogPage=1,catalogLoading=false;
 const catalogGenres={28:'Боевик',12:'Приключения',16:'Мультфильм',35:'Комедия',80:'Криминал',99:'Документальный',18:'Драма',14:'Фэнтези',27:'Ужасы',10749:'Мелодрама',9648:'Детектив',878:'Фантастика',53:'Триллер',10752:'Военный',37:'Вестерн',10759:'Боевик и приключения',10765:'Фантастика и фэнтези'};
-function catalogSource(){return activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:[]}
+function catalogSource(){return activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:activeType==='Классика'?liveClassics:[]}
 function catalogFiltered(){
  let list=[...catalogSource()];
  if(catalogGenre!=='all')list=list.filter(m=>(m.genreIds||[]).includes(Number(catalogGenre)));
@@ -304,7 +304,7 @@ function catalogFiltered(){
 function resetCatalogFilters(){catalogGenre='all';catalogYear='all';catalogMinRating=0;catalogSort='popular';render()}
 function setCatalogType(type){activeType=type;catalogPage=1;resetCatalogFilters()}
 function catalog(){
- const types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'],list=catalogFiltered();
+ const types=['Фильмы','Сериалы','Классика','Мультфильмы','Аниме','Шоу','ТВ'],list=catalogFiltered();
  const years=[...new Set(catalogSource().map(m=>String(m.year)).filter(y=>/^\\d{4}$/.test(y)))].sort((a,b)=>Number(b)-Number(a));
  const genreOptions=Object.entries(catalogGenres).map(([id,name])=>'<option value="'+id+'" '+(catalogGenre===id?'selected':'')+'>'+name+'</option>').join('');
  const yearOptions=years.map(y=>'<option value="'+y+'" '+(catalogYear===y?'selected':'')+'>'+y+'</option>').join('');
@@ -315,9 +315,9 @@ function catalog(){
 async function loadMoreCatalog(){
  if(catalogLoading||activeType==='Шоу'||activeType==='ТВ')return;
  catalogLoading=true;render();
- const kind=activeType==='Сериалы'||activeType==='Аниме'?'tv':'movie',category=activeType==='Мультфильмы'?'animation':activeType==='Аниме'?'anime':'popular';
+ const kind=activeType==='Сериалы'||activeType==='Аниме'?'tv':'movie',category=activeType==='Мультфильмы'?'animation':activeType==='Аниме'?'anime':activeType==='Классика'?'classics':'popular';
  try{
-  const list=await tmdbList(kind,category,++catalogPage),target=activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:liveMovies;
+  const list=await tmdbList(kind,category,++catalogPage),target=activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:activeType==='Классика'?liveClassics:liveMovies;
   const seen=new Set(target.map(m=>String(m.tmdbId||m.title))),fresh=list.filter(m=>!seen.has(String(m.tmdbId||m.title)));
   target.push(...fresh);movies.push(...fresh);
  }catch(e){console.warn('Could not load more catalog items',e)}
