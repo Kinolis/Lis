@@ -16,7 +16,37 @@ export async function onRequest({ request, env }) {
   if (!env.TMDB_TOKEN) return json({ error: "TMDB_TOKEN is not configured in Cloudflare Pages" }, 503);
 
   let endpoint;
-  if (action === "credits") {
+  if (action === "related") {
+    const id = url.searchParams.get("id");
+    if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
+    const base = `https://api.themoviedb.org/3/${kind}`;
+    const auth = { Authorization: `Bearer ${env.TMDB_TOKEN}`, Accept: "application/json" };
+    const get = async path => {
+      const response = await fetch(base + path, { headers: auth });
+      if (!response.ok) throw new Error("TMDB related request failed");
+      return response.json();
+    };
+    const [details, similar] = await Promise.all([
+      get(`/${id}?language=ru-RU`),
+      get(`/${id}/similar?language=ru-RU&page=1`)
+    ]);
+    let franchise = null;
+    if (kind === "movie" && details.belongs_to_collection?.id) {
+      const collectionResponse = await fetch(`https://api.themoviedb.org/3/collection/${details.belongs_to_collection.id}?language=ru-RU`, { headers: auth });
+      if (collectionResponse.ok) {
+        const collection = await collectionResponse.json();
+        franchise = { id: collection.id, name: collection.name, parts: (collection.parts || []).map(item => ({
+          id: item.id, title: item.title || item.name || "", poster_path: item.poster_path,
+          backdrop_path: item.backdrop_path, overview: item.overview || "",
+          release_date: item.release_date || "", vote_average: item.vote_average || 0
+        })) };
+      }
+    }
+    const map = item => ({ id:item.id,title:item.title||item.name||"",poster_path:item.poster_path,
+      backdrop_path:item.backdrop_path,overview:item.overview||"",
+      release_date:item.release_date||item.first_air_date||"",vote_average:item.vote_average||0 });
+    return json({ franchise, similar: (similar.results || []).map(map) });
+  } else if (action === "credits") {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
     endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/credits`);
