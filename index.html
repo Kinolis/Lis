@@ -67,12 +67,12 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .bottom-nav{
   gap:2px !important;
   padding:5px !important;
-  transition:transform .24s ease,padding .24s ease,gap .24s ease,border-radius .24s ease !important;
+  transition:transform .48s cubic-bezier(.22,1,.36,1),padding .48s cubic-bezier(.22,1,.36,1),gap .48s cubic-bezier(.22,1,.36,1),border-radius .48s cubic-bezier(.22,1,.36,1) !important;
 }
 .bottom-nav .nav-item{
   min-width:72px;
   padding:8px 10px;
-  transition:min-width .24s ease,padding .24s ease,gap .24s ease !important;
+  transition:min-width .48s cubic-bezier(.22,1,.36,1),padding .48s cubic-bezier(.22,1,.36,1),gap .48s cubic-bezier(.22,1,.36,1) !important;
 }
 .bottom-nav.is-scrolled{
   transform:translateX(-50%) scale(.94);
