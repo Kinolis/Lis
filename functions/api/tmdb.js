@@ -56,7 +56,12 @@ export async function onRequest({ request, env }) {
     endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/images`);
     endpoint.searchParams.set("include_image_language", "ru,en,null");
   } else if (action === "discover") {
-    if (category === "animation" || category === "anime") {
+    if (category === "classics") {
+      endpoint = new URL("https://api.themoviedb.org/3/discover/movie");
+      endpoint.searchParams.set("sort_by", "popularity.desc");
+      endpoint.searchParams.set("primary_release_date.lte", "2005-12-31");
+      endpoint.searchParams.set("vote_count.gte", "100");
+    } else if (category === "animation" || category === "anime") {
       const discoveryKind = category === "anime" ? "tv" : "movie";
       endpoint = new URL(`https://api.themoviedb.org/3/discover/${discoveryKind}`);
       endpoint.searchParams.set("with_genres", "16");
