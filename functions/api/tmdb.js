@@ -45,7 +45,7 @@ export async function onRequest({ request, env }) {
     const map = item => ({ id:item.id,title:item.title||item.name||"",poster_path:item.poster_path,
       backdrop_path:item.backdrop_path,overview:item.overview||"",
       release_date:item.release_date||item.first_air_date||"",vote_average:item.vote_average||0 });
-    return json({ franchise, similar: (similar.results || []).map(map) });
+    return json({ franchise, similar: (similar.results || []).filter(item => Number(item.vote_average || 0) >= 6 && Number(item.vote_count || 0) >= 30).map(map) });
   } else if (action === "credits") {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
