@@ -192,6 +192,7 @@ const movies=[
 {title:'Вечернее шоу',year:'2025',type:'Шоу',rating:'8.2',quality:'HD',genre:'Развлекательное',poster:'uW4dPCcbXaaFTyfL5HwhuDt5akK.jpg',desc:'Гости, интервью, юмор и неожиданные истории.',seasons:3}
 ];
 const channels=['Первый','Россия 1','НТВ','СТС','ТНТ','РЕН ТВ','Пятница!','Матч ТВ'];
+let catalogReady=false;
 let page='Главная',activeType='Фильмы',heroIndex=0,season=1,episode=1,expanded=false,history=JSON.parse(localStorage.getItem('lis-history')||'[]'),saved=JSON.parse(localStorage.getItem('lis-saved')||'[0,3]'),later=JSON.parse(localStorage.getItem('lis-later')||'[1,4]'),channel='Первый',tvTab='Сейчас',query='';
 const img=(m)=>'https://image.tmdb.org/t/p/w500/'+m.poster;
 function card(m){
@@ -205,7 +206,8 @@ function setActive(){document.querySelectorAll('.nav-item').forEach(b=>b.classLi
 function go(p){page=p;setActive();render();window.scrollTo({top:0,behavior:'smooth'})}
 function render(){const app=document.getElementById('app');if(page==='Главная')app.innerHTML=home();else if(page==='Каталог')app.innerHTML=catalog();else if(page==='Поиск')app.innerHTML=searchPage();else if(page==='Моё')app.innerHTML=myPage();else if(page==='Профиль')app.innerHTML=profilePage();else if(page==='ТВ')app.innerHTML=tvPage();else app.innerHTML=home()}
 function home(){
-  const featured=movies.slice(0,10);if(!featured.length)return '<div class="content"><p class="muted">Загружаем настоящий каталог LIS…</p></div>';
+  if(!catalogReady)return '<div class="content" style="min-height:65vh;display:grid;place-items:center"><p class="muted">Загружаем каталог LIS…</p></div>';
+  const featured=movies.slice(0,10);if(!featured.length)return '<div class="content"><p class="muted">Каталог пока недоступен.</p></div>';
   const h=featured[heroIndex%featured.length];
   return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+movies.indexOf(h)+')">Смотреть</button><button class="btn" onclick="toggleSave('+movies.indexOf(h)+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:Math.min(10,featured.length)},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',movies.slice(0,3))+rail('Популярное',movies.slice(0,12))+rail('Новинки',liveUpcoming.length?liveUpcoming:movies.slice(8,16))+rail('Рекомендации',liveTop.length?liveTop.slice(0,12):movies.slice(4,16))+rail('Фильмы',liveMovies.slice(0,12))+rail('Сериалы',liveShows.slice(0,12))+rail('Лучшие оценки',liveTop.slice(0,12))+rail('Скоро выйдут',liveUpcoming.slice(0,12))+rail('Подборки по жанрам',movies.slice(12,24))+rail('Смотреть позже',later.map(i=>movies[i]).filter(Boolean))+'</div>';
 }
@@ -230,8 +232,9 @@ async function loadRealCatalog(){
     const all=[...films,...shows,...animation,...anime];
     const seen=new Set();const merged=all.filter(m=>{const k=m.mediaType+':'+m.tmdbId;if(seen.has(k))return false;seen.add(k);return true;});
     movies.splice(0,movies.length,...merged);
+    catalogReady=true;
     if(page==='Главная'||page==='Каталог')render();
-  }catch(e){console.warn('TMDB catalog unavailable',e);}
+  }catch(e){console.warn('TMDB catalog unavailable',e);catalogReady=true;if(page==='Главная'||page==='Каталог')render();}
 }
 function catalog(){
   let types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'];
