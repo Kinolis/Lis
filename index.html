@@ -27,6 +27,25 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .tv-player{aspect-ratio:16/9;background:#050608;border-radius:16px;display:grid;place-items:center;color:#c9cad0;max-height:480px}.program{display:flex;justify-content:space-between;gap:15px;padding:15px;border-bottom:1px solid var(--line)}.program strong{font-size:13px}.program small{color:var(--muted)}
 .empty{padding:35px;text-align:center;color:var(--muted)}.hidden{display:none!important}
 @media(max-width:900px){.rail{grid-auto-columns:calc((100% - 48px)/4)}.catalog-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.nav-item{min-width:75px}}
+/* Centered movie detail heading and synopsis */
+.detail-copy{
+  width:100%;
+  max-width:720px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+.detail-copy .meta,
+.detail-copy .actions{justify-content:center}
+.detail-content .detail-block:has(> h2:first-child) > h2{
+  text-align:center;
+}
+.detail-content .description{
+  max-width:720px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
 /* Keep the three detail actions in one balanced row */
 .detail-copy .actions{display:flex;flex-wrap:nowrap;gap:8px;width:100%;max-width:560px}
 .detail-copy .actions .btn{flex:1 1 0;min-width:0;padding:11px 8px;font-size:clamp(12px,3.4vw,15px);white-space:nowrap}
