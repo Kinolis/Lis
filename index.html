@@ -63,21 +63,7 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 }
 
 
-/* Smooth centered contraction: keep item layout fixed to avoid sideways reflow */
-.bottom-nav{
-  transform:translateX(-50%) scale(1);
-  transform-origin:center center;
-  transition:transform .55s cubic-bezier(.22,1,.36,1) !important;
-}
-.bottom-nav .nav-item{
-  transition:none !important;
-}
-.bottom-nav.is-scrolled{
-  transform:translateX(-50%) scale(.88);
-}
-@media(prefers-reduced-motion:reduce){
-  .bottom-nav{transition:none !important}
-}
+/* Static bottom navigation: no scroll-dependent resizing */
 @media(prefers-reduced-motion:reduce){
   .bottom-nav,.bottom-nav .nav-item{transition:none !important}
 }
@@ -259,10 +245,6 @@ async function hydratePosters(){
   else render();
 }
 setInterval(()=>{if(page==='Главная'){heroIndex=(heroIndex+1)%10;render()}},10000);
-const bottomNav=document.getElementById('bottomNav');
-function updateBottomNav(){bottomNav.classList.toggle('is-scrolled',window.scrollY>70)}
-window.addEventListener('scroll',updateBottomNav,{passive:true});
-updateBottomNav();
 render();
 loadRealCatalog();
 hydratePosters();
