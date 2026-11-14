@@ -46,6 +46,11 @@ export async function onRequest({ request, env }) {
       backdrop_path:item.backdrop_path,overview:item.overview||"",
       release_date:item.release_date||item.first_air_date||"",vote_average:item.vote_average||0 });
     return json({ franchise, similar: (similar.results || []).filter(item => Number(item.vote_average || 0) >= 6 && Number(item.vote_count || 0) >= 30).map(map) });
+  } else if (action === "videos") {
+    const id = url.searchParams.get("id");
+    if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
+    endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/videos`);
+    endpoint.searchParams.set("language", "ru-RU");
   } else if (action === "credits") {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
@@ -101,6 +106,7 @@ export async function onRequest({ request, env }) {
     if (!upstream.ok) return json({ error: "TMDB request failed", status: upstream.status }, 502);
     const data = await upstream.json();
     if (action === "images") return json({ logos: data.logos || [] });
+    if (action === "videos") return json({ videos: (data.results || []).map(video => ({ key: video.key, site: video.site, type: video.type, official: !!video.official, name: video.name || "" })) });
     if (action === "credits") return json({ cast: (data.cast || []).slice(0, 16).map(person => ({ id: person.id, name: person.name, character: person.character || "", profile_path: person.profile_path || null })) });
     const results = (data.results || []).map(item => ({
       id: item.id,
