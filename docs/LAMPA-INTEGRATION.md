@@ -72,3 +72,14 @@ The layout is a target, not a claim that these components are already installed.
 ## Regression rule
 
 Every change must record: affected files, risk color, reason, test performed, result, and rollback commit. A red item is not changed without explicit user approval.
+
+
+## Experiment branch: source import preparation
+
+- Experiment branch: `experiment/lampa-source` (created from `feature/lampa-integration`).
+- Production branch `main` is untouched.
+- Upstream source repository confirmed: `https://github.com/yumata/lampa-source`; it contains `src/`, `plugins/`, `public/`, `index/`, `spec/`, `docs/`, `gulpfile.js`, and `package.json`.
+- Upstream README documents local development via `npm install` and `npm run start`; this is a Gulp-based source project, not a single HTML file.
+- Upstream `package.json` currently declares `license: ISC`, while the repository's `LICENSE` file is the full GPL-2.0 text. Do not silently choose one: retain both pieces of evidence and obtain maintainer clarification before publishing a redistributed derivative.
+- No Lampa source files have been imported in this commit. The connected GitHub actions available in this session do not expose a repository-fork or bulk Git-clone/import operation; creating placeholder files would falsely imply a working import. The actual source import must be done as a real upstream fork/clone, preserving history and all notices, then pushed to this experiment branch.
+- Next technical gate after import: run the upstream Gulp build unchanged and verify the generated app locally before connecting LIS UI or any provider backend.
