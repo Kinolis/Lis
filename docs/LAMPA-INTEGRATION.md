@@ -19,7 +19,7 @@ The layout is a target, not a claim that these components are already installed.
 
 1. Pin exact upstream repository, commit/tag, and license before importing code.
 2. Keep upstream copyright and license files with every copied source tree.
-3. Lampa source repository currently identifies itself as GPL-2.0. Review the complete license and distribution obligations before bundling or modifying it.
+3. Lampa source repository contains a GPL-2.0 LICENSE file, while its package.json currently says ISC. This is a license metadata conflict; do not import or distribute the source until the upstream owner clarifies which terms apply. Review the complete license and distribution obligations before bundling or modifying it.
 4. Lampac NextGen identifies itself as AGPL-3.0. Review network-use and source-disclosure obligations before deploying a modified service.
 5. Do not copy third-party plugins or provider implementations without reviewing their individual licenses and content rights.
 6. Only integrate sources and playback links that are authorized for the intended territories and use.
@@ -36,15 +36,22 @@ The layout is a target, not a claim that these components are already installed.
 |---|---|---|---|
 | Inspect current LIS frontend and deployment shape | DONE | 🟢 | Static HTML frontend; package build copies index.html to dist. |
 | Create isolated integration branch | DONE | 🟢 | Work is isolated from main. |
-| Verify upstream Lampa source and license | IN PROGRESS | 🟡 | Public source repo: yumata/lampa-source; GPL-2.0 indicated by repository. Pin a commit and inspect LICENSE before import. |
-| Verify Lampac backend API and license | IN PROGRESS | 🟡 | lampac-nextgen/lampac documents /online.js, /lite/{provider}, /externalids and related endpoints; AGPL-3.0. |
-| Map Lampa UI/runtime boundaries | TODO | 🟡 | Identify components/events that can be themed without changing playback internals. |
+| Verify upstream Lampa source and license | BLOCKED | 🟡 | Inspected LICENSE (GPL-2.0) and package.json (license: ISC); these conflict. Obtain clarification from upstream and pin an exact commit before import. |
+| Verify Lampac backend API and license | IN PROGRESS | 🟡 | Inspected LICENSE (AGPL-3.0), docker-compose (service exposes 9118), and Online/README (plugin /online.js; provider routes /lite/{provider}; externalids). |
+| Map Lampa UI/runtime boundaries | IN PROGRESS | 🟡 | Lampa 3 migration guide documents modular classes via Lampa.Maker; identify safe theme/extension points before overriding UI. |
 | Import immutable upstream snapshot | TODO | 🟡 | Only after license review; preserve upstream tree and attribution. |
 | Build LIS adapter against documented interfaces | TODO | 🟡 | Avoid monkey-patching core or depending on private internals. |
 | Add LIS visual shell | TODO | 🟢 | Must remain separate from upstream runtime. |
 | Validate plugins, search, detail pages, playback, subtitles and audio tracks | TODO | 🟡 | Use test sources that are authorized for embedding. |
 | Security review of third-party plugins | TODO | 🔴 | Plugins can execute code; do not grant unrestricted access to LIS credentials or user data. |
 | Production deployment | TODO | 🟡 | Requires a separately hosted backend for Lampac; static Pages alone cannot run its .NET service. |
+
+## Initial repository audit
+
+- LIS is currently a static HTML frontend; package.json build script only copies index.html into dist. It does not build or host a .NET service.
+- Lampac NextGen is a separate ASP.NET Core/.NET 10 backend. Its documented Docker deployment exposes port 9118; it must be hosted separately from the current static Pages build.
+- Lampac Online module exposes the Lampa VOD plugin at /online.js, provider routes at /lite/{provider}, and external ID mapping at /externalids.
+- Lampa source package.json has a `start` Gulp workflow and a separate `license: ISC` field, but the repository LICENSE file is GPL-2.0. This mismatch is a hard import gate.
 
 ## First implementation milestone
 
