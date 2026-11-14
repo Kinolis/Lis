@@ -147,3 +147,12 @@ Every change must record: affected files, risk color, reason, test performed, re
 - GitHub Actions execution is not yet confirmed from the available commit-status response. Check the Actions tab for the run attached to the latest experiment-branch commit.
 - A production-ready LIS/Lampa combined deployment is intentionally not created: the upstream license metadata conflict remains unresolved, no authorized playback backend has been selected and secured, and the actual browser playback path has not been validated.
 - GitHub Pages publishing source is a repository setting outside the code tree. Keep it on `main` until the experiment is approved; this repository change does not alter that setting.
+
+
+## First GitHub Actions result and test baseline
+
+- First upstream test job installed dependencies successfully and ran 13 Vitest suites: 12 passed, 1 failed; 151 individual tests passed.
+- The failing suite is `spec/torrent_preload.spec.js`. It searches `src/interaction/torrent.js` for `const TORRENT_PRELOAD_POLL_MS` and a `preload` implementation, but the pinned upstream source at `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0` does not contain that implementation. This is an upstream test/source mismatch, not a failure in LIS.
+- The experiment workflow now runs the 12 compatible suites and packages the original Lampa GitHub web target using upstream Gulp task `pack_github`, verifying both `build/github/lampa/index.html` and `app.min.js` exist. The excluded suite is documented and must not be represented as passed.
+- The LIS static build, submodule pin verification, and launcher shell syntax all passed in the first run.
+- A green run of the revised workflow will verify the compatible tests and upstream packaging only. It does not prove playback/provider availability or browser/device compatibility.
