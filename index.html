@@ -37,28 +37,44 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .header-action,.btn,.pill,.season,.episode,.channel,.searchbox,
 .select-wrap select,.panel,.info-item,.profile-menu button,.list-row,
 .tag,.rating,.quality,.year,.bottom-nav{
-  background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(125,132,145,.035) 52%,rgba(255,255,255,.075)) !important;
-  border:1px solid rgba(255,255,255,.20) !important;
-  -webkit-backdrop-filter:blur(32px) saturate(175%) !important;
-  backdrop-filter:blur(32px) saturate(175%) !important;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.045),0 9px 26px rgba(0,0,0,.16);
+  position:fixed;
+  isolation:isolate;
+  overflow:hidden;
+  background:rgba(25,28,34,.12) !important;
+  border:1px solid rgba(255,255,255,.26) !important;
+  -webkit-backdrop-filter:blur(42px) saturate(190%) contrast(108%) !important;
+  backdrop-filter:blur(42px) saturate(190%) contrast(108%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.34),
+    inset 0 -1px 0 rgba(255,255,255,.08),
+    0 12px 36px rgba(0,0,0,.26),
+    0 1px 1px rgba(255,255,255,.10) !important;
 }
-.btn.primary,.pill.active,.season.active,.episode.active,.channel.active{
-  color:#fff !important;
-  background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(170,177,190,.07) 55%,rgba(255,255,255,.12)) !important;
-  border-color:rgba(255,255,255,.28) !important;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.25),inset 0 -1px 0 rgba(255,255,255,.05),0 7px 20px rgba(0,0,0,.17) !important;
+.bottom-nav:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    linear-gradient(115deg,rgba(255,255,255,.12),transparent 34%,rgba(255,255,255,.035) 70%,rgba(255,255,255,.10)),
+    radial-gradient(ellipse at 50% -30%,rgba(255,255,255,.18),transparent 65%);
 }
-.bottom-nav{
-  background:linear-gradient(115deg,rgba(255,255,255,.13),rgba(104,111,124,.055) 52%,rgba(255,255,255,.10)) !important;
-  border:1px solid rgba(255,255,255,.25) !important;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.23),inset 0 -1px 0 rgba(255,255,255,.05),0 12px 34px rgba(0,0,0,.28) !important;
+.bottom-nav:after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+  border:1px solid rgba(255,255,255,.07);
 }
-.nav-item{color:rgba(245,246,249,.84)}
+.nav-item{position:relative;z-index:1;color:rgba(245,246,249,.88);background:transparent !important;}
 .nav-item.active{
   color:#17191e !important;
-  background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(210,216,226,.38)) !important;
-  border:1px solid rgba(255,255,255,.34) !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.68),rgba(210,216,226,.25)) !important;
+  border:1px solid rgba(255,255,255,.30) !important;
   box-shadow:inset 0 1px 1px rgba(255,255,255,.58),0 4px 15px rgba(0,0,0,.15) !important;
 }
 </style></head><body>
