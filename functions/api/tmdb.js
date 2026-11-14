@@ -51,6 +51,11 @@ export async function onRequest({ request, env }) {
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
     endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}`);
     endpoint.searchParams.set("language", "ru-RU");
+  } else if (action === "videos") {
+    const id = url.searchParams.get("id");
+    if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
+    endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/videos`);
+    endpoint.searchParams.set("language", "ru-RU");
   } else if (action === "credits") {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
@@ -107,6 +112,7 @@ export async function onRequest({ request, env }) {
     const data = await upstream.json();
     if (action === "details") return json({ item: { ...data, title: data.title || data.name || "", release_date: data.release_date || data.first_air_date || "", media_type: kind } });
     if (action === "images") return json({ logos: data.logos || [] });
+    if (action === "videos") return json({ videos: (data.results || []).map(video => ({ key: video.key, site: video.site, type: video.type, official: !!video.official, name: video.name || "" })) });
     if (action === "credits") return json({ cast: (data.cast || []).slice(0, 16).map(person => ({ id: person.id, name: person.name, character: person.character || "", profile_path: person.profile_path || null })) });
     const results = (data.results || []).map(item => ({
       id: item.id,
