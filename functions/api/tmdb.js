@@ -16,7 +16,11 @@ export async function onRequest({ request, env }) {
   if (!env.TMDB_TOKEN) return json({ error: "TMDB_TOKEN is not configured in Cloudflare Pages" }, 503);
 
   let endpoint;
-  if (action === "images") {
+  if (action === "credits") {
+    const id = url.searchParams.get("id");
+    if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
+    endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/credits`);
+  } else if (action === "images") {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
     endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/images`);
@@ -51,6 +55,7 @@ export async function onRequest({ request, env }) {
     if (!upstream.ok) return json({ error: "TMDB request failed", status: upstream.status }, 502);
     const data = await upstream.json();
     if (action === "images") return json({ logos: data.logos || [] });
+    if (action === "credits") return json({ cast: (data.cast || []).slice(0, 16).map(person => ({ id: person.id, name: person.name, character: person.character || "", profile_path: person.profile_path || null })) });
     const results = (data.results || []).map(item => ({
       id: item.id,
       title: item.title || item.name || "",
