@@ -103,3 +103,13 @@ Every change must record: affected files, risk color, reason, test performed, re
 - 🟡 Next safe engineering step: establish an upstream fork or a reproducible source sync that preserves the upstream commit and notices; run the unmodified upstream build before any LIS branding/customization.
 - 🔴 Do not enable arbitrary plugin URLs, parser/torrent providers, or unauthenticated backend endpoints as part of the initial import.
 - No upstream runtime files have been copied into LIS yet. The source import is still pending; this branch currently contains planning/audit documentation only.
+
+
+## Pinned upstream source dependency
+
+- Added `vendor/lampa-source` as a Git submodule pointing to `https://github.com/yumata/lampa-source.git`.
+- Pinned upstream commit: `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0` (upstream default branch `main`, observed 2026-11-15).
+- The submodule preserves the upstream repository and its own history; it is not a copied/modified snapshot. Clone LIS with `git clone --recurse-submodules https://github.com/Kinolis/Lis.git` and checkout this experiment branch to populate the submodule working tree.
+- The submodule pointer is committed only on `experiment/lampa-source`; LIS `main` and deployed site are unchanged.
+- License gate remains open: upstream `LICENSE` is GPL-2.0 while `package.json` says ISC. The pinned source includes the upstream LICENSE; do not distribute a modified combined product until the maintainer clarifies the discrepancy and LIS distribution obligations are reviewed.
+- Build has not yet been run. The upstream project requires Node/npm dependencies and its Gulp build; do not treat the submodule pointer as a verified runnable LIS build.

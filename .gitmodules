@@ -1,0 +1,3 @@
+[submodule "vendor/lampa-source"]
+	path = vendor/lampa-source
+	url = https://github.com/yumata/lampa-source.git
