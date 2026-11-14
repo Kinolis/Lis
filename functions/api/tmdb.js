@@ -17,7 +17,14 @@ export async function onRequest({ request, env }) {
 
   let endpoint;
   if (action === "discover") {
-    endpoint = new URL(`https://api.themoviedb.org/3/${category === "top_rated" ? kind + "/top_rated" : category === "upcoming" && kind === "movie" ? "movie/upcoming" : kind + "/popular"}`);
+    if (category === "animation" || category === "anime") {
+      const discoveryKind = category === "anime" ? "tv" : "movie";
+      endpoint = new URL(`https://api.themoviedb.org/3/discover/${discoveryKind}`);
+      endpoint.searchParams.set("with_genres", "16");
+      if (category === "anime") endpoint.searchParams.set("with_original_language", "ja");
+    } else {
+      endpoint = new URL(`https://api.themoviedb.org/3/${category === "top_rated" ? kind + "/top_rated" : category === "upcoming" && kind === "movie" ? "movie/upcoming" : kind + "/popular"}`);
+    }
     endpoint.searchParams.set("language", "ru-RU");
     endpoint.searchParams.set("page", String(page));
     if (category === "popular") endpoint.searchParams.set("region", "RU");
