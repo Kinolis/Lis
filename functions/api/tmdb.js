@@ -18,7 +18,7 @@ export async function onRequest({ request, env }) {
   let endpoint;
   if (action === "images") {
     const id = url.searchParams.get("id");
-    if (!id || !/^\\d+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
+    if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
     endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/images`);
     endpoint.searchParams.set("include_image_language", "ru,en,null");
   } else if (action === "discover") {
