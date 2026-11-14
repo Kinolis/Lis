@@ -138,3 +138,12 @@ Every change must record: affected files, risk color, reason, test performed, re
 - The workflow checks out LIS with recursive submodules, installs the pinned Lampa source dependencies on Node.js 20, and runs the upstream Vitest suite with `npm test -- --run`.
 - It runs on pushes and pull requests targeting the experiment branch, and can be started manually with GitHub Actions.
 - This is a source test workflow, not a production build or browser playback test. Its first GitHub Actions run is still pending; record the actual result before treating the upstream runtime as verified.
+
+
+## CI scope and current blockers
+
+- The workflow now has two independent jobs: the pinned upstream Lampa Vitest suite, and LIS static-site build plus pinned-submodule and launcher syntax checks.
+- The LIS build job verifies that the existing static Pages build still produces a non-empty `dist/index.html`; it does not bundle Lampa into LIS.
+- GitHub Actions execution is not yet confirmed from the available commit-status response. Check the Actions tab for the run attached to the latest experiment-branch commit.
+- A production-ready LIS/Lampa combined deployment is intentionally not created: the upstream license metadata conflict remains unresolved, no authorized playback backend has been selected and secured, and the actual browser playback path has not been validated.
+- GitHub Pages publishing source is a repository setting outside the code tree. Keep it on `main` until the experiment is approved; this repository change does not alter that setting.
