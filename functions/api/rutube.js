@@ -8,6 +8,7 @@ export async function onRequest({ request }) {
   if (request.method !== "GET") return json({ error: "Method not allowed" }, 405);
   const url = new URL(request.url);
   const query = (url.searchParams.get("q") || "").trim();
+  const type = url.searchParams.get("type") === "tv" ? "tv" : "movie";
   if (!query || query.length > 160) return json({ error: "A valid q parameter is required" }, 400);
 
   try {
@@ -32,7 +33,15 @@ export async function onRequest({ request }) {
       const views = Number(item.views || item.hits || item.views_count || 0);
       const thumbnail = item.thumbnail_url || item.thumbnail || item.preview || item.image || "";
       return { id, title, author: String(author), duration, views, thumbnail: /^https:\/\//i.test(thumbnail) ? thumbnail : "" };
-    }).filter(item => /^[a-zA-Z0-9_-]{8,80}$/.test(item.id) && item.title).slice(0, 12);
+    }).filter(item => {
+      if (!/^[a-zA-Z0-9_-]{8,80}$/.test(item.id) || !item.title) return false;
+      const title = item.title.toLocaleLowerCase("ru");
+      // Remove trailers, teasers, promos, clips, reviews and other non-watchable results.
+      if (/(?:трейлер|тизер|teaser|trailer|promo|промо|анонс|клип|clip|обзор|review|реакци|reaction|нарезк|shorts?)/i.test(title)) return false;
+      // Full films should be feature-length; series episodes are usually shorter.
+      const minimumDuration = type === "tv" ? 15 * 60 : 45 * 60;
+      return item.duration >= minimumDuration;
+    }).slice(0, 12);
     return json({ results });
   } catch {
     return json({ error: "Unable to reach RUTUBE search" }, 502);
