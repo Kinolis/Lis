@@ -199,6 +199,12 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .catalog-select select{width:100%;min-width:0;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:10px 8px;background:#202126;color:#f5f5f7;font-size:12px}
 .catalog-reset{font-size:11px;margin-top:7px}
 @media(max-width:600px){.catalog-filter-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.catalog-toolbar{padding:11px}.catalog-select select{font-size:13px;padding:11px 9px}}
+
+/* Keep all four detail actions readable on narrow screens */
+@media(max-width:600px){
+  .detail-copy .actions{flex-wrap:wrap;max-width:560px;gap:9px}
+  .detail-copy .actions .btn{flex:1 1 calc(50% - 9px);min-width:0;padding:12px 7px;font-size:14px;white-space:nowrap}
+}
 </style></head><body>
 <main id="app"></main>
 <nav class="bottom-nav" id="bottomNav" aria-label="Основная навигация">
