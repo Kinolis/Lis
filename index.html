@@ -246,7 +246,7 @@ function card(m){
 function rail(title,list){if(!list.length)return '';return '<section class="section"><div class="section-head"><h2>'+title+'</h2><span class="muted">Смотреть все →</span></div><div class="rail">'+list.map(card).join('')+'</div></section>'}
 function setActive(){document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
 function go(p){page=p;setActive();render();window.scrollTo({top:0,behavior:'smooth'})}
-function render(){const app=document.getElementById('app');if(page==='Главная')app.innerHTML=home();else if(page==='Каталог')app.innerHTML=catalog();else if(page==='Поиск')app.innerHTML=searchPage();else if(page==='Моё')app.innerHTML=myPage();else if(page==='Профиль')app.innerHTML=profilePage();else if(page==='ТВ')app.innerHTML=tvPage();else app.innerHTML=home()}
+function render(){const app=document.getElementById('app');if(catalogObserver)catalogObserver.disconnect();if(page==='Главная')app.innerHTML=home();else if(page==='Каталог'){app.innerHTML=catalog();observeCatalogEnd()}else if(page==='Поиск')app.innerHTML=searchPage();else if(page==='Моё')app.innerHTML=myPage();else if(page==='Профиль')app.innerHTML=profilePage();else if(page==='ТВ')app.innerHTML=tvPage();else app.innerHTML=home()}
 function home(){
   if(!catalogReady)return '<section class="loading-screen" role="status" aria-live="polite"><div class="loading-brand">LIS</div><div class="loading-orbit"><span></span></div><div class="loading-caption">ТВОЯ ТЕРРИТОРИЯ КИНО</div><div class="loading-progress"><i></i></div><div class="loading-status">Подбираем фильмы для тебя</div></section>';
   const featured=movies.slice(0,10);if(!featured.length)return '<div class="content"><p class="muted">Каталог пока недоступен.</p></div>';
@@ -270,10 +270,9 @@ function fromTMDB(item,kind){
   const date=item.release_date||'';
   return {id:item.id,title:item.title||item.name||'',year:date?date.slice(0,4):(item.first_air_date||'').slice(0,4)||'—',type:isTV?'Сериал':'Фильм',rating:Number(item.vote_average||0).toFixed(1),genreIds:item.genre_ids||[],quality:'',genre:'',poster:(item.poster_path||'').replace(/^\//,''),back:(item.backdrop_path||item.poster_path||'').replace(/^\//,''),desc:item.overview||'',tmdbId:item.id,mediaType:kind};
 }
-async function tmdbList(kind,category='popular',pageNo=1){
-  const r=await fetch('/api/tmdb?action=discover&type='+kind+'&category='+category+'&page='+pageNo);
-  if(!r.ok) throw new Error('TMDB '+r.status);
-  const d=await r.json();return (d.results||[]).map(x=>fromTMDB(x,kind)).filter(x=>x.poster);
+async function tmdbList(kind,category='popular',pageNo=1,filters={}){
+  const params=new URLSearchParams({action:'discover',type:kind,category,page:String(pageNo)});Object.entries(filters).forEach(([k,v])=>{if(v!==''&&v!=null)params.set(k,String(v))});
+  const r=await fetch('/api/tmdb?'+params.toString());if(!r.ok)throw new Error('TMDB '+r.status);const d=await r.json();return (d.results||[]).map(x=>fromTMDB(x,kind)).filter(x=>x.poster);
 }
 async function loadRealCatalog(){
   try{
@@ -288,41 +287,22 @@ async function loadRealCatalog(){
     await finishStartup();
   }catch(e){console.warn('TMDB catalog unavailable',e);await finishStartup();}
 }
-let catalogGenre='all',catalogYear='all',catalogMinRating=0,catalogSort='popular',catalogPage=1,catalogLoading=false;
+let catalogGenre='all',catalogYear='all',catalogMinRating=0,catalogSort='popular',catalogPage=1,catalogLoading=false,catalogHasMore=true,catalogObserver=null;
 const catalogGenres={28:'Боевик',12:'Приключения',16:'Мультфильм',35:'Комедия',80:'Криминал',99:'Документальный',18:'Драма',14:'Фэнтези',27:'Ужасы',10749:'Мелодрама',9648:'Детектив',878:'Фантастика',53:'Триллер',10752:'Военный',37:'Вестерн',10759:'Боевик и приключения',10765:'Фантастика и фэнтези'};
-function catalogSource(){return activeType==='Фильмы'?liveMovies:activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:activeType==='Классика'?liveClassics:[]}
-function catalogFiltered(){
- let list=[...catalogSource()];
- if(catalogGenre!=='all')list=list.filter(m=>(m.genreIds||[]).includes(Number(catalogGenre)));
- if(catalogYear!=='all')list=list.filter(m=>String(m.year)===catalogYear);
- list=list.filter(m=>Number(m.rating||0)>=Number(catalogMinRating));
- if(catalogSort==='rating')list.sort((a,b)=>Number(b.rating)-Number(a.rating));
- else if(catalogSort==='year')list.sort((a,b)=>Number(b.year)-Number(a.year));
- else if(catalogSort==='title')list.sort((a,b)=>a.title.localeCompare(b.title,'ru'));
- return list;
-}
-function resetCatalogFilters(){catalogGenre='all';catalogYear='all';catalogMinRating=0;catalogSort='popular';render()}
-function setCatalogType(type){activeType=type;catalogPage=1;resetCatalogFilters()}
-function catalog(){
- const types=['Фильмы','Сериалы','Классика','Мультфильмы','Аниме','Шоу','ТВ'],list=catalogFiltered();
- const years=[...new Set(catalogSource().map(m=>String(m.year)).filter(y=>/^\\d{4}$/.test(y)))].sort((a,b)=>Number(b)-Number(a));
- const genreOptions=Object.entries(catalogGenres).map(([id,name])=>'<option value="'+id+'" '+(catalogGenre===id?'selected':'')+'>'+name+'</option>').join('');
- const yearOptions=years.map(y=>'<option value="'+y+'" '+(catalogYear===y?'selected':'')+'>'+y+'</option>').join('');
- const label=activeType;
- const filters='<div class="catalog-toolbar"><div class="catalog-filter-row"><label class="catalog-select"><span>Жанр</span><select onchange="catalogGenre=this.value;render()"><option value="all">Все жанры</option>'+genreOptions+'</select></label><label class="catalog-select"><span>Год</span><select onchange="catalogYear=this.value;render()"><option value="all">Любой год</option>'+yearOptions+'</select></label><label class="catalog-select"><span>Рейтинг</span><select onchange="catalogMinRating=Number(this.value);render()"><option value="0" '+(catalogMinRating===0?'selected':'')+'>Любой</option><option value="6" '+(catalogMinRating===6?'selected':'')+'>От 6.0</option><option value="7" '+(catalogMinRating===7?'selected':'')+'>От 7.0</option><option value="8" '+(catalogMinRating===8?'selected':'')+'>От 8.0</option><option value="9" '+(catalogMinRating===9?'selected':'')+'>От 9.0</option></select></label><label class="catalog-select"><span>Сортировка</span><select onchange="catalogSort=this.value;render()"><option value="popular" '+(catalogSort==='popular'?'selected':'')+'>Популярные</option><option value="rating" '+(catalogSort==='rating'?'selected':'')+'>По рейтингу</option><option value="year" '+(catalogSort==='year'?'selected':'')+'>Сначала новые</option><option value="title" '+(catalogSort==='title'?'selected':'')+'>По названию</option></select></label></div><button class="text-btn catalog-reset" onclick="resetCatalogFilters()">Сбросить фильтры</button></div>';
- return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" data-type="'+t+'" onclick="setCatalogType(this.dataset.type)">'+t+'</button>').join('')+'</div>'+(activeType==='ТВ'?'<div class="toolbar"><strong>Телевидение</strong></div><button class="btn primary" onclick="go(\'ТВ\')">Открыть телеканалы →</button>':activeType==='Шоу'?'<p class="muted">Подборка шоу пока не подключена к каталогу TMDB.</p>':filters+'<div class="toolbar"><strong>'+label+' · '+list.length+'</strong></div><div class="catalog-grid">'+(list.length?list.map(card).join(''):'<p class="muted">Ничего не найдено. Измени параметры фильтрации.</p>')+'</div><button class="btn" style="margin-top:22px" onclick="loadMoreCatalog()" '+(catalogLoading?'disabled':'')+'>'+(catalogLoading?'Загружаем…':'Загрузить ещё')+'</button>')+'</div>';
-}
-async function loadMoreCatalog(){
- if(catalogLoading||activeType==='Шоу'||activeType==='ТВ')return;
- catalogLoading=true;render();
- const kind=activeType==='Сериалы'||activeType==='Аниме'?'tv':'movie',category=activeType==='Мультфильмы'?'animation':activeType==='Аниме'?'anime':activeType==='Классика'?'classics':'popular';
- try{
-  const list=await tmdbList(kind,category,++catalogPage),target=activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:activeType==='Классика'?liveClassics:liveMovies;
-  const seen=new Set(target.map(m=>String(m.tmdbId||m.title))),fresh=list.filter(m=>!seen.has(String(m.tmdbId||m.title)));
-  target.push(...fresh);movies.push(...fresh);
- }catch(e){console.warn('Could not load more catalog items',e)}
- catalogLoading=false;render();
-}
+function catalogKind(){return activeType==='Сериалы'||activeType==='Аниме'?'tv':'movie'}
+function catalogCategory(){return activeType==='Мультфильмы'?'animation':activeType==='Аниме'?'anime':activeType==='Классика'?'classics':'popular'}
+function catalogTarget(){return activeType==='Сериалы'?liveShows:activeType==='Мультфильмы'?liveAnimation:activeType==='Аниме'?liveAnime:activeType==='Классика'?liveClassics:liveMovies}
+function catalogParams(){return {genre:catalogGenre==='all'?'':catalogGenre,year:catalogYear==='all'?'':catalogYear,rating:catalogMinRating||'',sort:catalogSort==='popular'?'popularity.desc':catalogSort==='rating'?'vote_average.desc':catalogSort==='year'?'primary_release_date.desc':'original_title.asc'}}
+function catalogFiltered(){return [...catalogTarget()]}
+async function applyCatalogFilters(){catalogPage=1;catalogHasMore=true;catalogLoading=true;render();try{const list=await tmdbList(catalogKind(),catalogCategory(),1,catalogParams()),target=catalogTarget();target.splice(0,target.length,...list);movies.push(...list.filter(m=>!movies.some(x=>x.mediaType===m.mediaType&&x.tmdbId===m.tmdbId)));catalogHasMore=list.length>0}catch(e){console.warn('Catalog filters failed',e)}catalogLoading=false;render()}
+function resetCatalogFilters(){catalogGenre='all';catalogYear='all';catalogMinRating=0;catalogSort='popular';applyCatalogFilters()}
+function setCatalogType(type){activeType=type;catalogGenre='all';catalogYear='all';catalogMinRating=0;catalogSort='popular';applyCatalogFilters()}
+function catalog(){const types=['Фильмы','Сериалы','Классика','Мультфильмы','Аниме','Шоу','ТВ'],list=catalogFiltered(),years=Array.from({length:107},(_,i)=>String(2026-i)).filter(y=>Number(y)>=1920),genreOptions=Object.entries(catalogGenres).map(([id,n])=>'<option value="'+id+'" '+(catalogGenre===id?'selected':'')+'>'+n+'</option>').join(''),yearOptions=years.map(y=>'<option value="'+y+'" '+(catalogYear===y?'selected':'')+'>'+y+'</option>').join('');
+const filters='<div class="catalog-toolbar"><div class="catalog-filter-row"><label class="catalog-select"><span>Жанр</span><select onchange="catalogGenre=this.value;applyCatalogFilters()"><option value="all">Все жанры</option>'+genreOptions+'</select></label><label class="catalog-select"><span>Год выпуска</span><select onchange="catalogYear=this.value;applyCatalogFilters()"><option value="all">Любой год</option>'+yearOptions+'</select></label><label class="catalog-select"><span>Рейтинг</span><select onchange="catalogMinRating=Number(this.value);applyCatalogFilters()"><option value="0">Любой</option><option value="6">От 6.0</option><option value="7">От 7.0</option><option value="8">От 8.0</option><option value="9">От 9.0</option></select></label><label class="catalog-select"><span>Сортировка</span><select onchange="catalogSort=this.value;applyCatalogFilters()"><option value="popular">Популярные</option><option value="rating">По рейтингу</option><option value="year">Сначала новые</option><option value="title">По названию</option></select></label></div><button class="text-btn catalog-reset" onclick="resetCatalogFilters()">Сбросить фильтры</button></div>';
+const body=activeType==='ТВ'?'<div class="toolbar"><strong>Телевидение</strong></div><button class="btn primary" onclick="go(\'ТВ\')">Открыть телеканалы →</button>':activeType==='Шоу'?'<p class="muted">Подборка шоу пока не подключена к каталогу TMDB.</p>':filters+'<div class="toolbar"><strong>'+activeType+' · '+list.length+'</strong></div><div class="catalog-grid">'+(list.length?list.map(card).join(''):'<p class="muted">Ничего не найдено. Измени параметры фильтрации.</p>')+'</div><div id="catalogSentinel" class="catalog-sentinel" aria-live="polite">'+(catalogLoading?'Загружаем фильмы…':catalogHasMore?'':'Больше результатов нет')+'</div>';
+return '<div class="content"><h1 class="page-title">Каталог</h1><div class="tabs">'+types.map(t=>'<button class="pill '+(activeType===t?'active':'')+'" data-type="'+t+'" onclick="setCatalogType(this.dataset.type)">'+t+'</button>').join('')+'</div>'+body+'</div>'}
+async function loadMoreCatalog(){if(catalogLoading||!catalogHasMore||activeType==='Шоу'||activeType==='ТВ')return;catalogLoading=true;const sentinel=document.getElementById('catalogSentinel');if(sentinel)sentinel.textContent='Загружаем фильмы…';try{const list=await tmdbList(catalogKind(),catalogCategory(),++catalogPage,catalogParams()),target=catalogTarget(),seen=new Set(target.map(m=>String(m.tmdbId||m.title))),fresh=list.filter(m=>!seen.has(String(m.tmdbId||m.title)));target.push(...fresh);movies.push(...fresh);catalogHasMore=list.length>0&&catalogPage<500;const grid=document.querySelector('.catalog-grid');if(grid&&fresh.length)grid.insertAdjacentHTML('beforeend',fresh.map(card).join(''));if(sentinel)sentinel.textContent=catalogHasMore?'':'Больше результатов нет'}catch(e){console.warn('Could not load more catalog items',e);catalogPage=Math.max(1,catalogPage-1);if(sentinel)sentinel.textContent='Не удалось загрузить. Прокрути ещё раз для повтора'}catalogLoading=false}
+function observeCatalogEnd(){if(catalogObserver)catalogObserver.disconnect();const sentinel=document.getElementById('catalogSentinel');if(!sentinel||typeof IntersectionObserver==='undefined')return;catalogObserver=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting))loadMoreCatalog()},{rootMargin:'700px 0px'});catalogObserver.observe(sentinel)}
 function searchPage(){
   return '<div class="content"><h1 class="page-title">Поиск</h1><input class="searchbox" placeholder="Название фильма, сериала или другого контента" value="'+query.replace(/"/g,'&quot;')+'" oninput="query=this.value;renderSearchResults()"><div id="searchResults" class="search-results">'+(query?'<p class="muted">Ищем в каталоге TMDB…</p>':'<p class="muted">Начни вводить название — результаты появятся здесь.</p>')+'</div></div>';
 }
