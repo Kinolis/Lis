@@ -6,14 +6,14 @@ Preserve the upstream Lampa runtime and behavior. LIS owns the presentation laye
 
 ## Repository layout target
 
-- `vendor/lampa/` — pinned upstream Lampa source snapshot; keep upstream files unchanged.
+- `vendor/lampa-source/` — upstream Lampa source Git submodule pinned to an exact commit; keep upstream files unchanged.
 - `vendor/lampac/` — optional self-hosted backend, isolated from the static LIS frontend.
 - `functions/api/lampa/` — LIS-owned server-side adapter/proxy endpoints only; never expose backend secrets.
 - `lis-interface/` — LIS presentation components and styles.
 - `lis-adapter/` — narrow compatibility layer between LIS UI and documented Lampa APIs/events.
 - `docs/LAMPA-INTEGRATION.md` — integration checklist and risk register.
 
-The layout is a target, not a claim that these components are already installed.
+The layout is a target. At present, only the `vendor/lampa-source` Git submodule is connected; the LIS adapter, LIS visual shell, and Lampac backend are not implemented.
 
 ## Compatibility and licensing gates
 
@@ -36,10 +36,10 @@ The layout is a target, not a claim that these components are already installed.
 |---|---|---|---|
 | Inspect current LIS frontend and deployment shape | DONE | 🟢 | Static HTML frontend; package build copies index.html to dist. |
 | Create isolated integration branch | DONE | 🟢 | Work is isolated from main. |
-| Verify upstream Lampa source and license | BLOCKED | 🟡 | Rechecked both yumata/lampa-source and yumata/lampa: LICENSE is GPL-2.0; lampa-source/package.json says ISC. Main repo also has GPL-2.0. Obtain owner clarification and pin exact commits before bundling. |
+| Verify upstream Lampa source and license | BLOCKED | 🟡 | Source commit is pinned as a submodule; LICENSE is GPL-2.0 while package.json says ISC. Obtain owner clarification before redistribution/bundling. |
 | Verify Lampac backend API and license | IN PROGRESS | 🟡 | Inspected LICENSE (AGPL-3.0), docker-compose (service exposes 9118), and Online/README (plugin /online.js; provider routes /lite/{provider}; externalids). |
 | Map Lampa UI/runtime boundaries | IN PROGRESS | 🟡 | Lampa 3 migration guide documents modular classes via Lampa.Maker; identify safe theme/extension points before overriding UI. |
-| Import immutable upstream snapshot | TODO | 🟡 | Only after license review; preserve upstream tree and attribution. |
+| Connect pinned upstream source | DONE | 🟢 | `vendor/lampa-source` submodule points to `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0`; source is fetched when cloning with submodules. It is not copied into LIS blobs. |
 | Build LIS adapter against documented interfaces | TODO | 🟡 | Avoid monkey-patching core or depending on private internals. |
 | Add LIS visual shell | TODO | 🟢 | Must remain separate from upstream runtime. |
 | Validate plugins, search, detail pages, playback, subtitles and audio tracks | TODO | 🟡 | Use test sources that are authorized for embedding. |
@@ -81,7 +81,7 @@ Every change must record: affected files, risk color, reason, test performed, re
 - Upstream source repository confirmed: `https://github.com/yumata/lampa-source`; it contains `src/`, `plugins/`, `public/`, `index/`, `spec/`, `docs/`, `gulpfile.js`, and `package.json`.
 - Upstream README documents local development via `npm install` and `npm run start`; this is a Gulp-based source project, not a single HTML file.
 - Upstream `package.json` currently declares `license: ISC`, while the repository's `LICENSE` file is the full GPL-2.0 text. Do not silently choose one: retain both pieces of evidence and obtain maintainer clarification before publishing a redistributed derivative.
-- No Lampa source files have been imported in this commit. The connected GitHub actions available in this session do not expose a repository-fork or bulk Git-clone/import operation; creating placeholder files would falsely imply a working import. The actual source import must be done as a real upstream fork/clone, preserving history and all notices, then pushed to this experiment branch.
+- The upstream source is connected as a Git submodule, not copied into LIS's own file tree. The exact upstream commit is recorded by the submodule gitlink; cloning with `--recurse-submodules` fetches the source and preserves its upstream history and notices.
 - Next technical gate after import: run the upstream Gulp build unchanged and verify the generated app locally before connecting LIS UI or any provider backend.
 
 
@@ -100,9 +100,9 @@ Every change must record: affected files, risk color, reason, test performed, re
 ## Import decision
 
 - 🟢 Read-only source architecture audit completed for the files listed above.
-- 🟡 Next safe engineering step: establish an upstream fork or a reproducible source sync that preserves the upstream commit and notices; run the unmodified upstream build before any LIS branding/customization.
-- 🔴 Do not enable arbitrary plugin URLs, parser/torrent providers, or unauthenticated backend endpoints as part of the initial import.
-- No upstream runtime files have been copied into LIS yet. The source import is still pending; this branch currently contains planning/audit documentation only.
+- 🟢 Upstream source dependency connected as a Git submodule, pinned to the exact commit recorded below.
+- 🟡 Next safe engineering step: clone with submodules, install upstream dependencies, and run the unmodified Lampa build in isolation before any LIS branding/customization.
+- 🔴 Do not enable arbitrary plugin URLs, parser/torrent providers, or unauthenticated backend endpoints as part of the initial integration.
 
 
 ## Pinned upstream source dependency
@@ -113,3 +113,10 @@ Every change must record: affected files, risk color, reason, test performed, re
 - The submodule pointer is committed only on `experiment/lampa-source`; LIS `main` and deployed site are unchanged.
 - License gate remains open: upstream `LICENSE` is GPL-2.0 while `package.json` says ISC. The pinned source includes the upstream LICENSE; do not distribute a modified combined product until the maintainer clarifies the discrepancy and LIS distribution obligations are reviewed.
 - Build has not yet been run. The upstream project requires Node/npm dependencies and its Gulp build; do not treat the submodule pointer as a verified runnable LIS build.
+
+
+## Current experiment status
+
+- LIS branch: `experiment/lampa-source`; production `main` remains unchanged.
+- Upstream source is available through the pinned Git submodule at `vendor/lampa-source`.
+- No local npm install, Gulp build, or browser playback test has been completed yet. The next gate is a clean, unmodified upstream run; only after that should LIS-owned UI integration begin.
