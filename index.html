@@ -212,6 +212,18 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
   .detail-copy .actions.detail-actions .detail-watch{grid-column:1 / -1}
 }
 
+/* LIS source picker and RUTUBE results */
+.source-list{display:grid;gap:10px}
+.source-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--glass)}
+.source-status{font-size:11px;color:var(--muted)}
+.source-results-head{font-size:12px;color:var(--muted);padding:4px 2px}
+.source-result{display:flex;align-items:center;gap:12px;width:100%;padding:10px;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--glass);color:var(--white)}
+.source-result img,.source-thumb{width:112px;aspect-ratio:16/9;object-fit:cover;border-radius:9px;background:#24262d;flex:0 0 auto}
+.source-thumb{display:grid;place-items:center;color:#ddd}
+.source-result-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:6px}
+.source-result-copy strong{font-size:13px;line-height:1.35}
+.source-result-copy small{font-size:11px;color:var(--muted);line-height:1.4}
+.source-play{font-size:18px;padding:0 7px}
 /* LIS native playback surface */
 .player-page{min-height:calc(100svh - 100px);padding:24px clamp(16px,4vw,64px) 50px;max-width:1180px;margin:0 auto}
 .player-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0 18px}
@@ -457,19 +469,36 @@ async function hydratePosters(){
   else render();
 }
 
-function searchVKVideo(i){
-  const m=movies[i];if(!m)return;
-  const query=[m.title,m.year].filter(Boolean).join(' ');
-  const url='https://vk.com/video?q='+encodeURIComponent(query)+'&section=search';
-  window.open(url,'_blank','noopener');
+function rutubeDuration(seconds){
+  const n=Number(seconds)||0;if(!n)return '';
+  const h=Math.floor(n/3600),m=Math.floor(n%3600/60),s=Math.floor(n%60);
+  return h?[h,String(m).padStart(2,'0'),String(s).padStart(2,'0')].join(':'):[m,String(s).padStart(2,'0')].join(':');
 }
-function openPlayer(i){
-  const m=movies[i];if(!m)return;
-  page='Плеер';setActive();
+async function openRutubeVideo(id,title){
   const app=document.getElementById('app');
-  const source=typeof m.videoUrl==='string'&&/^https:\/\//i.test(m.videoUrl)?m.videoUrl:'';
-  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS PLAYER</span></div><div class="player-screen">'+(source?'<video controls playsinline preload="metadata" poster="https://image.tmdb.org/t/p/w780/'+escapeHTML(m.back||m.poster||'')+'"><source src="'+escapeHTML(source)+'"></video>':'<div class="player-empty"><div class="player-symbol">▶</div><h2>Ищем фильм через VK Видео</h2><p>Без токена VK LIS не может получить список результатов прямо в плеере. Откроем поиск по названию и году — выбери полный фильм среди доступных видео.</p><button class="btn primary" style="margin-top:18px" onclick="searchVKVideo('+i+')">Найти в VK Видео ↗</button></div>')+'</div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
+  if(!/^[a-zA-Z0-9_-]{8,80}$/.test(String(id)))return;
+  const safeTitle=escapeHTML(title||'Видео RUTUBE');
+  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openPlayer('+detailIndex+')">← К источникам</button><span class="muted">RUTUBE</span></div><div class="player-screen"><iframe title="'+safeTitle+'" src="https://rutube.ru/play/embed/'+encodeURIComponent(id)+'" style="width:100%;height:100%;border:0" allow="clipboard-write; autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="player-info"><strong style="color:#f5f5f7">'+safeTitle+'</strong><div>Встроенный плеер RUTUBE</div></div></section>';
   window.scrollTo(0,0);
+}
+async function openPlayer(i){
+  const m=movies[i];if(!m)return;
+  detailIndex=i;page='Плеер';setActive();
+  const app=document.getElementById('app');
+  const query=[m.title,m.year].filter(Boolean).join(' ');
+  app.innerHTML='<section class="player-page"><div class="player-top"><button class="player-back" onclick="openDetail('+i+')">← Назад к фильму</button><span class="muted">LIS SOURCES</span></div><h2 style="font:700 23px Manrope;margin:10px 0 6px">Выбери источник</h2><p class="muted" style="margin:0 0 18px">'+escapeHTML(query)+'</p><div class="source-list"><article class="source-card"><div><strong>RUTUBE</strong><div class="muted">Поиск публичных видео</div></div><span class="source-status">Поиск…</span></article></div><div class="player-info"><strong style="color:#f5f5f7">'+escapeHTML(m.title)+'</strong><div>'+escapeHTML(String(m.year||''))+' · '+escapeHTML(m.type||'')+'</div></div></section>';
+  window.scrollTo(0,0);
+  try{
+    const response=await fetch('/api/rutube?q='+encodeURIComponent(query));
+    if(!response.ok)throw new Error('RUTUBE search failed');
+    const data=await response.json(),items=data.results||[];
+    const list=document.querySelector('.source-list');if(!list)return;
+    if(!items.length){list.innerHTML='<div class="player-empty"><h2>Ничего не найдено</h2><p>В RUTUBE не нашлось доступных совпадений. Попробуй поиск по оригинальному названию.</p><a class="text-btn" href="https://rutube.ru/search/?query='+encodeURIComponent(query)+'" target="_blank" rel="noopener">Открыть поиск RUTUBE ↗</a></div>';return;}
+    list.innerHTML='<div class="source-results-head">Найдено видео: '+items.length+'</div>'+items.map(item=>'<button class="source-result" onclick="openRutubeVideo(\''+escapeHTML(item.id)+'\',\''+escapeHTML(item.title).replace(/'/g,'&#39;')+'\')">'+(item.thumbnail?'<img src="'+escapeHTML(item.thumbnail)+'" alt="" loading="lazy">':'<div class="source-thumb">▶</div>')+'<span class="source-result-copy"><strong>'+escapeHTML(item.title)+'</strong><small>'+escapeHTML(item.author||'RUTUBE')+(item.duration?' · '+rutubeDuration(item.duration):'')+(item.views?' · '+Number(item.views).toLocaleString('ru-RU')+' просмотров':'')+'</small></span><span class="source-play">▶</span></button>').join('');
+  }catch(e){
+    const list=document.querySelector('.source-list');
+    if(list)list.innerHTML='<div class="player-empty"><h2>Поиск RUTUBE сейчас недоступен</h2><p>Сервис мог ограничить автоматические запросы. Можно открыть официальный поиск отдельно.</p><a class="text-btn" href="https://rutube.ru/search/?query='+encodeURIComponent(query)+'" target="_blank" rel="noopener">Искать на RUTUBE ↗</a></div>';
+  }
 }
 
 setInterval(()=>{if(page==='Главная'){heroIndex=(heroIndex+1)%10;render()}},10000);
