@@ -1,3 +1,4 @@
+// Redeploy after configuring the TMDB_TOKEN Pages secret.
 const headers = { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=3600", "Access-Control-Allow-Origin": "*" };
 
 export async function onRequest({ request, env }) {
