@@ -68,7 +68,12 @@ export async function onRequest({ request, env }) {
       endpoint.searchParams.set("with_genres", "16");
       if (category === "anime") endpoint.searchParams.set("with_original_language", "ja");
     } else {
-      endpoint = new URL(`https://api.themoviedb.org/3/${category === "top_rated" ? kind + "/top_rated" : category === "upcoming" && kind === "movie" ? "movie/upcoming" : kind + "/popular"}`);
+      const hasFilters=!!(genre||year||rating||sort&&sort!=="popularity.desc");
+      if(hasFilters){
+        endpoint = new URL(`https://api.themoviedb.org/3/discover/${kind}`);
+      } else {
+        endpoint = new URL(`https://api.themoviedb.org/3/${category === "top_rated" ? kind + "/top_rated" : category === "upcoming" && kind === "movie" ? "movie/upcoming" : kind + "/popular"}`);
+      }
     }
     if(genre&&/^[0-9]+$/.test(genre))endpoint.searchParams.set("with_genres",genre);
     if(year&&/^\d{4}$/.test(year))endpoint.searchParams.set(kind==="tv"?"first_air_date_year":"primary_release_year",year);
@@ -77,7 +82,7 @@ export async function onRequest({ request, env }) {
     if(sort==="vote_average.desc")endpoint.searchParams.set("vote_count.gte","100");
     endpoint.searchParams.set("language", "ru-RU");
     endpoint.searchParams.set("page", String(page));
-    if (category === "popular") endpoint.searchParams.set("region", "RU");
+    if (category === "popular" && !genre && !year && !rating && (!sort || sort==="popularity.desc")) endpoint.searchParams.set("region", "RU");
   } else if (action === "search") {
     if (!query || query.length > 120) return json({ error: "A valid q parameter is required" }, 400);
     endpoint = new URL(`https://api.themoviedb.org/3/search/${kind}`);
