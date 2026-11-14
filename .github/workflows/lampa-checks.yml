@@ -38,6 +38,33 @@ jobs:
           trap 'mv /tmp/torrent_preload.spec.js spec/torrent_preload.spec.js' EXIT
           npx vitest run
 
+      - name: Build original Lampa bundle
+        working-directory: vendor/lampa-source
+        run: |
+          npx gulp > /tmp/lampa-gulp.log 2>&1 &
+          gulp_pid=$!
+          cleanup() {
+            kill "$gulp_pid" 2>/dev/null || true
+            wait "$gulp_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          for attempt in $(seq 1 60); do
+            if [ -s dest/app.js ]; then
+              first_size=$(wc -c < dest/app.js)
+              sleep 2
+              second_size=$(wc -c < dest/app.js)
+              if [ "$first_size" -gt 0 ] && [ "$first_size" -eq "$second_size" ]; then
+                break
+              fi
+            fi
+            sleep 1
+          done
+
+          test -s dest/app.js
+          cleanup
+          trap - EXIT
+
       - name: Package original Lampa for GitHub web target
         working-directory: vendor/lampa-source
         run: |
