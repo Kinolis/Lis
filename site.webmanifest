@@ -1,5 +1,5 @@
 {
-  "name": "LIS — твоя территория кино",
+  "name": "LIS",
   "short_name": "LIS",
   "start_url": "/",
   "display": "standalone",
@@ -7,10 +7,16 @@
   "theme_color": "#101114",
   "icons": [
     {
+      "src": "/apple-touch-icon.png?v=2",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/fox.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
