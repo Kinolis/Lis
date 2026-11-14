@@ -176,6 +176,20 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
   border:1px solid rgba(255,255,255,.25) !important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.30) !important;
 }
+
+/* LIS home refresh: cleaner hierarchy and low-cost glass */
+@media(max-width:600px){
+  .hero{height: min(590px,72svh);min-height:510px;padding:76px 20px 38px}
+  .content{padding-top:22px;padding-bottom:34px}
+  .section{margin-bottom:27px}
+  .section-head{margin-bottom:12px}
+  .section-head h2{font-size:19px;letter-spacing:-.25px}
+  .rail{grid-auto-columns:calc((100% - 24px)/3);gap:12px;padding-bottom:8px}
+}
+.section-head .muted{border:0;background:none;padding:6px 0;white-space:nowrap}
+.bottom-nav{-webkit-backdrop-filter:none !important;backdrop-filter:none !important;background:rgba(18,20,24,.82) !important}
+.poster,.poster-card:hover .poster{transition:transform .16s ease}
+@media(prefers-reduced-motion:reduce){.poster,.poster-card:hover .poster{transition:none}}
 </style></head><body>
 <main id="app"></main>
 <nav class="bottom-nav" id="bottomNav" aria-label="Основная навигация">
@@ -228,7 +242,18 @@ function home(){
   if(!catalogReady)return '<section class="loading-screen" role="status" aria-live="polite"><div class="loading-brand">LIS</div><div class="loading-orbit"><span></span></div><div class="loading-caption">ТВОЯ ТЕРРИТОРИЯ КИНО</div><div class="loading-progress"><i></i></div><div class="loading-status">Подбираем фильмы для тебя</div></section>';
   const featured=movies.slice(0,10);if(!featured.length)return '<div class="content"><p class="muted">Каталог пока недоступен.</p></div>';
   const h=featured[heroIndex%featured.length];
-  return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+movies.indexOf(h)+')">Смотреть</button><button class="btn" onclick="toggleSave('+movies.indexOf(h)+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:Math.min(10,featured.length)},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',movies.slice(0,3))+rail('Популярное',movies.slice(0,12))+rail('Новинки',liveUpcoming.length?liveUpcoming:movies.slice(8,16))+rail('Рекомендации',liveTop.length?liveTop.slice(0,12):movies.slice(4,16))+rail('Фильмы',liveMovies.slice(0,12))+rail('Сериалы',liveShows.slice(0,12))+rail('Лучшие оценки',liveTop.slice(0,12))+rail('Скоро выйдут',liveUpcoming.slice(0,12))+rail('Подборки по жанрам',movies.slice(12,24))+rail('Смотреть позже',later.map(i=>movies[i]).filter(Boolean))+'</div>';
+  const seen=new Set();
+  const distinct=(items)=>items.filter(m=>{if(!m)return false;const key=(m.mediaType||m.type)+':'+(m.tmdbId||m.title);if(seen.has(key))return false;seen.add(key);return true;});
+  const continueItems=distinct(history.map(i=>movies[i]).filter(Boolean));
+  const popular=distinct(liveMovies.slice(0,12));
+  const newItems=distinct(liveUpcoming.slice(0,12));
+  const recommendations=distinct([...liveTop.slice(0,12),...liveAnimation.slice(0,6),...liveAnime.slice(0,6)]);
+  const films=distinct(liveMovies.slice(0,18));
+  const shows=distinct(liveShows.slice(0,18));
+  const best=distinct([...liveTop].sort((a,b)=>Number(b.rating)-Number(a.rating)).slice(0,18));
+  const genreMix=distinct([...liveAnimation.slice(0,8),...liveAnime.slice(0,8)]);
+  const savedLater=distinct(later.map(i=>movies[i]).filter(Boolean));
+  return '<section class="hero"><div class="hero-bg" style="background-image:url(https://image.tmdb.org/t/p/original/'+h.back+')"></div><div class="hero-copy"><div class="eyebrow">✦ ВЫБОР LIS · '+h.type.toUpperCase()+'</div><h1>'+h.title+'</h1><div class="meta"><b>★ '+h.rating+'</b><span>'+h.year+'</span><span>'+h.type+'</span></div><p>'+h.desc+'</p><div class="actions"><button class="btn primary" onclick="openDetail('+movies.indexOf(h)+')">Смотреть</button><button class="btn" onclick="toggleSave('+movies.indexOf(h)+')">＋ В моё</button></div><div class="hero-dots">'+Array.from({length:Math.min(10,featured.length)},(_,i)=>'<button class="dot '+(i===heroIndex?'active':'')+'" onclick="heroIndex='+i+';render()"></button>').join('')+'</div></div></section><div class="content">'+rail('Продолжить просмотр',continueItems)+rail('Популярное',popular)+rail('Новинки',newItems)+rail('Рекомендации',recommendations)+rail('Фильмы',films)+rail('Сериалы',shows)+rail('Лучшие оценки',best)+rail('Анимация и аниме',genreMix)+rail('Смотреть позже',savedLater)+'</div>';
 }
 let liveMovies=[],liveShows=[],liveAnimation=[],liveAnime=[],liveTop=[],liveUpcoming=[],searchTimer=null;
 function fromTMDB(item,kind){
