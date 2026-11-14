@@ -56,6 +56,10 @@ export async function onRequest({ request, env }) {
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
     endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/videos`);
     endpoint.searchParams.set("language", "ru-RU");
+  } else if (action === "providers") {
+    const id = url.searchParams.get("id");
+    if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
+    endpoint = new URL(`https://api.themoviedb.org/3/${kind}/${id}/watch/providers`);
   } else if (action === "credits") {
     const id = url.searchParams.get("id");
     if (!id || !/^[0-9]+$/.test(id)) return json({ error: "A valid id parameter is required" }, 400);
@@ -113,6 +117,22 @@ export async function onRequest({ request, env }) {
     if (action === "details") return json({ item: { ...data, title: data.title || data.name || "", release_date: data.release_date || data.first_air_date || "", media_type: kind } });
     if (action === "images") return json({ logos: data.logos || [] });
     if (action === "videos") return json({ videos: (data.results || []).map(video => ({ key: video.key, site: video.site, type: video.type, official: !!video.official, name: video.name || "" })) });
+    if (action === "providers") {
+      const ru = data.results?.RU || {};
+      const map = (items, type) => (items || []).map(item => ({
+        provider_name: item.provider_name || "",
+        logo: item.logo_path || "",
+        link: ru.link || "",
+        type
+      }));
+      return json({ providers: [
+        ...map(ru.flatrate, "Подписка"),
+        ...map(ru.free, "Бесплатно"),
+        ...map(ru.ads, "С рекламой"),
+        ...map(ru.rent, "Аренда"),
+        ...map(ru.buy, "Покупка")
+      ] });
+    }
     if (action === "credits") return json({ cast: (data.cast || []).slice(0, 16).map(person => ({ id: person.id, name: person.name, character: person.character || "", profile_path: person.profile_path || null })) });
     const results = (data.results || []).map(item => ({
       id: item.id,
