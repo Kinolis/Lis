@@ -204,7 +204,14 @@ const movies=[
 {title:'Вечернее шоу',year:'2025',type:'Шоу',rating:'8.2',quality:'HD',genre:'Развлекательное',poster:'uW4dPCcbXaaFTyfL5HwhuDt5akK.jpg',desc:'Гости, интервью, юмор и неожиданные истории.',seasons:3}
 ];
 const channels=['Первый','Россия 1','НТВ','СТС','ТНТ','РЕН ТВ','Пятница!','Матч ТВ'];
+const lisStartupAt=Date.now();
 let catalogReady=false;
+async function finishStartup(){
+  const remaining=Math.max(0,2400-(Date.now()-lisStartupAt));
+  if(remaining)await new Promise(resolve=>setTimeout(resolve,remaining));
+  catalogReady=true;
+  if(page==='Главная'||page==='Каталог')render();
+}
 let page='Главная',activeType='Фильмы',heroIndex=0,season=1,episode=1,expanded=false,history=JSON.parse(localStorage.getItem('lis-history')||'[]'),saved=JSON.parse(localStorage.getItem('lis-saved')||'[0,3]'),later=JSON.parse(localStorage.getItem('lis-later')||'[1,4]'),channel='Первый',tvTab='Сейчас',query='';
 const img=(m)=>'https://image.tmdb.org/t/p/w500/'+m.poster;
 function card(m){
@@ -244,9 +251,8 @@ async function loadRealCatalog(){
     const all=[...films,...shows,...animation,...anime];
     const seen=new Set();const merged=all.filter(m=>{const k=m.mediaType+':'+m.tmdbId;if(seen.has(k))return false;seen.add(k);return true;});
     movies.splice(0,movies.length,...merged);
-    catalogReady=true;
-    if(page==='Главная'||page==='Каталог')render();
-  }catch(e){console.warn('TMDB catalog unavailable',e);catalogReady=true;if(page==='Главная'||page==='Каталог')render();}
+    await finishStartup();
+  }catch(e){console.warn('TMDB catalog unavailable',e);await finishStartup();}
 }
 function catalog(){
   let types=['Фильмы','Сериалы','Мультфильмы','Аниме','Шоу','ТВ'];
