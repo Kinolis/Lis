@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101114"><title>LIS — твоя территория кино</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap');
 :root{color-scheme:dark;--bg:#101114;--panel:rgba(30,32,39,.52);--glass:rgba(220,226,238,.17);--line:rgba(255,255,255,.27);--muted:#a7a8b0;--white:#f5f5f7}
 /* Hide the transient mobile scroll indicator and blend browser chrome */
 html,body{scrollbar-width:none}
@@ -16,10 +16,10 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .hero-copy{position:relative;z-index:1;max-width:760px;width:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center}.eyebrow{color:#c7c8ce;font-size:10px;letter-spacing:2px;text-transform:uppercase}.hero h1{font:800 clamp(38px,6vw,72px)/1.02 Manrope;letter-spacing:-2px;margin:14px 0}.meta{font-size:13px;color:#c4c5ca;display:flex;gap:12px;flex-wrap:wrap}.hero p{font-size:15px;line-height:1.55;color:#f0f0f3;max-width:620px;margin:16px auto 20px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;text-wrap:pretty}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.btn{border:1px solid rgba(255,255,255,.32);background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(210,218,232,.09));backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);box-shadow:inset 0 1px 1px rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.08),0 8px 28px rgba(0,0,0,.22);border-radius:28px;padding:12px 19px;font-weight:600}.btn.primary{background:linear-gradient(135deg,rgba(238,243,250,.30),rgba(190,202,220,.12) 48%,rgba(255,255,255,.20));color:#fff;border-color:rgba(255,255,255,.48);backdrop-filter:blur(34px) saturate(210%);-webkit-backdrop-filter:blur(34px) saturate(210%);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.16),0 10px 30px rgba(0,0,0,.25),0 0 18px rgba(220,232,255,.08)}.hero-dots{display:flex;gap:7px;margin:24px auto 0;justify-content:center}.dot{width:7px;height:7px;border-radius:20px;background:#ffffff66;border:0;padding:0}.dot.active{width:25px;background:#fff}
 /* LIS cinematic startup screen */
 .loading-screen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:radial-gradient(ellipse at 50% 42%,#252831 0%,#15161b 42%,#0d0e11 100%);padding:24px;text-align:center}
-.loading-brand{font:800 clamp(54px,15vw,76px)/1 Manrope,sans-serif;letter-spacing:.24em;padding-left:.24em;color:#f5f5f7;text-shadow:0 8px 35px #ffffff18}
+.loading-brand{font:600 clamp(58px,15vw,80px)/1 Sora,Manrope,sans-serif;letter-spacing:.30em;padding-left:.30em;color:#f5f5f7;text-shadow:0 8px 35px #ffffff18;font-kerning:normal}
 .loading-orbit{width:34px;height:34px;border:1.5px solid #ffffff26;border-top-color:#f5f5f7;border-right-color:#ffffffa8;border-radius:50%;animation:lis-spin .9s linear infinite}
 .loading-orbit span{display:block;width:5px;height:5px;margin:3px auto;background:#fff;border-radius:50%;box-shadow:0 0 12px #fff}
-.loading-caption{font-size:9px;letter-spacing:3px;color:#b8bac3}
+.loading-caption{font:500 9px/1.5 Manrope,sans-serif;letter-spacing:3.4px;color:#c4c6cf;text-transform:uppercase}
 .loading-progress{width:112px;height:2px;background:#ffffff20;border-radius:4px;overflow:hidden;margin-top:3px}
 .loading-progress i{display:block;width:38%;height:100%;background:#f3f3f5;border-radius:4px;animation:lis-progress 1.5s ease-in-out infinite}
 .loading-status{font-size:11px;color:#858792;letter-spacing:.3px}
