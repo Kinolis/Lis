@@ -73,3 +73,51 @@
   .lang__selector-item{min-height:54px;margin-bottom:8px;padding:14px 48px 14px 17px;font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.lang__selector-item{transition:none!important;transform:none!important}}
+
+/* LIS branded Lampa startup / proxy initialization screen */
+.welcome{
+  background:#000!important;
+  background-image:none!important;
+  overflow:hidden;
+}
+.welcome:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:calc(50% - 170px);
+  width:clamp(112px,30vw,156px);
+  height:clamp(112px,30vw,156px);
+  transform:translateX(-50%);
+  background:url("../lis-fox.png") center/contain no-repeat;
+  filter:drop-shadow(0 8px 24px rgba(255,122,26,.22));
+  pointer-events:none;
+}
+.lp-step{
+  color:#f5f6f8!important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  font-size:clamp(19px,5vw,24px)!important;
+  font-weight:500!important;
+  letter-spacing:.01em;
+}
+.lp-status{
+  color:rgba(225,229,237,.48)!important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  font-size:12px!important;
+  letter-spacing:.025em;
+}
+.lp-status:after{
+  content:"";
+  display:block;
+  width:88px;
+  height:2px;
+  margin:13px auto 0;
+  border-radius:2px;
+  background:linear-gradient(90deg,transparent,#ff9b43 45%,#ffd09a 55%,transparent);
+  background-size:220% 100%;
+  animation:lis-startup-glow 1.7s ease-in-out infinite;
+}
+@keyframes lis-startup-glow{
+  from{background-position:100% 0}
+  to{background-position:-120% 0}
+}
+@media(prefers-reduced-motion:reduce){.lp-status:after{animation:none;background:#ff9b43}}
