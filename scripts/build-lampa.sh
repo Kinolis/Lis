@@ -78,15 +78,15 @@ if title_count == 0:
         raise SystemExit("Could not find </head> to add the LIS page title")
     html = html.replace("</head>", "<title>LIS</title>\\n</head>", 1)
 
-branding = {
-    "icon": '<link rel="icon" type="image/png" href="./branding/lis-fox.png">',
-    "apple": '<link rel="apple-touch-icon" href="./branding/lis-fox.png">',
-    "mobile_title": '<meta name="apple-mobile-web-app-title" content="LIS">',
-    "app_name": '<meta name="application-name" content="LIS">',
-    "description": '<meta name="description" content="LIS — фильмы и сериалы в одном месте">',
-    "skin": '<link rel="stylesheet" href="./branding/lis-language.css">',
-}
-need = [tag for key, tag in branding.items() if tag.split(" ")[1].split("=")[0] not in html or (key == "skin" and "./branding/lis-language.css" not in html) or (key in ("icon", "apple") and "./branding/lis-fox.png" not in html)]
+branding = [
+    ('./branding/lis-fox.png', '<link rel="icon" type="image/png" href="./branding/lis-fox.png">'),
+    ('apple-touch-icon', '<link rel="apple-touch-icon" href="./branding/lis-fox.png">'),
+    ('apple-mobile-web-app-title', '<meta name="apple-mobile-web-app-title" content="LIS">'),
+    ('name="application-name"', '<meta name="application-name" content="LIS">'),
+    ('name="description"', '<meta name="description" content="LIS — фильмы и сериалы в одном месте">'),
+    ('./branding/lis-language.css', '<link rel="stylesheet" href="./branding/lis-language.css">'),
+]
+need = [tag for marker, tag in branding if marker not in html]
 if need:
     if "</head>" not in html:
         raise SystemExit("Could not find </head> in packaged Lampa index.html")
