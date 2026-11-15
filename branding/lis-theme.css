@@ -308,3 +308,28 @@ body.true--mobile .head__action.open--profile{
   -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
   font-size:.78em!important;font-weight:600;letter-spacing:.06em;
 }
+
+
+/* Final poster layout fix: keep native year below the image and hide empty icon shell. */
+.card__icons-inner:empty{display:none!important}
+.card__icons:has(.card__icons-inner:empty){display:none!important}
+.card__icons-inner{border:0!important;background:transparent!important;box-shadow:none!important}
+/* Keep the poster metadata where Lampa's card template expects it. */
+.card__view{padding-bottom:150%!important;margin-bottom:.72em!important;overflow:hidden!important}
+.card__vote{
+  position:absolute!important;right:.45em!important;bottom:.45em!important;top:auto!important;
+  display:block!important;padding:.18em .48em!important;
+  border:1px solid rgba(255,255,255,.18)!important;border-radius:1em!important;
+  background:rgba(0,0,0,.66)!important;color:#f4dfbd!important;
+  font-size:1.05em!important;font-weight:700!important;
+  -webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;
+}
+.card__vote:before{content:"★";color:#d5ad72;margin-right:.28em}
+/* The source only supplies a quality label when one exists; never fabricate HD. */
+.card__quality{left:.55em!important;bottom:.55em!important;top:auto!important;right:auto!important;width:auto!important;min-height:0!important;padding:.28em .55em!important;border:1px solid rgba(255,255,255,.18)!important;border-radius:.45em!important;background:rgba(0,0,0,.7)!important;color:#9fcaff!important}
+.card__age{
+  position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  display:block!important;margin:.42em 0 0!important;padding:0!important;
+  color:#85858d!important;font-size:.82em!important;line-height:1.2!important;
+}
+.card__title{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
