@@ -42,3 +42,20 @@
 .lang__selector-item.focus,.lang__selector-item:focus,.lang__selector-item:focus-visible{z-index:1;outline:none!important;border-color:rgba(255,153,77,.9)!important;background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(190,198,211,.12) 58%,rgba(255,255,255,.07))!important;box-shadow:inset 0 1px 2px rgba(255,255,255,.26),inset 0 0 0 1px rgba(255,132,38,.18)!important;color:#fff!important;}
 .lang__selector-item.focus:after,.lang__selector-item:focus:after,.lang__selector-item:focus-visible:after{color:#ffc18d!important;}
 .lang__selector-item.focus:before,.lang__selector-item.last-focus:before,.lang__selector-item:focus:before{content:none!important;display:none!important;filter:none!important;box-shadow:none!important;}
+
+
+/* Restore the orange selected-language outline without a square outer glow. */
+.lang__selector-item.focus,
+.lang__selector-item.last-focus,
+.lang__selector-item:focus,
+.lang__selector-item:focus-visible{
+  border:1px solid rgba(255,145,55,.9)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.19),rgba(190,198,211,.11) 58%,rgba(255,255,255,.065))!important;
+  box-shadow:inset 0 0 0 1px rgba(255,157,75,.2),inset 0 1px 2px rgba(255,255,255,.24)!important;
+  color:#fff!important;
+}
+.lang__selector-item.focus:after,
+.lang__selector-item.last-focus:after,
+.lang__selector-item:focus:after,
+.lang__selector-item:focus-visible:after{color:#ffc18d!important;}
+.lang__selector-item.last-focus:not(.focus){border-color:rgba(255,145,55,.9)!important;}
