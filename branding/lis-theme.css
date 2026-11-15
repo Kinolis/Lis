@@ -15,12 +15,12 @@
 .lang__logo{margin:0 auto 24px;display:flex;align-items:center;justify-content:center;min-height:66px}
 .lang__logo img{display:none!important}
 .lang__logo:after{
-  content:'LIS';
+  content:'🦊';
   display:block;
   color:#f5f5f7;
-  font:800 54px/1 Sora,Manrope,sans-serif;
-  letter-spacing:.28em;
-  padding-left:.28em;
+  font:400 68px/1 'Apple Color Emoji','Segoe UI Emoji',sans-serif;
+  letter-spacing:0;
+  padding-left:0;
   text-shadow:0 8px 35px rgba(255,255,255,.12);
 }
 .lang__title{
@@ -35,13 +35,23 @@
   letter-spacing:.02em;
 }
 .lang__selector{
-  width:min(100%,360px);
+  width:min(100%,520px);
   margin:32px auto 0;
+}
+.lang__selector > .scroll{
+  max-height:none!important;
+  overflow:visible!important;
+}
+.lang__selector .scroll__content{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  align-items:stretch;
 }
 .lang__selector-item{
   position:relative;
-  margin:8px 0;
-  padding:17px 22px;
+  margin:0;
+  padding:17px 12px;
   min-height:58px;
   border:1px solid rgba(255,255,255,.16);
   border-radius:20px;
@@ -66,7 +76,8 @@
   .lang__logo{margin-bottom:22px}
   .lang__title{font-size:clamp(32px,8.5vw,42px)}
   .lang__subtitle{font-size:14px}
-  .lang__selector{margin-top:28px;width:min(100%,340px)}
-  .lang__selector-item{min-height:56px;padding:16px 18px;font-size:16px}
+  .lang__selector{margin-top:28px;width:min(100%,520px)}
+  .lang__selector .scroll__content{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .lang__selector-item{min-height:64px;padding:14px 8px;font-size:15px;border-radius:17px}
 }
 @media(prefers-reduced-motion:reduce){.lang__selector-item{transition:none}}
