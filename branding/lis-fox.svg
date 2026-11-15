@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
 <defs>
- <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd36b"/><stop offset=".32" stop-color="#ff9b19"/><stop offset=".72" stop-color="#ff5a0b"/><stop offset="1" stop-color="#b92d12"/></linearGradient>
- <linearGradient id="white" x1=".2" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#f3efff"/><stop offset="1" stop-color="#aeb5d1"/></linearGradient>
- <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb53e"/><stop offset=".55" stop-color="#ff6b12"/><stop offset="1" stop-color="#d43a0d"/></linearGradient>
- <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+ <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe17a"/><stop offset=".28" stop-color="#ff9d19"/><stop offset=".62" stop-color="#ff5b0b"/><stop offset="1" stop-color="#bd260b"/></linearGradient>
+ <linearGradient id="light" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#f7e9e7"/><stop offset="1" stop-color="#c6a6a8"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0a0"/><stop offset=".4" stop-color="#ff9b19"/><stop offset="1" stop-color="#f04a08"/></linearGradient>
+ <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3"/></filter>
 </defs>
-<path d="M17 66C13 36 42 9 77 10c12 0 24 3 34 9" fill="none" stroke="#ff7917" stroke-width="5" stroke-linecap="round" opacity=".55" filter="url(#soft)"/>
-<path d="M17 66C13 36 42 9 77 10c12 0 24 3 34 9" fill="none" stroke="url(#glow)" stroke-width="3.2" stroke-linecap="round"/>
-<path d="M109 65c2 23-14 43-36 49-13 4-27 2-38-5" fill="none" stroke="url(#glow)" stroke-width="3.2" stroke-linecap="round" opacity=".95"/>
-<path d="M27 67C20 54 24 34 39 17c3 15 12 23 24 29 10-10 23-18 38-22-2 18-8 30-19 39" fill="url(#orange)"/>
-<path d="M39 22c-5 13-6 24-2 34l15-12zM94 30c-11 5-20 12-26 21l22-4z" fill="#24131a"/>
-<path d="M22 73c8-18 24-31 45-34 15-2 27 3 37 13 7 7 12 15 19 19-8 7-20 10-35 9-11 0-18 8-24 20-19-1-34-9-42-27z" fill="url(#orange)"/>
-<path d="M28 75c13-13 27-20 43-20 16 0 27 6 38 16-12 6-25 6-37 9-10 3-17 12-22 22-11-5-18-14-22-27z" fill="url(#white)"/>
-<path d="M43 73c13-11 27-15 41-12 9 2 17 7 25 14-13-3-24-1-34 4-9 5-15 13-20 22-8-7-12-16-12-28z" fill="#fff" opacity=".96"/>
-<path d="M91 69c9-2 18 0 27 5-8 5-17 7-27 6l-10-5z" fill="#21131b"/>
-<path d="M113 72c3 0 5 2 6 4-3 3-7 4-11 3z" fill="#161322"/>
-<path d="M26 65c8-21 23-35 43-40-11 8-18 17-22 29" fill="none" stroke="#ffc14e" stroke-width="3" stroke-linecap="round" opacity=".9"/>
-<path d="M37 89c9 12 22 19 37 20" fill="none" stroke="#ffb13a" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+<path d="M17 65C21 31 48 9 82 12c12 1 22 5 30 12" fill="none" stroke="#ff7814" stroke-width="5" opacity=".35" filter="url(#glow)"/>
+<path d="M17 65C21 31 48 9 82 12c12 1 22 5 30 12" fill="none" stroke="url(#gold)" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M22 74C17 54 22 32 40 14c2 17 10 28 22 37 8-13 21-23 39-28-1 18-8 34-21 45" fill="url(#fur)"/>
+<path d="M39 20c-6 14-7 25-3 36l17-15zM95 29C83 36 75 44 68 54l23-8z" fill="#7c210e"/>
+<path d="M20 72c9-20 27-34 49-36 18-2 31 5 42 18 5 7 9 13 15 17-10 9-23 12-40 11-14 0-23 10-30 25-17-4-29-15-36-35z" fill="url(#fur)"/>
+<path d="M27 76c13-15 29-23 47-22 16 1 29 8 40 18-13 6-26 7-39 11-11 4-18 13-23 23-13-6-21-16-25-30z" fill="url(#light)"/>
+<path d="M40 77c13-13 28-18 44-15 10 2 19 7 28 14-15-2-27 1-38 8-8 5-14 13-18 21-10-8-15-17-16-28z" fill="#fff"/>
+<path d="M91 70c11-3 21-1 30 5-8 6-18 8-29 7l-11-6z" fill="#24151b"/>
+<path d="M117 75c3 0 5 2 6 4-3 3-7 4-11 3z" fill="#15121a"/>
+<path d="M34 64c11-21 27-33 48-37-14 8-23 18-29 31" fill="none" stroke="#ffd15a" stroke-width="3" stroke-linecap="round"/>
+<path d="M35 91c12 15 29 22 47 20 18-2 31-13 37-29" fill="none" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+<path d="M80 109c-14-1-26-8-35-19 10 5 20 6 30 3" fill="none" stroke="#ffb13a" stroke-width="2" opacity=".8"/>
 </svg>
