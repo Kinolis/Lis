@@ -63,15 +63,34 @@ cp -a "$SOURCE/." "$OUTPUT/"
 mkdir -p "$OUTPUT/branding"
 cp "$ROOT/branding/lis-language.css" "$OUTPUT/branding/lis-language.css"
 cp "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.svg"
-cp "$ROOT/branding/lis-fox.png" "$OUTPUT/branding/lis-fox.png"
+
+# Always rasterize the vector master into a clean, transparent, high-resolution PNG.
+# This avoids shipping the old 128x128 PNG, which produced visible pixel/strip artifacts.
+python3 -m pip install --quiet --user --disable-pip-version-check CairoSVG
+python3 - "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.png" <<'PY'
+from pathlib import Path
+import sys
+import cairosvg
+import struct
+
+source, target = map(Path, sys.argv[1:])
+cairosvg.svg2png(url=str(source), write_to=str(target), output_width=512, output_height=512)
+data = target.read_bytes()
+if data[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+    raise SystemExit("LIS icon generation did not produce a PNG")
+width, height = struct.unpack(">II", data[16:24])
+if (width, height) != (512, 512):
+    raise SystemExit(f"Unexpected LIS PNG dimensions: {width}x{height}")
+print(f"Generated clean LIS icon: {width}x{height}, {len(data)} bytes")
+PY
 
 python3 - "$OUTPUT/index.html" <<'PY'
 from pathlib import Path
 import sys
+import re
 
 index = Path(sys.argv[1])
 html = index.read_text(encoding="utf-8")
-import re
 html, title_count = re.subn(r"<title>.*?</title>", "<title>LIS</title>", html, count=1, flags=re.IGNORECASE | re.DOTALL)
 if title_count == 0:
     if "</head>" not in html:
@@ -80,7 +99,7 @@ if title_count == 0:
 
 branding = [
     ('./branding/lis-fox.png', '<link rel="icon" type="image/png" href="./branding/lis-fox.png">'),
-    ('apple-touch-icon', '<link rel="apple-touch-icon" href="./branding/lis-fox.png">'),
+    ('apple-touch-icon', '<link rel="apple-touch-icon" sizes="512x512" href="./branding/lis-fox.png">'),
     ('apple-mobile-web-app-title', '<meta name="apple-mobile-web-app-title" content="LIS">'),
     ('name="application-name"', '<meta name="application-name" content="LIS">'),
     ('name="description"', '<meta name="description" content="LIS — фильмы и сериалы в одном месте">'),
