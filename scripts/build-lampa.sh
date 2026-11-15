@@ -55,20 +55,6 @@ rm -rf "$OUTPUT"
 mkdir -p "$OUTPUT"
 cp -a build/github/lampa/. "$OUTPUT/"
 
-# Apply LIS visual styling without modifying the pinned upstream Lampa source.
-mkdir -p "$OUTPUT/css"
-cp "$ROOT/branding/lis-theme.css" "$OUTPUT/css/lis-theme.css"
-python3 - "$OUTPUT/index.html" <<'PY'
-from pathlib import Path
-import sys
-index = Path(sys.argv[1])
-html = index.read_text(encoding="utf-8")
-link = '<link rel="stylesheet" href="css/lis-theme.css?v=6">'
-if link not in html:
-    html = html.replace("</head>", f"    {link}\\n</head>")
-index.write_text(html, encoding="utf-8")
-PY
-
 test -s "$OUTPUT/index.html"
 test -s "$OUTPUT/app.min.js"
 test -d "$OUTPUT/css"
