@@ -97,5 +97,7 @@ jobs:
           test -s dist/lampa/index.html
           test -s dist/lampa/app.min.js
 
-      - name: Check Lampa launcher syntax
-        run: bash -n scripts/start-lampa-dev.sh
+      - name: Check local preview launchers
+        run: |
+          bash -n scripts/start-lampa-dev.sh
+          bash -n scripts/preview-lis.sh
