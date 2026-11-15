@@ -65,7 +65,8 @@ from pathlib import Path
 import sys
 index = Path(sys.argv[1])
 html = index.read_text(encoding="utf-8")
-link = '<link rel="stylesheet" href="css/lis-theme.css?v=8">'\nfavicon = '<link rel="icon" type="image/svg+xml" href="favicon.svg">'
+link = '<link rel="stylesheet" href="css/lis-theme.css?v=8">' 
+favicon = '<link rel="icon" type="image/svg+xml" href="favicon.svg">'
 if link not in html:
     html = html.replace("</head>", f"    {link}\\n</head>")
 if favicon not in html:
