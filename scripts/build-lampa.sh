@@ -58,15 +58,15 @@ cp -a build/github/lampa/. "$OUTPUT/"
 # Apply LIS welcome screen styling.
 mkdir -p "$OUTPUT/css"
 cp "$ROOT/branding/lis-theme.css" "$OUTPUT/css/lis-theme.css"
-cp "$ROOT/branding/lis-fox.webp" "$OUTPUT/css/lis-fox.webp"
-cp "$ROOT/branding/lis-fox.webp" "$OUTPUT/lis-fox.webp"
+cp "$ROOT/branding/lis-fox.png" "$OUTPUT/css/lis-fox.png"
+cp "$ROOT/branding/lis-fox.png" "$OUTPUT/lis-fox.png"
 python3 - "$OUTPUT/index.html" <<'PY'
 from pathlib import Path
 import sys
 index = Path(sys.argv[1])
 html = index.read_text(encoding="utf-8")
-link = '<link rel="stylesheet" href="css/lis-theme.css?v=9">' 
-favicon = '<link rel="icon" type="image/svg+xml" href="lis-fox.webp">'
+link = '<link rel="stylesheet" href="css/lis-theme.css?v=10">' 
+favicon = '<link rel="icon" type="image/png" href="lis-fox.png">'
 if link not in html:
     html = html.replace("</head>", f"    {link}\n</head>")
 if favicon not in html:

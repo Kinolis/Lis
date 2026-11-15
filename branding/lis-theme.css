@@ -15,7 +15,7 @@
   min-height:64px;
   margin:0 auto 18px;
   display:block;
-  background:url("lis-fox.webp") center/contain no-repeat!important;
+  background:url("lis-fox.png") center/contain no-repeat!important;
   filter:drop-shadow(0 0 12px rgba(255,125,30,.28));
 }
 .lang__logo img{display:none!important}
