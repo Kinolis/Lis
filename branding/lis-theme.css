@@ -12,27 +12,25 @@
   font-family:'DM Sans',Manrope,-apple-system,BlinkMacSystemFont,sans-serif;
 }
 .lang__body{width:min(100%,520px);text-align:center}
-.lang__logo{margin:0 auto 20px;display:flex;align-items:center;justify-content:center;min-height:66px}
-.lang__logo img{display:none!important}
-.lang__logo:after{
-  content:'';
+.lang__logo{
+  width:58px;height:58px;min-height:58px;
+  margin:0 auto 20px;
   display:block;
-  width:58px;
-  height:58px;
   background-repeat:no-repeat;
   background-position:center;
   background-size:contain;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23f5f5f7' d='M9 12 37 28Q50 22 63 28L91 12 86 59Q80 82 50 91 20 82 14 59Z'/%3E%3Cpath fill='%23202638' d='m22 28 15 10-13 13zm56 0L63 38l13 13z'/%3E%3Cpath fill='%2317191f' d='M35 51q7-8 15 0 8-8 15 0l-15 18z'/%3E%3Cpath fill='%23f5f5f7' d='m45 63 5 7 5-7-5-3z'/%3E%3C/svg%3E");
   filter:drop-shadow(0 8px 18px rgba(255,255,255,.12));
 }
+.lang__logo img{display:none!important}
+
 .lang__title{
   margin:0;
   font:600 clamp(25px,6vw,31px)/1.18 Manrope,'DM Sans',sans-serif;
   letter-spacing:-.7px;
   min-height:1.18em;
 }
-.lang__title:empty:before{content:'Добро пожаловать';}
-.lang__logo:after{content:''!important;opacity:1!important;visibility:visible!important;}
+.lang__title:before{content:'Добро пожаловать';display:block;}
 .lang__selector .scroll{mask-image:none!important;-webkit-mask-image:none!important;}
 .lang__subtitle{
   margin:14px 0 0;
@@ -45,14 +43,14 @@
   margin:34px auto 0;
 }
 .lang__selector > .scroll{
-  max-height:none!important;
-  overflow:visible!important;
-}
-.lang__selector > .scroll{
+  display:block!important;
   width:100%;
-  height:auto!important;
-  max-height:none!important;
-  overflow:visible!important;
+  height:18em!important;
+  max-height:18em!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
 }
 .lang__selector .scroll__content{
   width:100%;
@@ -67,7 +65,6 @@
   grid-template-columns:minmax(0,1fr);
   gap:10px;
   align-items:stretch;
-  transform:none!important;
 }
 .lang__selector-item{
   position:relative;
@@ -99,6 +96,7 @@
   .lang__title{font-size:clamp(32px,8.5vw,42px)}
   .lang__subtitle{font-size:14px}
   .lang__selector{margin-top:28px;width:min(100%,520px)}
+  .lang__selector > .scroll{height:18em!important;max-height:18em!important;}
    .lang__selector .scroll__body{grid-template-columns:minmax(0,1fr);gap:9px}
   .lang__selector-item{min-height:56px;padding:15px 18px;font-size:15px;border-radius:12px}
 }
