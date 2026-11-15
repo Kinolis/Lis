@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - lis-language-screen
   workflow_dispatch:
 
 permissions:
@@ -29,7 +30,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build clean Lampa
+      - name: Build Lampa with the selected branch's LIS skin
         run: npm run build
 
       - name: Configure GitHub Pages
