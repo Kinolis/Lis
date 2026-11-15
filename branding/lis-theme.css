@@ -496,3 +496,45 @@ html,body,.app,.app__content,.full,.full-start-new{
     -webkit-backdrop-filter:blur(20px) saturate(150%)!important;backdrop-filter:blur(20px) saturate(150%)!important;
   }
 }
+
+
+/* LIS global cleanup: remove inherited Lampa grey surfaces and gradients.
+   Keep only LIS black canvas, graphite liquid-glass controls and champagne accents. */
+:root,html,body,#app,.app,.app__content,.app__body,.content,.content__body,
+.main,.main__content,.wrap,.wrapper,.view,.view__content,.scroll,.scroll__content{
+  background-color:#000!important;
+  color:#f2f2f5!important;
+}
+html,body,#app,.app,.app__content,.app__body,.content,.main,.view{
+  background-image:none!important;
+}
+body:before,body:after,.app:before,.app:after,.app__content:before,.app__content:after,
+.content:before,.content:after,.main:before,.main:after,.view:before,.view:after{
+  background-image:none!important;
+  box-shadow:none!important;
+}
+.items-line,.items-line__body,.items-line__content,.items-cards,
+.head,.head__body,.head__content,.full,.full__body,.full__content{
+  background-color:transparent!important;
+  background-image:none!important;
+  color:#f2f2f5!important;
+}
+.items-line__title,.head__title,.full__title,.title,.title__text{
+  color:#f5f5f7!important;
+  font-family:Manrope,-apple-system,BlinkMacSystemFont,sans-serif!important;
+  font-weight:600!important;
+}
+.items-line__more,.button--secondary,.filter,.selectbox__head,.menu__item,
+.card__view,.card__img{
+  box-shadow:none!important;
+}
+.card__img{
+  background:#090a0d!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+}
+.card__title{color:#f4f4f6!important}
+.card__age,.items-line__subtitle{color:#858993!important}
+/* Remove legacy grey/blue atmospheric overlays on page sections, not artwork. */
+[class*="gradient"],[class*="backdrop"],[class*="background-overlay"]{
+  background-image:none!important;
+}
