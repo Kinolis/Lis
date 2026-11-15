@@ -1,7 +1,8 @@
 {
-  "name": "lis-lampa",
-  "version": "1.0.0",
+  "name": "lis",
+  "version": "0.1.0",
   "private": true,
+  "description": "LIS — clean upstream Lampa baseline",
   "scripts": {
     "build": "bash scripts/build-lampa.sh"
   }

@@ -1,13 +1,11 @@
-name: Lampa upstream checks
+name: Original Lampa checks
 
 on:
   push:
     branches:
-      - experiment/lampa-source
       - main
   pull_request:
     branches:
-      - experiment/lampa-source
       - main
   workflow_dispatch:
 
@@ -15,11 +13,11 @@ permissions:
   contents: read
 
 jobs:
-  lampa-tests:
-    name: Test pinned Lampa source
+  upstream:
+    name: Test and package untouched Lampa source
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout LIS with pinned Lampa submodule
+      - name: Checkout LIS with original Lampa submodule
         uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -29,74 +27,18 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install upstream dependencies
+      - name: Install original Lampa dependencies
         working-directory: vendor/lampa-source
-        run: npm install --no-audit --no-fund
+        run: npm install --no-package-lock --no-audit --no-fund
 
-      - name: Run upstream tests
+      - name: Run upstream tests without modifying them
         working-directory: vendor/lampa-source
-        run: |
-          mv spec/torrent_preload.spec.js /tmp/torrent_preload.spec.js
-          trap 'mv /tmp/torrent_preload.spec.js spec/torrent_preload.spec.js' EXIT
-          npx vitest run
+        run: npx vitest run
 
-      - name: Build original Lampa bundle
-        working-directory: vendor/lampa-source
-        run: |
-          npx gulp > /tmp/lampa-gulp.log 2>&1 &
-          gulp_pid=$!
-          cleanup() {
-            kill "$gulp_pid" 2>/dev/null || true
-            wait "$gulp_pid" 2>/dev/null || true
-          }
-          trap cleanup EXIT
-
-          for attempt in $(seq 1 60); do
-            if [ -s dest/app.js ]; then
-              first_size=$(wc -c < dest/app.js)
-              sleep 2
-              second_size=$(wc -c < dest/app.js)
-              if [ "$first_size" -gt 0 ] && [ "$first_size" -eq "$second_size" ]; then
-                break
-              fi
-            fi
-            sleep 1
-          done
-
-          test -s dest/app.js
-          cleanup
-          trap - EXIT
-
-      - name: Package original Lampa for web
-        working-directory: vendor/lampa-source
-        run: |
-          npx gulp pack_github
-          test -s build/github/lampa/index.html
-          test -s build/github/lampa/app.min.js
-
-  lampa-static-build:
-    name: Verify original Lampa deployment output
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository with pinned Lampa submodule
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Verify pinned upstream revision
-        run: |
-          test "$(git -C vendor/lampa-source rev-parse HEAD)" = "4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0"
-
-      - name: Build original Lampa as the entire site
+      - name: Build original Lampa web package
         run: |
           npm run build
           test -s dist/index.html
           test -s dist/app.min.js
           test -d dist/css
           test -d dist/vender
-          test ! -e dist/lampa

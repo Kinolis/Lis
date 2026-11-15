@@ -1,24 +1,45 @@
-# Lampa — оригинальный клиент
+# LIS
 
-Этот репозиторий публикует **оригинальную веб-сборку Lampa** из закреплённого upstream Git submodule `vendor/lampa-source`. Собственная оболочка LIS не включается в опубликованный сайт.
+LIS starts from the **unmodified original Lampa client**. The current stage is deliberately a clean baseline: no LIS theme overrides, no custom interface, no automatic plugin injection, and no custom TMDB proxy.
 
-## Сборка
+## Original source
 
-Требуется Node.js 20 и доступ к Git submodule:
+- Upstream: https://github.com/yumata/lampa-source
+- Pinned upstream revision: `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0`
+- Local submodule: `vendor/lampa-source`
+
+The upstream source is kept as a Git submodule and is not patched during builds.
+
+## Build
+
+Requirements: Node.js 20+ and Git.
+
+Clone with the submodule:
 
 ```bash
-git clone --recurse-submodules -b experiment/lampa-source https://github.com/Kinolis/Lis.git
+git clone --recurse-submodules https://github.com/Kinolis/Lis.git
 cd Lis
 npm run build
 ```
 
-Результат сборки находится в `dist/`: корневой `index.html` и все необходимые ресурсы оригинальной Lampa.
+The original Lampa web package is generated in `dist/`.
 
-## Cloudflare Pages
+## Run the original Lampa locally
 
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Production branch: `main` (не переключать без отдельного решения)
-- Тестовая ветка: `experiment/lampa-source`
+```bash
+git submodule update --init --recursive
+cd vendor/lampa-source
+npm install
+npm run start
+```
 
-Исходники Lampa подключены как Git submodule и закреплены на upstream commit `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0`. Содержимое upstream не изменяется.
+Open the local URL printed by the upstream development server (normally `http://localhost:3000`).
+
+## Development sequence
+
+1. Verify the untouched upstream Lampa build and runtime.
+2. Only after the baseline is confirmed, add LIS changes in small, isolated steps.
+3. Test each step before continuing.
+4. Publish the finished version to the primary Cloudflare Pages site only after explicit approval.
+
+Cloudflare production deployment is intentionally kept separate from GitHub development.
