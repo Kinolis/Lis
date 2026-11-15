@@ -1,8 +1,8 @@
 {
-  "name": "lis",
+  "name": "lis-lampa",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && cp index.html dist/index.html && bash scripts/build-lampa.sh"
+    "build": "bash scripts/build-lampa.sh"
   }
 }
