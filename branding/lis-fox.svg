@@ -1,25 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="LIS fox emblem">
-  <defs>
-    <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2a0"/><stop offset=".24" stop-color="#ffad18"/><stop offset=".58" stop-color="#ff5a0a"/><stop offset="1" stop-color="#b51d0a"/></linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5b4"/><stop offset=".32" stop-color="#ffbd32"/><stop offset=".72" stop-color="#ff6b12"/><stop offset="1" stop-color="#d82b0a"/></linearGradient>
-    <linearGradient id="cream" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#f4edf3"/><stop offset="1" stop-color="#c7c0d0"/></linearGradient>
-    <linearGradient id="shadowFur" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ff9b13"/><stop offset="1" stop-color="#e52c08"/></linearGradient>
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="b"/><feColorMatrix in="b" type="matrix" values="1 0 0 0 1 0 .35 0 0 .25 0 0 .05 0 0 0 0 0 .55 0" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <g filter="url(#glow)" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M72 280C87 166 186 73 326 66c43-2 83 7 116 24-69-13-133-2-191 28C153 163 103 218 72 280Z" fill="url(#gold)"/>
-    <path d="M430 300c-7 88-65 150-153 169 75-30 113-79 127-145 7-33 12-53 26-70Z" fill="url(#gold)"/>
-    <path d="M118 323c-4-74 34-141 103-183l-10-83 72 71c26-7 51-7 75-2l69-62-13 113c24 28 37 59 38 94-29-22-59-34-95-37-80-7-151 25-239 89Z" fill="url(#fur)"/>
-    <path d="M212 142 202 78l49 51c-17 2-29 6-39 13Z" fill="#8f180d"/>
-    <path d="M355 134 420 85l-11 96c-13-20-30-35-54-47Z" fill="#9d1d0b"/>
-    <path d="M111 325c26-77 92-127 175-137 54-7 101 9 141 47-37-13-75-13-114-1-54 17-97 55-130 114-23 40-26 83-6 127-54-30-79-80-66-150Z" fill="url(#shadowFur)"/>
-    <path d="M146 305c47-64 106-99 174-103 42-2 78 10 111 34-35-7-66-2-95 12-44 22-73 58-88 109-11 36-3 69 24 100-61-12-105-51-126-117Z" fill="#ff7b0b"/>
-    <path d="M180 294c53-61 115-88 184-80 37 4 69 19 95 46-39-12-73-10-104 6-34 18-58 46-70 84-12 38-5 71 21 100-71-15-114-68-126-156Z" fill="url(#gold)"/>
-    <path d="M205 306c41-48 89-70 143-65 36 3 67 17 94 42-35-8-65-4-90 11-32 19-49 48-51 86-2 31 12 57 41 78-63-5-111-47-137-123Z" fill="#e82b12"/>
-    <path d="M186 320c36-50 82-77 139-81 41-3 79 7 114 31-34-6-65 0-92 18-34 23-52 55-53 95-1 30 12 58 39 81-71-10-120-57-147-144Z" fill="url(#cream)"/>
-    <path d="M218 348c28-39 61-60 101-64 31-3 59 4 84 21-28-3-52 4-72 20-23 18-34 42-32 72 2 24 14 44 37 60-52-4-92-40-118-109Z" fill="#fff"/>
-    <path d="M305 181c42-19 86-17 127 6-23-3-43 1-60 12-19 12-32 29-39 51-8-26-17-48-28-69Z" fill="#341018"/>
-    <path d="M419 235c18-5 34-2 48 9-12 18-29 27-50 24-11-2-18-8-22-17 7-8 15-13 24-16Z" fill="#17151b"/>
-    <path d="M130 363c11 63 52 109 120 134-43-7-81-27-111-60-26-29-38-63-35-101Z" fill="#ff9b13"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+ <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe18a"/><stop offset=".24" stop-color="#ffad24"/><stop offset=".58" stop-color="#ff6810"/><stop offset="1" stop-color="#bd2b12"/></linearGradient>
+ <linearGradient id="cream" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".58" stop-color="#fff0e9"/><stop offset="1" stop-color="#d8b9b4"/></linearGradient>
+ <linearGradient id="shade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffbd45"/><stop offset="1" stop-color="#e7440b"/></linearGradient>
+ <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter>
+</defs>
+<!-- warm circular motion mark -->
+<path d="M15 72C13 39 35 13 66 10c17-2 32 4 44 15" fill="none" stroke="#ff7816" stroke-width="5" opacity=".32" filter="url(#glow)"/>
+<path d="M15 72C13 39 35 13 66 10c17-2 32 4 44 15" fill="none" stroke="#ff9b25" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M24 79C23 54 30 31 48 15c2 15 7 25 16 34 8-15 20-25 36-30-1 20-8 36-21 48" fill="url(#orange)"/>
+<path d="M48 22c-5 12-6 22-3 31l14-12z" fill="#7c2915"/>
+<path d="M94 28c-10 7-17 16-22 26l18-8z" fill="#8d260f"/>
+<!-- head silhouette -->
+<path d="M26 76c2-22 16-39 37-45 18-5 34 1 45 15 5 7 8 14 15 19-8 13-20 19-37 20-12 1-22 9-31 24-14-5-24-15-29-33z" fill="url(#orange)"/>
+<!-- forehead and bridge -->
+<path d="M35 67c9-20 25-31 43-31 13 0 24 6 34 17-15-4-28-1-39 7-9 6-16 14-21 25-9-4-14-10-17-18z" fill="#ffb52e"/>
+<path d="M48 73c9-17 24-27 42-27 10 0 19 4 27 11-12-1-23 3-33 11-8 6-14 14-18 24-9-4-15-10-18-19z" fill="#ff7b16"/>
+<!-- near ear highlight -->
+<path d="M48 20c-4 12-4 22 0 31l11-12z" fill="#ffcf61" opacity=".8"/>
+<!-- cheeks and white muzzle -->
+<path d="M29 75c10-14 23-22 40-23 15-1 29 5 42 17-13 4-25 5-35 12-9 6-15 15-20 26-13-6-22-16-27-32z" fill="url(#cream)"/>
+<path d="M39 80c11-12 24-18 39-18 12 0 23 4 33 12-13 0-24 4-33 12-7 6-12 13-16 21-11-6-18-15-23-27z" fill="#fff"/>
+<!-- orange cheek tufts -->
+<path d="M28 72c8-10 17-17 29-21-8 9-13 19-15 31-7-2-11-5-14-10z" fill="#ff8b1b"/>
+<path d="M34 91c8 13 20 21 34 23-13-7-20-16-24-27z" fill="url(#shade)"/>
+<!-- eye -->
+<path d="M78 60c8-5 17-5 26 0-8 3-15 4-23 4z" fill="#24151b"/>
+<path d="M83 58c5-2 10-2 14 0" fill="none" stroke="#fff0d8" stroke-width="1.5" stroke-linecap="round"/>
+<!-- muzzle and nose -->
+<path d="M84 72c12-6 23-6 34-1-8 8-19 12-32 11l-9-5z" fill="#fff7f1"/>
+<path d="M113 69c5-1 9 1 12 4-3 4-8 5-13 3z" fill="#19151a"/>
+<path d="M115 70l5 1" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity=".8"/>
+<!-- sculpted fur highlights -->
+<path d="M40 68c8-13 19-22 33-26" fill="none" stroke="#ffe08a" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M43 87c7 10 16 16 27 19" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+<path d="M29 79c4 17 15 29 31 35" fill="none" stroke="#ff9a27" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M73 115c20-1 35-13 42-30" fill="none" stroke="#ff8118" stroke-width="2.8" stroke-linecap="round"/>
 </svg>
