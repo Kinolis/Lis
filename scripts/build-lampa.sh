@@ -68,9 +68,9 @@ html = index.read_text(encoding="utf-8")
 link = '<link rel="stylesheet" href="css/lis-theme.css?v=8">' 
 favicon = '<link rel="icon" type="image/svg+xml" href="favicon.svg">'
 if link not in html:
-    html = html.replace("</head>", f"    {link}\\n</head>")
+    html = html.replace("</head>", f"    {link}\n</head>")
 if favicon not in html:
-    html = html.replace("</head>", f"    {favicon}\\n</head>")
+    html = html.replace("</head>", f"    {favicon}\n</head>")
 index.write_text(html, encoding="utf-8")
 PY
 
