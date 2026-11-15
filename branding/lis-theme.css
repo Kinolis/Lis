@@ -10,24 +10,16 @@
   text-align:center;
 }
 .lang__logo{
-  width:58px;
-  height:58px;
-  min-height:58px;
+  width:64px;
+  height:64px;
+  min-height:64px;
   margin:0 auto 18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:none!important;
-  filter:none;
+  display:block;
+  background:url("lis-fox.svg") center/contain no-repeat!important;
+  filter:drop-shadow(0 0 12px rgba(255,125,30,.28));
 }
 .lang__logo img{display:none!important}
-.lang__logo:before{
-  content:"🦊";
-  display:block;
-  font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;
-  font-size:54px;
-  line-height:1;
-}
+
 .lang__title{
   margin:0;
   font-size:clamp(25px,6vw,31px);
