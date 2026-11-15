@@ -41,14 +41,14 @@
 .lang__selector > .scroll{
   display:block!important;
   width:100%;
-  height:18em!important;
-  max-height:18em!important;
+  height:22em!important;
+  max-height:22em!important;
   overflow-x:hidden!important;
   overflow-y:auto!important;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
-  mask-image:none!important;
-  -webkit-mask-image:none!important;
+  mask-image:linear-gradient(to bottom,#000 0%,#000 88%,rgba(0,0,0,.92) 94%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 88%,rgba(0,0,0,.92) 94%,transparent 100%);
 }
 .lang__selector .scroll__content{
   width:100%;
@@ -107,9 +107,9 @@
 .lang__selector-item.focus,
 .lang__selector-item.last-focus,
 .lang__selector-item:hover{
-  background:linear-gradient(135deg,rgba(255,190,125,.27),rgba(255,150,75,.16) 55%,rgba(255,255,255,.10));
-  border-color:rgba(255,190,135,.48);
-  box-shadow:inset 0 1px 2px rgba(255,255,255,.24),0 0 20px rgba(255,145,65,.10);
+  background:linear-gradient(135deg,rgba(255,190,125,.20),rgba(255,150,75,.11) 55%,rgba(255,255,255,.08));
+  border-color:rgba(255,190,135,.38);
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.24),0 0 16px rgba(255,145,65,.07);
   color:#fff;
 }
 .lang__selector-item.focus:after,
@@ -119,7 +119,7 @@
   .lang__title{font-size:clamp(26px,7vw,32px)}
   .lang__subtitle{font-size:15px}
   .lang__selector{margin-top:28px}
-  .lang__selector > .scroll{height:18em!important;max-height:18em!important}
+  .lang__selector > .scroll{height:22em!important;max-height:18em!important}
   .lang__selector-item{min-height:54px;margin-bottom:8px;padding:14px 48px 14px 17px;font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.lang__selector-item{transition:none}}
