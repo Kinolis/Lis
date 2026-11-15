@@ -100,7 +100,7 @@ bootstrap = """<script>
 })();
 </script>"""
 if "LIS plugin preload failed" not in html:
-    html = html.replace("</head>", bootstrap + "\\n</head>")
+    html = html.replace("</head>", bootstrap + "\n</head>")
 index.write_text(html, encoding="utf-8")
 PY
 cp "$ROOT/branding/lis-theme.css" "$OUTPUT/css/lis-theme.css"
