@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+ <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd36b"/><stop offset=".42" stop-color="#ff8a18"/><stop offset="1" stop-color="#e94a16"/></linearGradient>
+ <linearGradient id="cream" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#cfd5e2"/></linearGradient>
+ <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb13b"/><stop offset=".55" stop-color="#ff6a16"/><stop offset="1" stop-color="#a82c12"/></linearGradient>
+ <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<path d="M17 62A48 48 0 0 1 104 30" fill="none" stroke="url(#ring)" stroke-width="5" stroke-linecap="round" filter="url(#glow)"/>
+<path d="M111 63A48 48 0 0 1 35 111" fill="none" stroke="url(#ring)" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+<path d="M22 43 29 8 54 29Q64 25 74 29L100 8 105 49Q103 81 65 105 28 85 22 43Z" fill="url(#fur)"/>
+<path d="m29 17 19 17-17 17zM99 17 80 34l17 17z" fill="#29130f"/>
+<path d="M37 56Q49 43 64 52Q79 43 92 56Q87 77 65 91Q43 78 37 56Z" fill="url(#cream)"/>
+<path d="M50 59Q57 54 64 61Q71 54 79 59L65 74Z" fill="#25151a"/>
+<path d="m61 73 4 4 4-4-4-3z" fill="#202638"/>
+<path d="M64 84Q77 78 89 65Q84 88 65 100Q47 90 40 69Q52 81 64 84Z" fill="#f7f8fb" opacity=".95"/>
+</svg>
