@@ -1,7 +1,7 @@
 /* LIS language selection — isolated skin; upstream Lampa logic remains untouched. */
 .lang{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;box-sizing:border-box;overflow:hidden;padding:max(28px,env(safe-area-inset-top)) 22px max(28px,env(safe-area-inset-bottom));background:#000!important;color:#f5f6f8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .lang__body{width:min(100%,390px);max-height:100%;text-align:center;overflow:visible}
-.lang__logo{display:block;width:78px;height:78px;margin:0 auto 20px;background:url("./lis-fox.svg") center/contain no-repeat!important;filter:drop-shadow(0 0 15px rgba(255,126,30,.38))}
+.lang__logo{display:block;width:78px;height:78px;margin:0 auto 20px;background:url("./lis-fox.png") center/contain no-repeat!important;filter:drop-shadow(0 0 15px rgba(255,126,30,.38))}
 .lang__logo img{display:none!important}
 .lang__title{margin:0;font-size:clamp(28px,7vw,38px);line-height:1.16;font-weight:600;letter-spacing:-.7px;color:#fff}
 .lang__subtitle{margin:12px 0 0;color:#aeb1b8;font-size:clamp(15px,4vw,18px);line-height:1.4;font-weight:400}
