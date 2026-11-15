@@ -22,7 +22,6 @@
 
 
 /* Final polish: prevent iOS square glow artifacts around glass capsules. */
-.lang__logo{width:86px;height:86px;margin-bottom:14px;filter:drop-shadow(0 0 10px rgba(255,126,30,.34)) drop-shadow(0 0 22px rgba(255,91,15,.13));}
 .lang__selector-item{isolation:isolate;overflow:visible;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 1px 1px rgba(255,255,255,.19),inset 0 -1px 0 rgba(255,255,255,.045),0 7px 18px rgba(0,0,0,.22);}
 .lang__selector-item.focus,.lang__selector-item.last-focus{z-index:1;border-color:rgba(255,153,77,.82);background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(190,198,211,.12) 58%,rgba(255,255,255,.07));box-shadow:inset 0 1px 2px rgba(255,255,255,.26),0 0 0 1px rgba(255,132,38,.10);color:#fff;}
 .lang__selector-item.focus:before,.lang__selector-item.last-focus:before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:-9px;border-radius:inherit;background:radial-gradient(ellipse at center,rgba(255,119,29,.22) 0%,rgba(255,119,29,.10) 42%,rgba(255,119,29,0) 76%);filter:blur(10px);opacity:.9;}
@@ -31,7 +30,6 @@
 .lang__selector-item:nth-child(2){animation-delay:.04s}.lang__selector-item:nth-child(3){animation-delay:.08s}.lang__selector-item:nth-child(4){animation-delay:.12s}
 @keyframes lis-screen-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes lis-capsule-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:600px){.lang__logo{width:80px;height:80px;margin-bottom:14px}}
 @media(prefers-reduced-motion:reduce){.lang__body,.lang__selector-item{animation:none!important}}
 
 
