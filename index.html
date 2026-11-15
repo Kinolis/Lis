@@ -392,7 +392,7 @@ async function shareDetail(i){
     else alert(shareUrl);
   }catch(e){if(e&&e.name!=='AbortError')console.warn('Share failed',e);}
 }
-async function openSharedTitle(){const params=new URLSearchParams(location.search),id=params.get('lis'),kind=params.get('type')==='tv'?'tv':'movie';if(!id||!/^\d+$/.test(id))return;try{const response=await fetch('/api/tmdb?action=details&type='+kind+'&id='+encodeURIComponent(id));if(!response.ok)return;const data=await response.json();if(!data.item)return;let index=movies.findIndex(x=>String(x.tmdbId)===String(data.item.id)&&x.mediaType===kind);if(index<0){movies.push(fromTMDB(data.item,kind));index=movies.length-1;}openDetail(index);}catch(e){console.warn('Shared title could not be opened',e);}}
+async function openSharedTitle(){const params=new URLSearchParams(location.search),id=params.get('lis')||params.get('card'),media=params.get('type')||params.get('media'),kind=media==='tv'?'tv':'movie',source=params.get('source');if(!id||!/^\d+$/.test(id)||(source&&source!=='tmdb'&& !params.has('lis')))return;try{const response=await fetch('/api/tmdb?action=details&type='+kind+'&id='+encodeURIComponent(id));if(!response.ok)throw new Error('TMDB details request failed: '+response.status);const data=await response.json();if(!data.item)return;let index=movies.findIndex(x=>String(x.tmdbId)===String(data.item.id)&&x.mediaType===kind);if(index<0){movies.push(fromTMDB(data.item,kind));index=movies.length-1;}openDetail(index);}catch(e){console.warn('Shared title could not be opened',e);}}
 async function loadDetailTrailer(i){
   const m=movies[i],host=document.getElementById('detailTrailer');if(!m||!host)return;
   if(!m.tmdbId){host.innerHTML='<p class="muted">Трейлер пока недоступен</p>';return;}
