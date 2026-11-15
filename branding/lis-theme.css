@@ -623,3 +623,86 @@ body.true--mobile .head__action.open--profile{
     box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 12px 35px rgba(0,0,0,.55)!important;
   }
 }
+
+
+
+/* LIS detail page continuation: remove Lampa's grey page wash below the hero.
+   Keep every information section on the same true-black canvas. */
+@media(max-width:600px){
+  html,body,.app,.app__content,.full,.full-start-new,
+  .full-start-new__body,.full-start-new__right,
+  .full-descr,.full-review,.full-person,.full-seasons,.full-episodes,
+  .full-collection,.full-related,.full-trailers,.full-voices,
+  .full-start-new__details,.full-start-new__description{
+    background-color:#000!important;
+    background-image:none!important;
+    color:#f2f2f4!important;
+  }
+  body:before,body:after,.app:before,.app:after,
+  .full:before,.full:after,.full-start-new:before,.full-start-new:after,
+  .full-start-new__body:before,.full-start-new__body:after{
+    background-image:none!important;
+    box-shadow:none!important;
+  }
+  .full-start-new__right{
+    background:#000!important;
+    padding-bottom:2em!important;
+  }
+  /* Description and metadata */
+  .full-descr,.full-review,.full-person,.full-seasons,.full-episodes,
+  .full-collection,.full-related,.full-trailers,.full-voices{
+    border:0!important;
+    box-shadow:none!important;
+  }
+  .full-descr__title,.full-review__title,.full-person__title,
+  .full-seasons__title,.full-episodes__title{
+    color:#f4f4f6!important;
+    font-family:Manrope,-apple-system,sans-serif!important;
+    font-weight:650!important;
+    letter-spacing:-.025em!important;
+  }
+  .full-descr__text,.full-start-new__description,
+  .full-descr__details,.full-descr__info{
+    color:#b9bbc3!important;
+    line-height:1.55!important;
+  }
+  .full-descr__details>*,.full-descr__info>*{
+    color:#e4e5e9!important;
+  }
+  /* Genre / production / tag counters */
+  .full-descr__tags>*,.full-descr__tag,
+  .full-descr__more>*,.full-descr__buttons>*{
+    border:1px solid rgba(255,255,255,.13)!important;
+    border-radius:12px!important;
+    background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.045))!important;
+    color:#e8e9ed!important;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.12)!important;
+    -webkit-backdrop-filter:blur(18px) saturate(150%)!important;
+    backdrop-filter:blur(18px) saturate(150%)!important;
+  }
+  /* Comment cards and cast/crew rows */
+  .full-review__item,.full-review__card,.full-person__item,
+  .full-collection__item,.full-related__item{
+    border:1px solid rgba(255,255,255,.11)!important;
+    border-radius:16px!important;
+    background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035))!important;
+    color:#e9e9ed!important;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.10)!important;
+    -webkit-backdrop-filter:blur(20px) saturate(145%)!important;
+    backdrop-filter:blur(20px) saturate(145%)!important;
+  }
+  .full-review__text,.full-review__name,.full-person__name{
+    color:#e8e9ed!important;
+  }
+  .full-review__date,.full-review__author,.full-person__role{
+    color:#9296a0!important;
+  }
+  .full-review__add{
+    border:1px dashed rgba(213,173,114,.7)!important;
+    border-radius:16px!important;
+    background:rgba(213,173,114,.045)!important;
+    color:#d5ad72!important;
+  }
+  /* Keep the fixed navigation above the black canvas. */
+  .navigation-bar{background:linear-gradient(0deg,rgba(0,0,0,.96),rgba(0,0,0,0))!important}
+}
