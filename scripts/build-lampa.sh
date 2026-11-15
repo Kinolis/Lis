@@ -79,7 +79,7 @@ if title_count == 0:
     html = html.replace("</head>", "<title>LIS</title>\\n</head>", 1)
 
 branding = [
-    ('./branding/lis-fox.svg', '<link rel="icon" type="image/svg+xml" href="./branding/lis-fox.svg">'),
+    ('./branding/lis-fox.png', '<link rel="icon" type="image/png" href="./branding/lis-fox.png">'),
     ('apple-touch-icon', '<link rel="apple-touch-icon" href="./branding/lis-fox.png">'),
     ('apple-mobile-web-app-title', '<meta name="apple-mobile-web-app-title" content="LIS">'),
     ('name="application-name"', '<meta name="application-name" content="LIS">'),
