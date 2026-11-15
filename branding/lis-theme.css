@@ -1,103 +1,130 @@
-/* LIS visual layer for the original Lampa language chooser.
-   Upstream Lampa markup and interaction remain unchanged. */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap');
-
+/* LIS welcome screen: Prisma-inspired layout, preserving Lampa's original dark background. */
 .lang{
-  z-index:200;
-  padding: max(34px, env(safe-area-inset-top)) 22px max(34px, env(safe-area-inset-bottom));
-  color:#f5f5f7;
-  background:
-    radial-gradient(ellipse at 50% 38%, rgba(79,103,151,.20) 0%, rgba(40,49,70,.16) 42%, transparent 72%),
-    linear-gradient(155deg,#202638 0%,#1c2232 58%,#171d2b 100%);
-  font-family:'DM Sans',Manrope,-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#1c1f20;
+  color:#f5f6f8;
+  padding:max(28px,env(safe-area-inset-top)) 22px max(28px,env(safe-area-inset-bottom));
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-.lang__body{width:min(100%,520px);text-align:center}
+.lang__body{
+  width:min(100%,440px);
+  text-align:center;
+}
 .lang__logo{
-  width:58px;height:58px;min-height:58px;
-  margin:0 auto 20px;
-  display:block;
-  background-repeat:no-repeat;
-  background-position:center;
-  background-size:contain;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23f5f5f7' d='M9 12 37 28Q50 22 63 28L91 12 86 59Q80 82 50 91 20 82 14 59Z'/%3E%3Cpath fill='%23202638' d='m22 28 15 10-13 13zm56 0L63 38l13 13z'/%3E%3Cpath fill='%2317191f' d='M35 51q7-8 15 0 8-8 15 0l-15 18z'/%3E%3Cpath fill='%23f5f5f7' d='m45 63 5 7 5-7-5-3z'/%3E%3C/svg%3E");
-  filter:drop-shadow(0 8px 18px rgba(255,255,255,.12));
+  width:58px;
+  height:58px;
+  min-height:58px;
+  margin:0 auto 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:none!important;
+  filter:none;
 }
 .lang__logo img{display:none!important}
-
+.lang__logo:before{
+  content:"🦊";
+  display:block;
+  font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  font-size:54px;
+  line-height:1;
+}
 .lang__title{
   margin:0;
-  font:600 clamp(25px,6vw,31px)/1.18 Manrope,'DM Sans',sans-serif;
-  letter-spacing:-.7px;
-  min-height:1.18em;
+  font-size:clamp(25px,6vw,31px);
+  line-height:1.2;
+  font-weight:600;
+  letter-spacing:-.5px;
 }
-.lang__title:before{content:'Добро пожаловать';display:block;}
-.lang__selector .scroll{mask-image:none!important;-webkit-mask-image:none!important;}
 .lang__subtitle{
-  margin:14px 0 0;
-  color:#aeb1bb;
-  font:500 15px/1.5 'DM Sans',sans-serif;
-  letter-spacing:.02em;
+  margin:12px 0 0;
+  color:#aeb1b8;
+  font-size:15px;
+  line-height:1.45;
+  font-weight:400;
 }
 .lang__selector{
-  width:min(100%,440px);
-  margin:34px auto 0;
+  width:100%;
+  margin:30px auto 0;
 }
 .lang__selector > .scroll{
   display:block!important;
   width:100%;
   height:18em!important;
   max-height:18em!important;
-  overflow-y:auto!important;
   overflow-x:hidden!important;
-  overscroll-behavior:contain;
+  overflow-y:auto!important;
   -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  mask-image:none!important;
+  -webkit-mask-image:none!important;
 }
 .lang__selector .scroll__content{
   width:100%;
-  height:auto!important;
-  max-height:none!important;
-  overflow:visible!important;
-  padding:2px 5px 12px;
+  padding:2px 4px 12px;
+  box-sizing:border-box;
 }
 .lang__selector .scroll__body{
   width:100%;
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr);
-  gap:10px;
-  align-items:stretch;
+  display:block!important;
 }
 .lang__selector-item{
   position:relative;
-  margin:0;
-  padding:16px 20px;
-  min-height:56px;
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:13px;
-  background:rgba(112,126,155,.19);
-  color:#e8e9ed;
-  font:500 16px/1.35 Manrope,'DM Sans',sans-serif;
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  min-height:54px;
+  margin:0 0 9px;
+  padding:15px 54px 15px 18px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;
+  background:rgba(255,255,255,.075);
+  color:#f0f1f4;
   text-align:left;
+  font-size:16px;
+  line-height:1.4;
+  font-weight:400;
   box-shadow:none;
-  transition:background .18s ease,border-color .18s ease,transform .18s ease;
+  transition:background .16s ease,border-color .16s ease;
 }
-.lang__selector-item:after{content:attr(data-code);float:right;color:rgba(225,231,244,.43);font:500 13px/1.5 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.lang__selector-item.last-focus,
+.lang__selector-item:after{
+  position:absolute;
+  right:17px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#858b98;
+  font-size:13px;
+  line-height:1;
+  font-weight:500;
+  letter-spacing:.04em;
+}
+.lang__selector-item:nth-child(1):after{content:"RU"}
+.lang__selector-item:nth-child(2):after{content:"EN"}
+.lang__selector-item:nth-child(3):after{content:"UK"}
+.lang__selector-item:nth-child(4):after{content:"BE"}
+.lang__selector-item:nth-child(5):after{content:"ZH"}
+.lang__selector-item:nth-child(6):after{content:"PT"}
+.lang__selector-item:nth-child(7):after{content:"BG"}
+.lang__selector-item:nth-child(8):after{content:"HE"}
+.lang__selector-item:nth-child(9):after{content:"CS"}
+.lang__selector-item:nth-child(10):after{content:"RO"}
+.lang__selector-item:nth-child(11):after{content:"FR"}
+.lang__selector-item:nth-child(12):after{content:"PL"}
+.lang__selector-item:nth-child(13):after{content:"ES"}
 .lang__selector-item.focus,
+.lang__selector-item.last-focus,
 .lang__selector-item:hover{
-  background:rgba(112,126,155,.48);
-  border-color:rgba(190,205,235,.35);
+  background:rgba(255,255,255,.16);
+  border-color:rgba(255,255,255,.16);
   color:#fff;
 }
-.lang__selector-item.focus{transform:scale(1.01)}
-.lang__selector-item.focus:after,.lang__selector-item.last-focus:after{color:rgba(255,255,255,.58)}
-
+.lang__selector-item.focus:after,
+.lang__selector-item.last-focus:after{color:#b8bdc8}
 @media(max-width:600px){
-  .lang__logo{margin-bottom:22px}
-  .lang__title{font-size:clamp(32px,8.5vw,42px)}
-  .lang__subtitle{font-size:14px}
-  .lang__selector{margin-top:28px;width:min(100%,520px)}
-  .lang__selector > .scroll{height:18em!important;max-height:18em!important;}
-   .lang__selector .scroll__body{grid-template-columns:minmax(0,1fr);gap:9px}
-  .lang__selector-item{min-height:56px;padding:15px 18px;font-size:15px;border-radius:12px}
+  .lang__logo{margin-bottom:18px}
+  .lang__title{font-size:clamp(26px,7vw,32px)}
+  .lang__subtitle{font-size:15px}
+  .lang__selector{margin-top:28px}
+  .lang__selector > .scroll{height:18em!important;max-height:18em!important}
+  .lang__selector-item{min-height:54px;margin-bottom:9px;padding:15px 52px 15px 18px;font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.lang__selector-item{transition:none}}
