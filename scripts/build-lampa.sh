@@ -63,6 +63,7 @@ cp -a "$SOURCE/." "$OUTPUT/"
 mkdir -p "$OUTPUT/branding"
 cp "$ROOT/branding/lis-language.css" "$OUTPUT/branding/lis-language.css"
 cp "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.svg"
+cp "$ROOT/branding/lis-fox.png" "$OUTPUT/branding/lis-fox.png"
 
 python3 - "$OUTPUT/index.html" <<'PY'
 from pathlib import Path
@@ -82,5 +83,6 @@ test -s "$OUTPUT/index.html"
 test -s "$OUTPUT/app.min.js"
 test -s "$OUTPUT/branding/lis-language.css"
 test -s "$OUTPUT/branding/lis-fox.svg"
+test -s "$OUTPUT/branding/lis-fox.png"
 grep -q 'branding/lis-language.css' "$OUTPUT/index.html"
 echo "Built original Lampa with the isolated LIS language-screen skin into $OUTPUT"
