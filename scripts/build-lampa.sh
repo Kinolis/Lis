@@ -22,8 +22,8 @@ import sys
 p = Path(sys.argv[1])
 s = p.read_text(encoding="utf-8")
 s = s.replace("black_list.push('bylampa.github.io')", "// LIS: allow only the explicitly selected CUB-off plugin from this host")
-old = "puts = puts.filter(p => p.toLowerCase().indexOf(b) == -1)"
-new = "puts = puts.filter(p => p.toLowerCase().indexOf(b) == -1 || p === 'https://bylampa.github.io/cub_off.js')"
+old = "puts = puts.filter(p=>p.toLowerCase().indexOf(b) == -1)"
+new = "puts = puts.filter(p=>p.toLowerCase().indexOf(b) == -1 || p === 'https://bylampa.github.io/cub_off.js')"
 if old not in s:
     raise SystemExit("Could not locate Lampa plugin blacklist filter; refusing unsafe patch")
 s = s.replace(old, new)
