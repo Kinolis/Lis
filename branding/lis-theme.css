@@ -203,3 +203,13 @@ body.true--mobile .head__menu-icon{
   filter:none!important;
 }
 body.true--mobile .head__menu-icon svg{display:none!important}
+
+/* Compact LIS header: fox mark on the left, profile only on the right. */
+body.true--mobile .head__title{display:none!important}
+body.true--mobile .head__markers{display:none!important}
+body.true--mobile .head__actions .head__action:not(.open--profile){display:none!important}
+body.true--mobile .head__actions{margin-left:auto!important}
+body.true--mobile .head__action.open--profile{
+  display:flex!important;
+  margin-left:0!important;
+}
