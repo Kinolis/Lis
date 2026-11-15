@@ -65,18 +65,18 @@ jobs:
           cleanup
           trap - EXIT
 
-      - name: Package original Lampa for GitHub web target
+      - name: Package original Lampa for web
         working-directory: vendor/lampa-source
         run: |
           npx gulp pack_github
           test -s build/github/lampa/index.html
           test -s build/github/lampa/app.min.js
 
-  lis-static-build:
-    name: Verify LIS static site build
+  lampa-static-build:
+    name: Verify original Lampa deployment output
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout LIS with pinned Lampa submodule
+      - name: Checkout repository with pinned Lampa submodule
         uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -90,14 +90,11 @@ jobs:
         run: |
           test "$(git -C vendor/lampa-source rev-parse HEAD)" = "4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0"
 
-      - name: Build LIS static site
+      - name: Build original Lampa as the entire site
         run: |
           npm run build
           test -s dist/index.html
-          test -s dist/lampa/index.html
-          test -s dist/lampa/app.min.js
-
-      - name: Check local preview launchers
-        run: |
-          bash -n scripts/start-lampa-dev.sh
-          bash -n scripts/preview-lis.sh
+          test -s dist/app.min.js
+          test -d dist/css
+          test -d dist/vender
+          test ! -e dist/lampa
