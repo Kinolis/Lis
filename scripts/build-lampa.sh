@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LAMP_DIR="$ROOT/vendor/lampa-source"
-OUTPUT="$ROOT/dist/lampa"
+OUTPUT="$ROOT/dist"
 LOG_FILE="${TMPDIR:-/tmp}/lis-lampa-gulp.log"
 
 if [[ ! -f "$LAMP_DIR/gulpfile.js" ]]; then
@@ -14,8 +14,7 @@ fi
 cd "$LAMP_DIR"
 npm install --no-audit --no-fund
 
-# The upstream default Gulp task starts BrowserSync and watches files.
-# Wait for its initial Rollup bundle, then stop the watcher cleanly.
+# Build the upstream bundle without leaving its watch server running.
 npx gulp >"$LOG_FILE" 2>&1 &
 gulp_pid=$!
 cleanup() {
@@ -50,13 +49,15 @@ npx gulp pack_github
 
 test -s build/github/lampa/index.html
 test -s build/github/lampa/app.min.js
+
+# Publish only the original Lampa web package at the site root.
+rm -rf "$OUTPUT"
 mkdir -p "$OUTPUT"
 cp -a build/github/lampa/. "$OUTPUT/"
 
-# Ensure the standalone Lampa entry point and its essential assets are present.
 test -s "$OUTPUT/index.html"
 test -s "$OUTPUT/app.min.js"
 test -d "$OUTPUT/css"
 test -d "$OUTPUT/vender"
 
-echo "Lampa web bundle copied to $OUTPUT"
+echo "Original Lampa web bundle copied to $OUTPUT"
