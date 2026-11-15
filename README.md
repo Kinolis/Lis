@@ -1,28 +1,24 @@
-# LIS — кино начинается здесь
+# Lampa — оригинальный клиент
 
-Новый интерфейс LIS на React + Vite. Сейчас это демонстрационная версия: каталог и избранное работают локально в браузере, без авторизации и серверной базы.
-
-## Локальный запуск
-
-```bash
-npm install
-npm run dev
-```
+Этот репозиторий публикует **оригинальную веб-сборку Lampa** из закреплённого upstream Git submodule `vendor/lampa-source`. Собственная оболочка LIS не включается в опубликованный сайт.
 
 ## Сборка
 
+Требуется Node.js 20 и доступ к Git submodule:
+
 ```bash
+git clone --recurse-submodules -b experiment/lampa-source https://github.com/Kinolis/Lis.git
+cd Lis
 npm run build
 ```
 
-Результат сборки находится в папке `dist`.
+Результат сборки находится в `dist/`: корневой `index.html` и все необходимые ресурсы оригинальной Lampa.
 
-## Публикация через Cloudflare Pages
+## Cloudflare Pages
 
-Подключить репозиторий `Kinolis/Lis` в Cloudflare Pages и указать:
-- Framework preset: **Vite**
-- Build command: **npm run build**
-- Build output directory: **dist**
-- Root directory: **/**
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Production branch: `main` (не переключать без отдельного решения)
+- Тестовая ветка: `experiment/lampa-source`
 
-Не использовать команду `npx wrangler deploy`: это команда для деплоя Worker, а данный проект является статическим сайтом для Pages.
+Исходники Lampa подключены как Git submodule и закреплены на upstream commit `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0`. Содержимое upstream не изменяется.
