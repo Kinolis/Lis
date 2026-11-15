@@ -213,3 +213,55 @@ body.true--mobile .head__action.open--profile{
   display:flex!important;
   margin-left:0!important;
 }
+
+/* LIS poster cards: unified cinematic metadata layout. */
+/* Poster frame and image */
+.card{width:13.2em!important}
+.card__view{position:relative;overflow:hidden;border-radius:1.05em;margin-bottom:.72em;padding-bottom:150%}
+.card__img{border-radius:1.05em!important;border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 24px rgba(0,0,0,.34)}
+/* Category chip */
+.card__type{
+  left:.55em!important;top:.55em!important;
+  padding:.32em .62em!important;border-radius:.42em!important;
+  background:rgba(0,0,0,.72)!important;color:#f4f4f6!important;
+  border:1px solid rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  font-size:.78em!important;font-weight:600;letter-spacing:.06em;
+}
+/* Favourite / watch-later controls */
+.card__icons{top:.5em!important;left:auto!important;right:.5em!important;justify-content:flex-end!important}
+.card__icons-inner{
+  width:2.55em;height:2.55em;align-items:center;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(0,0,0,.58)!important;
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.18);
+}
+.card__icon{width:2.35em!important;height:2.35em!important}
+/* Bottom glass metadata rail */
+.card__quality{
+  left:0!important;right:0!important;bottom:0!important;top:auto!important;
+  display:flex;align-items:center;justify-content:flex-start;
+  min-height:2.35em;box-sizing:border-box;
+  padding:.38em .72em!important;
+  border-radius:0!important;
+  background:rgba(0,0,0,.70)!important;color:#8fc5ff!important;
+  border-top:1px solid rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  font-size:.82em!important;font-weight:600;letter-spacing:.04em;
+}
+.card__vote{
+  right:.55em!important;bottom:.48em!important;
+  padding:0!important;border:0!important;border-radius:0!important;
+  background:transparent!important;color:#f4dfbd!important;
+  font-size:1em!important;font-weight:700!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+.card__vote:before{content:"★";color:#d5ad72;margin-right:.28em}
+.card__age{color:#85858d!important;font-size:.82em!important;margin-top:.45em!important}
+.card__title{font-size:1.12em!important;font-weight:600!important;line-height:1.25!important}
+.card__marker{z-index:2}
+@media(max-width:600px){
+  .card{width:13.2em!important}
+  .card__view{padding-bottom:150%!important}
+}
