@@ -200,17 +200,7 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .catalog-reset{font-size:11px;margin-top:7px}
 @media(max-width:600px){.catalog-filter-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.catalog-toolbar{padding:11px}.catalog-select select{font-size:13px;padding:11px 9px}}
 
-/* Keep all four detail actions readable on narrow screens */
-@media(max-width:600px){
-  .detail-copy .actions{flex-wrap:wrap;max-width:560px;gap:9px}
-  .detail-copy .actions .btn{flex:1 1 calc(50% - 9px);min-width:0;padding:12px 7px;font-size:14px;white-space:nowrap}
-}
-
-@media(max-width:600px){
-  .detail-copy .actions.detail-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;width:100%;max-width:560px}
-  .detail-copy .actions.detail-actions .btn{width:100%;min-width:0;min-height:58px;padding:12px 8px;font-size:14px;white-space:nowrap}
-  .detail-copy .actions.detail-actions .detail-watch{grid-column:1 / -1}
-}
+/* Detail actions are controlled only by the LIS detail layout below. */
 
 /* LIS legal streaming source picker */
 .source-list{display:grid;gap:10px}
@@ -225,60 +215,59 @@ main{min-height:75vh}.hero{height:min(690px,76vh);min-height:510px;position:rela
 .source-result-copy small{font-size:11px;color:var(--muted);line-height:1.4}
 .source-play{font-size:18px;padding:0 7px}
 
-/* LIS cinematic detail screen — poster-led, centered metadata and compact actions. */
-.lis-detail-hero{height:min(850px,92svh);min-height:720px;align-items:flex-end;justify-content:center;padding:0 20px 38px;background-size:cover;background-position:center 18%;text-align:center}
-.lis-detail-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.04) 36%,rgba(0,0,0,.66) 62%,#000 100%)}
-.lis-detail-copy{width:100%;max-width:650px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center}
-.lis-detail-copy .eyebrow{font-size:12px;letter-spacing:.02em;text-transform:none;color:#c6c8cf;justify-content:center}
-.lis-detail-copy .detail-title-wrap{min-height:clamp(58px,11vw,104px);margin:8px auto 0}
-.lis-detail-copy .detail-title-logo{max-width:min(82vw,440px);max-height:clamp(58px,12vw,105px)}
-.lis-detail-copy .detail-title-wrap h1{font-size:clamp(30px,7vw,48px);letter-spacing:-1px}
-.lis-tagline{margin:4px 0 18px;color:#c5c6cc;font-size:17px;line-height:1.35}
-.lis-ratings{width:100%;display:grid;grid-template-columns:repeat(3,1fr);margin:0 auto 14px;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
-.lis-rating{display:flex;min-height:72px;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-right:1px solid rgba(255,255,255,.15)}
-.lis-rating:last-child{border-right:0}
-.lis-rating strong{font:700 29px Manrope,sans-serif;color:#f7f7f8}
-.lis-rating span{font-size:11px;color:#8e9098;letter-spacing:.08em}
-.lis-status{font-size:13px;color:#c9cbd1;margin:0 0 18px}
-.lis-detail-actions{width:100%;max-width:540px;display:grid!important;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(54px,.65fr));gap:10px!important;margin:0!important}
-.lis-detail-actions .btn{min-height:58px;border-radius:30px;padding:10px 12px;font-size:15px}
-.lis-detail-actions .detail-watch{grid-column:auto!important;background:#f4f4f5!important;color:#111!important;border-color:#f4f4f5!important;font-weight:700}
-.lis-detail-actions .detail-save,.lis-detail-actions .detail-share{font-size:22px}
-.lis-detail-hero+.detail-content{padding-top:30px}
-@media(max-width:600px){.lis-detail-hero{height:min(820px,91svh);min-height:700px;padding:0 20px max(28px,env(safe-area-inset-bottom));background-position:center 16%}.lis-detail-copy .eyebrow{font-size:11px}.lis-tagline{font-size:16px;margin-bottom:14px}.lis-rating{min-height:66px}.lis-rating strong{font-size:26px}.lis-detail-actions{grid-template-columns:minmax(0,1.55fr) repeat(3,minmax(48px,.62fr));gap:8px!important}.lis-detail-actions .btn{min-height:54px;padding:8px 6px;font-size:13px}}
-/* Mobile detail layout: keep the LIS actions clear of the fixed navigation. */
-@media(max-width:600px){
-  .lis-detail-hero{
-    height:auto!important;
-    min-height:0!important;
-    padding:0 18px 24px!important;
-    display:flex;
-    align-items:flex-end;
-    background-size:100% auto!important;
-    background-repeat:no-repeat!important;
-    background-position:center top!important;
-  }
-  .lis-detail-hero:before{
-    background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.08) 34%,rgba(0,0,0,.82) 61%,#000 100%)!important;
-  }
-  .lis-detail-copy{padding-top:clamp(360px,54svh,470px);max-width:100%}
-  .lis-detail-copy .detail-title-wrap{min-height:58px;margin:5px auto 0}
-  .lis-detail-copy .detail-title-logo{max-width:88vw;max-height:82px}
-  .lis-tagline{margin:3px 0 12px;font-size:15px}
-  .lis-ratings{margin-bottom:10px}
-  .lis-rating{min-height:58px}
-  .lis-rating strong{font-size:24px}
-  .lis-status{font-size:12px;color:#bfc1c8;margin:0 0 12px}
-  .lis-detail-actions{
-    grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(46px,.55fr))!important;
-    gap:7px!important;
-    margin:0!important;
-  }
-  .lis-detail-actions .btn{min-height:50px;padding:7px 4px;font-size:12px}
-  .lis-detail-hero+.detail-content{padding-top:22px;padding-bottom:120px}
-  body{padding-bottom:110px}
+/* LIS film detail — compact poster-led layout; no legacy Lampa sizing rules. */
+.lis-detail-hero{
+  height:auto!important;min-height:0!important;position:relative;display:block;
+  padding:0 18px 24px!important;background-color:#000;background-size:100% auto;
+  background-repeat:no-repeat;background-position:center top;text-align:left;overflow:hidden;
 }
-</style></head><body>
+.lis-detail-hero:before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.02) 35%,rgba(0,0,0,.55) 62%,#000 100%);
+}
+.lis-detail-copy{
+  position:relative;z-index:1;width:100%;max-width:650px;margin:0 auto;
+  padding-top:clamp(320px,92vw,390px);display:flex;flex-direction:column;
+  align-items:flex-start;text-align:left;
+}
+.lis-detail-copy .eyebrow{font-size:12px;letter-spacing:0;text-transform:none;color:#c6c8cf}
+.lis-detail-copy .detail-title-wrap{width:100%;min-height:0;justify-content:flex-start;align-items:center;margin:7px 0 2px}
+.lis-detail-copy .detail-title-logo{max-width:min(88vw,440px);max-height:78px;object-position:left center}
+.lis-detail-copy .detail-title-wrap h1{font-size:clamp(30px,7vw,46px);letter-spacing:-1px;text-align:left}
+.lis-tagline{margin:3px 0 12px;color:#c5c6cc;font-size:16px;line-height:1.35}
+.lis-ratings{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 10px;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+.lis-rating{display:flex;min-height:58px;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-right:1px solid rgba(255,255,255,.15)}
+.lis-rating:last-child{border-right:0}
+.lis-rating strong{font:700 25px Manrope,sans-serif;color:#f7f7f8}
+.lis-rating span{font-size:10px;color:#8e9098;letter-spacing:.08em}
+.lis-status{font-size:12px;color:#c9cbd1;margin:0 0 12px}
+.lis-detail-actions{
+  width:100%;max-width:540px;display:grid!important;
+  grid-template-columns:minmax(0,1.55fr) repeat(3,minmax(0,.62fr));
+  gap:8px!important;margin:0!important;
+}
+.lis-detail-actions .btn{min-width:0;min-height:52px;border-radius:28px;padding:8px 5px;font-size:13px;white-space:nowrap}
+.lis-detail-actions .detail-watch{
+  grid-column:auto!important;background:linear-gradient(135deg,#f4dfb8,#b99664)!important;
+  color:#17130d!important;border-color:rgba(244,223,184,.8)!important;font-weight:700;
+}
+.lis-detail-actions .detail-save,.lis-detail-actions .detail-share{font-size:21px}
+.lis-detail-hero+.detail-content{padding:24px 18px 130px}
+@media(max-width:600px){
+  .lis-detail-hero{padding:0 18px 22px!important;background-size:100% auto!important}
+  .lis-detail-copy{padding-top:clamp(315px,90vw,370px);max-width:100%}
+  .lis-detail-copy .eyebrow{font-size:11px}
+  .lis-detail-copy .detail-title-wrap{min-height:0;margin:5px 0 1px}
+  .lis-detail-copy .detail-title-logo{max-width:88vw;max-height:72px}
+  .lis-tagline{font-size:15px;margin:2px 0 10px}
+  .lis-rating{min-height:54px}
+  .lis-rating strong{font-size:23px}
+  .lis-status{font-size:11px;margin-bottom:10px}
+  .lis-detail-actions{grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,.58fr))!important;gap:7px!important}
+  .lis-detail-actions .btn{min-height:48px;padding:7px 3px;font-size:12px}
+  .lis-detail-hero+.detail-content{padding:20px 15px 130px}
+  body{padding-bottom:112px}
+}</style></head><body>
 <main id="app"></main>
 <nav class="bottom-nav" id="bottomNav" aria-label="Основная навигация">
 <button class="nav-item active" data-page="Главная" onclick="go('Главная')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg><span>Главная</span></button>
