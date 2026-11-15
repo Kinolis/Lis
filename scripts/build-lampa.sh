@@ -76,6 +76,24 @@ if tag.strip() not in html:
     if "</head>" not in html:
         raise SystemExit("Could not find </head> in packaged Lampa index.html")
     html = html.replace("</head>", tag + "</head>", 1)
+
+# Replace the stock Lampa welcome wallpaper with a native LIS launch screen.
+welcome = """<div class="welcome lis-welcome">
+    <div class="lis-welcome__content">
+        <img class="lis-welcome__logo" src="./branding/lis-fox.png" alt="LIS">
+        <div class="lis-welcome__brand">LI<span>S</span></div>
+        <div class="lis-welcome__title">Уже скоро</div>
+        <div class="lis-welcome__subtitle">Приложение LIS</div>
+        <div class="lis-welcome__dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+</div>"""
+if '<div class="welcome"></div>' in html:
+    html = html.replace('<div class="welcome"></div>', welcome, 1)
+elif 'lis-welcome__content' not in html:
+    raise SystemExit("Could not find the stock welcome element in packaged Lampa index.html")
+
+html = html.replace("<title>Lampa - Каталог фильмов и сериалов</title>", "<title>LIS — каталог фильмов и сериалов</title>")
+html = html.replace('content="Lampa - Каталог фильмов и сериалов"', 'content="LIS — каталог фильмов и сериалов"')
 index.write_text(html, encoding="utf-8")
 PY
 
