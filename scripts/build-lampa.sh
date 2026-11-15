@@ -66,8 +66,9 @@ cp "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.svg"
 
 # Always rasterize the vector master into a clean, transparent, high-resolution PNG.
 # This avoids shipping the old 128x128 PNG, which produced visible pixel/strip artifacts.
-python3 -m pip install --quiet --user --disable-pip-version-check CairoSVG
-python3 - "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.png" <<'PY'
+python3 -m venv "${TMPDIR:-/tmp}/lis-cairosvg-venv"
+"${TMPDIR:-/tmp}/lis-cairosvg-venv/bin/pip" install --quiet --disable-pip-version-check CairoSVG
+"${TMPDIR:-/tmp}/lis-cairosvg-venv/bin/python" - "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.png" <<'PY'
 from pathlib import Path
 import sys
 import cairosvg
