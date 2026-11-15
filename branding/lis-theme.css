@@ -265,3 +265,46 @@ body.true--mobile .head__action.open--profile{
   .card{width:13.2em!important}
   .card__view{padding-bottom:150%!important}
 }
+
+/* Poster card correction: remove empty controls and align the metadata rail. */
+/* The upstream template always reserves an icons wrapper; hide it when empty. */
+.card__icons-inner:not(:has(*)){display:none!important}
+.card__icons:has(.card__icons-inner:not(:has(*))){display:none!important}
+.card__icons-inner{width:2.55em;height:2.55em;align-items:center;justify-content:center}
+.card__icon{display:block!important}
+/* Consistent lower metadata strip; year is positioned into the same strip. */
+.card{position:relative!important}
+.card__view{overflow:hidden!important}
+.card__quality{
+  left:0!important;right:0!important;bottom:0!important;top:auto!important;
+  width:100%;min-height:2.45em;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:flex-start;
+  padding:.38em .72em!important;
+  border:0!important;border-top:1px solid rgba(255,255,255,.16)!important;
+  border-radius:0 0 1.05em 1.05em!important;
+  background:rgba(0,0,0,.72)!important;color:#9fcaff!important;
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  font-size:.82em!important;font-weight:600;
+}
+.card__age{
+  position:absolute!important;z-index:3;
+  left:4.5em;bottom:calc(2.45em + .72em + .45em);
+  margin:0!important;padding:0!important;
+  color:#d4d6dc!important;font-size:.82em!important;
+  pointer-events:none;
+}
+.card__vote{
+  z-index:4!important;right:.55em!important;bottom:calc(2.45em + .72em + .25em)!important;
+  padding:.12em .35em!important;border-radius:.4em!important;
+  background:rgba(0,0,0,.55)!important;color:#f4dfbd!important;
+  font-size:.95em!important;
+}
+.card__vote:before{content:"★";color:#d5ad72;margin-right:.28em}
+.card__type{
+  z-index:4!important;left:.55em!important;top:.55em!important;
+  border-radius:.42em!important;padding:.32em .62em!important;
+  background:rgba(0,0,0,.72)!important;color:#f4f4f6!important;
+  border:1px solid rgba(255,255,255,.16);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  font-size:.78em!important;font-weight:600;letter-spacing:.06em;
+}
