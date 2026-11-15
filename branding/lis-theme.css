@@ -121,3 +121,70 @@
   to{background-position:-120% 0}
 }
 @media(prefers-reduced-motion:reduce){.lp-status:after{animation:none;background:#ff9b43}}
+
+/* LIS Lampa home screen: black cinematic glass with restrained amber accents. */
+:root{color-scheme:dark}
+html,body{background:#000!important}
+body{background:#000!important;color:#f5f5f7}
+.head{
+  background:linear-gradient(180deg,rgba(0,0,0,.94),rgba(0,0,0,.70) 72%,transparent)!important;
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+}
+.head__body{padding:1em 1.1em}
+.head__title{font-family:Manrope,-apple-system,sans-serif;font-weight:500;letter-spacing:-.025em;color:#f5f5f7}
+.head__menu-icon,.head__action{
+  border:1px solid rgba(255,255,255,.13);
+  background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.045));
+  border-radius:50%;box-shadow:inset 0 1px 1px rgba(255,255,255,.12);
+}
+.head__action.active:after{background:#d5ad72!important;border-color:#151515!important}
+.head__markers-item.status--live{background:#d6b47c!important;box-shadow:0 0 8px #d6b47c88}
+.items-line{padding-bottom:3.2em}
+.items-line__head{padding:0 1.1em;margin-bottom:1.15em}
+.items-line__title{font-family:Manrope,-apple-system,sans-serif;font-size:1.55em;font-weight:600;letter-spacing:-.025em;color:#f4f4f6}
+.items-line__more{
+  color:#e6d0ad!important;
+  background:rgba(255,255,255,.065)!important;
+  border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+}
+.items-cards{gap:.15em}
+.card{width:13.2em}
+.card__view{margin-bottom:.8em}
+.card__img{border-radius:1.05em;background:#151515;box-shadow:0 9px 25px rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.075)}
+.card__vote{
+  right:.45em;bottom:.45em;
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(0,0,0,.68);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  color:#f4dfbd;font-size:1.15em;padding:.22em .55em;
+}
+.card__title{font-family:Manrope,-apple-system,sans-serif;font-size:1.12em;font-weight:600;line-height:1.25;color:#f4f4f6}
+.card__age{color:#85858d;font-size:.82em}
+.navigation-bar{
+  padding:0 1em max(.8em,env(safe-area-inset-bottom))!important;
+  background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,0))!important;
+}
+.navigation-bar__body{
+  padding:.85em .45em!important;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:2.2em!important;
+  background:linear-gradient(135deg,rgba(245,246,250,.19),rgba(160,168,184,.09) 55%,rgba(255,255,255,.07))!important;
+  -webkit-backdrop-filter:blur(32px) saturate(180%);backdrop-filter:blur(32px) saturate(180%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 12px 35px rgba(0,0,0,.5);
+}
+.navigation-bar__item{
+  min-width:0;flex:1;text-align:center;color:#bfc0c7;
+  padding:.35em .2em;border-radius:1.5em;
+  transition:background .2s,color .2s;
+}
+.navigation-bar__item:active{background:rgba(255,255,255,.15);color:#fff}
+.navigation-bar__icon{width:1.75em;height:1.75em}
+.navigation-bar__label{font-family:Manrope,-apple-system,sans-serif;font-size:.78em;margin-top:.55em;color:inherit}
+@media(max-width:600px){
+  .head__body{padding:.9em 1em}
+  .head__title{font-size:1.5em}
+  .items-line__head{padding:0 1em}
+  .card{width:13.2em}
+  .navigation-bar{padding-left:.9em!important;padding-right:.9em!important}
+}
