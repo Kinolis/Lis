@@ -16,7 +16,7 @@
 .lang__selector-item.focus:after,.lang__selector-item.last-focus:after{color:#ffc18d}
 .lang__selector-item:active{transform:scale(.985)}
 .lang__selector-item:hover:not(.focus):not(.last-focus){border-color:rgba(255,255,255,.28);background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(180,190,208,.09))}
-@media(max-width:600px){.lang__logo{width:70px;height:70px;margin-bottom:18px}.lang__title{font-size:clamp(27px,7vw,34px)}.lang__selector{margin-top:26px}.lang__selector>.scroll{height:clamp(220px,35svh,270px)!important;max-height:270px!important}}
+@media(max-width:600px){.lang__logo{width:62px;height:62px;margin-bottom:18px}.lang__title{font-size:clamp(27px,7vw,34px)}.lang__selector{margin-top:26px}.lang__selector>.scroll{height:clamp(220px,35svh,270px)!important;max-height:270px!important}}
 @media(max-height:650px){.lang__logo{width:56px;height:56px;margin-bottom:12px}.lang__selector{margin-top:18px}.lang__selector>.scroll{height:260px!important;max-height:260px!important}}
 @media(prefers-reduced-motion:reduce){.lang__selector-item{transition:none!important}}
 
