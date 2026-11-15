@@ -14,6 +14,22 @@ fi
 cd "$LAMP_DIR"
 npm install --no-audit --no-fund
 
+# LIS-managed plugin preload: persist selected extensions before Lampa initializes.
+# Kinopoisk Ratings requires the companion Kinopoisk authorization plugin.
+python3 - "$LAMP_DIR/src/core/plugins.js" <<'PY'
+from pathlib import Path
+import sys
+p = Path(sys.argv[1])
+s = p.read_text(encoding="utf-8")
+s = s.replace("black_list.push('bylampa.github.io')", "// LIS: allow only the explicitly selected CUB-off plugin from this host")
+old = "puts = puts.filter(p => p.toLowerCase().indexOf(b) == -1)"
+new = "puts = puts.filter(p => p.toLowerCase().indexOf(b) == -1 || p === 'https://bylampa.github.io/cub_off.js')"
+if old not in s:
+    raise SystemExit("Could not locate Lampa plugin blacklist filter; refusing unsafe patch")
+s = s.replace(old, new)
+p.write_text(s, encoding="utf-8")
+PY
+
 # Build the upstream bundle without leaving its watch server running.
 npx gulp >"$LOG_FILE" 2>&1 &
 gulp_pid=$!
@@ -55,8 +71,38 @@ rm -rf "$OUTPUT"
 mkdir -p "$OUTPUT"
 cp -a build/github/lampa/. "$OUTPUT/"
 
-# Apply LIS welcome screen styling.
+# Apply LIS welcome screen styling and preload approved plugins.
 mkdir -p "$OUTPUT/css"
+python3 - "$OUTPUT/index.html" <<'PY'
+from pathlib import Path
+import sys
+index = Path(sys.argv[1])
+html = index.read_text(encoding="utf-8")
+bootstrap = """<script>
+(function(){
+  var plugins = [
+    'https://lampaplugins.github.io/store/logo.js',
+    'https://bylampa.github.io/cub_off.js',
+    'https://xiaomishka.github.io/lampa/ads.js',
+    'https://and7ey.github.io/lampa/kinopoisk.js',
+    'https://and7ey.github.io/lampa/kinopoisk_rating.js'
+  ];
+  try {
+    var current = JSON.parse(localStorage.getItem('plugins') || '[]');
+    if (!Array.isArray(current)) current = [];
+    plugins.forEach(function(url) {
+      if (!current.some(function(item) { return (typeof item === 'string' ? item : item.url) === url; })) {
+        current.push({url:url, status:1, name:'LIS extension'});
+      }
+    });
+    localStorage.setItem('plugins', JSON.stringify(current));
+  } catch (e) { console.warn('LIS plugin preload failed', e); }
+})();
+</script>"""
+if "LIS plugin preload failed" not in html:
+    html = html.replace("</head>", bootstrap + "\\n</head>")
+index.write_text(html, encoding="utf-8")
+PY
 cp "$ROOT/branding/lis-theme.css" "$OUTPUT/css/lis-theme.css"
 cp "$ROOT/branding/lis-fox.png" "$OUTPUT/css/lis-fox.png"
 cp "$ROOT/branding/lis-fox.png" "$OUTPUT/lis-fox.png"
