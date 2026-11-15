@@ -156,3 +156,14 @@ Every change must record: affected files, risk color, reason, test performed, re
 - The experiment workflow now runs the 12 compatible suites and packages the original Lampa GitHub web target using upstream Gulp task `pack_github`, verifying both `build/github/lampa/index.html` and `app.min.js` exist. The excluded suite is documented and must not be represented as passed.
 - The LIS static build, submodule pin verification, and launcher shell syntax all passed in the first run.
 - A green run of the revised workflow will verify the compatible tests and upstream packaging only. It does not prove playback/provider availability or browser/device compatibility.
+
+
+## Isolated local preview
+
+- Added `scripts/preview-lis.sh` on `experiment/lampa-source`. It builds the static LIS + Lampa output into `dist/` and serves that directory with Python's standard HTTP server.
+- Run from a clone of the experiment branch (including submodules): `bash scripts/preview-lis.sh`. Optional port: `bash scripts/preview-lis.sh 4173`.
+- Local URLs after the build: LIS at `http://localhost:4173/`; Lampa runtime at `http://localhost:4173/lampa/`.
+- This is a local-only preview bound to the machine running the command; it does not create a public test URL or change GitHub Pages/Cloudflare settings. Stop it with Ctrl+C.
+- The latest CI run for commit `e84eacd5bfea2b45ef92bb093dd23358ff804f30` completed successfully: both LIS static build and pinned Lampa source test/package jobs passed. The upstream torrent preload spec remains excluded because it expects code absent from the pinned source; it is not counted as passed.
+- Browser/device playback and an authorized provider/backend are still unverified. No YouTube, Internet Archive, arbitrary plugin URLs, or unreviewed provider endpoints are enabled.
+- Public preview deployment remains on hold pending maintainer clarification of the upstream GPL-2.0 LICENSE versus ISC package metadata conflict. Production `main` and the live site remain untouched.
