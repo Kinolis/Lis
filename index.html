@@ -448,7 +448,16 @@ async function loadDetailLogo(m){
   if(!wrap||!m.tmdbId)return;
   try{
     const kind=m.mediaType==='tv'||m.type==='Сериал'?'tv':'movie';
-    const response=await fetch('/api/tmdb?action=images&type='+kind+'&id='+encodeURIComponent(m.tmdbId));
+    const [response,detailsResponse]=await Promise.all([
+      fetch('/api/tmdb?action=images&type='+kind+'&id='+encodeURIComponent(m.tmdbId)),
+      fetch('/api/tmdb?action=details&type='+kind+'&id='+encodeURIComponent(m.tmdbId))
+    ]);
+    if(detailsResponse.ok){
+      const details=await detailsResponse.json();
+      m.tagline=details.item?.tagline||'';
+      const tagline=document.querySelector('.lis-tagline');
+      if(tagline)tagline.textContent=m.tagline;
+    }
     if(!response.ok)return;
     const data=await response.json();
     const logos=data.logos||[];
