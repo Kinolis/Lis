@@ -167,3 +167,10 @@ Every change must record: affected files, risk color, reason, test performed, re
 - The latest CI run for commit `e84eacd5bfea2b45ef92bb093dd23358ff804f30` completed successfully: both LIS static build and pinned Lampa source test/package jobs passed. The upstream torrent preload spec remains excluded because it expects code absent from the pinned source; it is not counted as passed.
 - Browser/device playback and an authorized provider/backend are still unverified. No YouTube, Internet Archive, arbitrary plugin URLs, or unreviewed provider endpoints are enabled.
 - Public preview deployment remains on hold pending maintainer clarification of the upstream GPL-2.0 LICENSE versus ISC package metadata conflict. Production `main` and the live site remain untouched.
+
+
+## Current direction: original Lampa only
+
+The experiment deployment is being changed to publish the upstream Lampa web package at the site root. The custom LIS home/catalog shell is not part of the deployment output. The upstream source remains pinned as the `vendor/lampa-source` submodule at `4d0b666c6c6ce1523dc501939dcfe99b0e5b87e0`; upstream files are not modified. The build script packages the upstream `pack_github` target and copies its contents directly into `dist/`. The workflow verifies `dist/index.html`, `dist/app.min.js`, `dist/css/`, and `dist/vender/`, and verifies that no nested `dist/lampa/` application is published.
+
+This change is limited to `experiment/lampa-source`. Production branch `main` is not modified. The upstream LICENSE/package metadata discrepancy remains documented and should be reviewed before wider redistribution. Successful build CI does not by itself prove video playback or provider availability.
