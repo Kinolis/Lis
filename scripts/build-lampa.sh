@@ -63,7 +63,7 @@ from pathlib import Path
 import sys
 index = Path(sys.argv[1])
 html = index.read_text(encoding="utf-8")
-link = '<link rel="stylesheet" href="css/lis-theme.css?v=3">'
+link = '<link rel="stylesheet" href="css/lis-theme.css?v=4">'
 if link not in html:
     html = html.replace("</head>", f"    {link}\\n</head>")
 index.write_text(html, encoding="utf-8")
