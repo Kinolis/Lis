@@ -71,9 +71,12 @@ import sys
 
 index = Path(sys.argv[1])
 html = index.read_text(encoding="utf-8")
-html = html.replace("<title>Lampa</title>", "<title>LIS</title>")
-if "<title>LIS</title>" not in html:
-    raise SystemExit("Could not update the page title to LIS")
+import re
+html, title_count = re.subn(r"<title>.*?</title>", "<title>LIS</title>", html, count=1, flags=re.IGNORECASE | re.DOTALL)
+if title_count == 0:
+    if "</head>" not in html:
+        raise SystemExit("Could not find </head> to add the LIS page title")
+    html = html.replace("</head>", "<title>LIS</title>\\n</head>", 1)
 
 branding = '''    <link rel="icon" type="image/png" href="./branding/lis-fox.png">\n    <link rel="apple-touch-icon" href="./branding/lis-fox.png">\n    <meta name="apple-mobile-web-app-title" content="LIS">\n    <meta name="application-name" content="LIS">\n    <meta name="description" content="LIS — фильмы и сериалы в одном месте">\n    <link rel="stylesheet" href="./branding/lis-language.css">\n'''
 if "apple-touch-icon" not in html:
