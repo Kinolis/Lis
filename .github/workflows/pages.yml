@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - lis-language-screen
   workflow_dispatch:
 
 permissions:
@@ -24,12 +25,17 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install SVG renderer for the high-resolution LIS logo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Build clean Lampa
+      - name: Build Lampa with the selected branch's LIS skin
         run: npm run build
 
       - name: Configure GitHub Pages
