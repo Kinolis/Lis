@@ -105,7 +105,7 @@ test -s "$OUTPUT/branding/lis-fox.png"
 grep -q 'branding/lis-language.css' "$OUTPUT/index.html"
 grep -q 'lis-welcome__content' "$OUTPUT/index.html"
 grep -q 'lis-fox.png' "$OUTPUT/index.html"
-if grep -Fq '\\n' "$OUTPUT/index.html"; then
+if grep -Fq '\n' "$OUTPUT/index.html"; then
   echo "Unexpected literal \\n sequence found in generated index.html" >&2
   exit 1
 fi
