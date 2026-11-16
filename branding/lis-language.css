@@ -59,7 +59,7 @@
 .lang__selector-item.last-focus:not(.focus){border-color:rgba(255,145,55,.9)!important;}
 
 /* LIS branded launch / welcome splash. */
-.welcome.lis-welcome{display:flex!important;align-items:center;justify-content:center;overflow:hidden;background:#030303!important;background-image:radial-gradient(ellipse at 50% 48%,rgba(255,111,20,.105) 0%,rgba(255,111,20,.035) 23%,transparent 52%),radial-gradient(ellipse at 0% 0%,rgba(255,112,22,.10),transparent 38%),radial-gradient(ellipse at 100% 100%,rgba(255,112,22,.075),transparent 36%)!important;color:#f7f7f8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.welcome.lis-welcome{display:flex;align-items:center;justify-content:center;overflow:hidden;background:#030303!important;background-image:radial-gradient(ellipse at 50% 48%,rgba(255,111,20,.105) 0%,rgba(255,111,20,.035) 23%,transparent 52%),radial-gradient(ellipse at 0% 0%,rgba(255,112,22,.10),transparent 38%),radial-gradient(ellipse at 100% 100%,rgba(255,112,22,.075),transparent 36%)!important;color:#f7f7f8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .lis-welcome__content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(88vw,440px);text-align:center;transform:translateY(-1.5vh);animation:lis-welcome-in .8s cubic-bezier(.2,.7,.2,1) both}
 .lis-welcome__logo{display:block;width:clamp(88px,25vw,126px);height:clamp(88px,25vw,126px);object-fit:contain;filter:drop-shadow(0 0 15px rgba(255,112,22,.28)) drop-shadow(0 0 34px rgba(255,112,22,.13))}
 .lis-welcome__brand{margin-top:9px;color:#fff;font-size:clamp(38px,10vw,54px);line-height:1;font-weight:750;letter-spacing:.075em;text-indent:.075em;text-shadow:0 0 24px rgba(255,116,28,.12)}
