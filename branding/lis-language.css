@@ -73,3 +73,11 @@
 @keyframes lis-welcome-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(-1.5vh)}}
 @media(max-height:600px){.lis-welcome__logo{width:76px;height:76px}.lis-welcome__brand{font-size:36px}.lis-welcome__title{margin-top:20px}}
 @media(prefers-reduced-motion:reduce){.lis-welcome__content,.lis-welcome__dots i{animation:none!important}}
+
+
+/* LIS owns its launch screen: hide Lampa's technical progress labels. */
+.lp-step,.lp-status{display:none!important;}
+.lis-welcome__brand{display:none!important;}
+.lis-welcome__title{margin-top:0!important;}
+.lis-welcome__subtitle{max-width:280px;}
+.lis-welcome__dots{margin-top:34px;}

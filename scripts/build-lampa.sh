@@ -81,9 +81,9 @@ if tag.strip() not in html:
 welcome = """<div class="welcome lis-welcome">
     <div class="lis-welcome__content">
         <img class="lis-welcome__logo" src="./branding/lis-fox.png" alt="LIS">
-        <div class="lis-welcome__brand">LI<span>S</span></div>
-        <div class="lis-welcome__title">Уже скоро</div>
-        <div class="lis-welcome__subtitle">Приложение LIS</div>
+        
+        <div class="lis-welcome__title">Добро пожаловать</div>
+        <div class="lis-welcome__subtitle">Ваш мир кино и сериалов</div>
         <div class="lis-welcome__dots" aria-hidden="true"><i></i><i></i><i></i></div>
     </div>
 </div>"""
