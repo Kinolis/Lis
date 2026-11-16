@@ -110,7 +110,7 @@ monitor = """<script>
 </script>"""
 if "</body>" not in html:
     raise SystemExit("Could not find </body> in packaged Lampa index.html")
-html = html.replace("</body>", monitor + "\\n</body>", 1)
+html = html.replace("</body>", monitor + "\n</body>", 1)
 
 index.write_text(html, encoding="utf-8")
 PY
