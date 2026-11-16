@@ -84,7 +84,7 @@ welcome = """<div class="welcome lis-welcome">
         
         <div class="lis-welcome__title">Добро пожаловать</div>
         <div class="lis-welcome__subtitle">Ваш мир кино и сериалов</div>
-        <div class="lis-welcome__dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="lis-welcome__progress" role="progressbar" aria-label="Загрузка LIS"></div>
     </div>
 </div>"""
 if '<div class="welcome"></div>' in html:
@@ -94,6 +94,24 @@ elif 'lis-welcome__content' not in html:
 
 html = html.replace("<title>Lampa - Каталог фильмов и сериалов</title>", "<title>LIS — каталог фильмов и сериалов</title>")
 html = html.replace('content="Lampa - Каталог фильмов и сериалов"', 'content="LIS — каталог фильмов и сериалов"')
+# Remove Lampa's separate fixed progress labels; LIS owns the loading UI.
+monitor = """<script>
+(function () {
+    function removeProgress() {
+        document.querySelectorAll('.lp-step, .lp-status').forEach(function (node) {
+            var wrapper = node.parentElement;
+            if (wrapper && wrapper.parentElement === document.body) wrapper.remove();
+            else if (wrapper) wrapper.style.setProperty('display', 'none', 'important');
+        });
+    }
+    removeProgress();
+    new MutationObserver(removeProgress).observe(document.body, {childList: true, subtree: true});
+})();
+</script>"""
+if "</body>" not in html:
+    raise SystemExit("Could not find </body> in packaged Lampa index.html")
+html = html.replace("</body>", monitor + "\\n</body>", 1)
+
 index.write_text(html, encoding="utf-8")
 PY
 
