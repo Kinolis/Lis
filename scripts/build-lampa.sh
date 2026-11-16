@@ -63,7 +63,25 @@ cp -a "$SOURCE/." "$OUTPUT/"
 mkdir -p "$OUTPUT/branding"
 cp "$ROOT/branding/lis-language.css" "$OUTPUT/branding/lis-language.css"
 cp "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.svg"
-cp "$ROOT/branding/lis-fox.png" "$OUTPUT/branding/lis-fox.png"
+# Render the vector master directly at high resolution; never upscale the old small PNG.
+if ! command -v rsvg-convert >/dev/null 2>&1; then
+  echo "rsvg-convert is required to render the LIS logo." >&2
+  exit 1
+fi
+rsvg-convert --format=png --width=1024 --height=1024 \
+  --output="$OUTPUT/branding/lis-fox.png" "$ROOT/branding/lis-fox.svg"
+python3 - "$OUTPUT/branding/lis-fox.png" <<'PY'
+from pathlib import Path
+import struct
+import sys
+png = Path(sys.argv[1]).read_bytes()
+if png[:8] != b"\x89PNG\r\n\x1a\n":
+    raise SystemExit("LIS logo is not a valid PNG")
+width, height = struct.unpack(">II", png[16:24])
+if (width, height) != (1024, 1024):
+    raise SystemExit(f"Expected a 1024x1024 LIS logo, got {width}x{height}")
+print(f"Verified high-resolution LIS logo: {width}x{height}")
+PY
 
 python3 - "$OUTPUT/index.html" <<'PY'
 from pathlib import Path
