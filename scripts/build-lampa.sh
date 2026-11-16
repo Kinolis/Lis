@@ -62,6 +62,7 @@ cp -a "$SOURCE/." "$OUTPUT/"
 # Add the LIS welcome-screen skin as a separate layer; keep upstream files intact.
 mkdir -p "$OUTPUT/branding"
 cp "$ROOT/branding/lis-language.css" "$OUTPUT/branding/lis-language.css"
+cp "$ROOT/branding/lis-ui.js" "$OUTPUT/branding/lis-ui.js"
 cp "$ROOT/branding/lis-fox.svg" "$OUTPUT/branding/lis-fox.svg"
 # Use the approved transparent LIS fox emblem as the actual site mark.
 cp "$ROOT/branding/lis-fox.png" "$OUTPUT/branding/lis-fox.png"
@@ -123,7 +124,7 @@ monitor = """<script>
 </script>"""
 if "</body>" not in html:
     raise SystemExit("Could not find </body> in packaged Lampa index.html")
-html = html.replace("</body>", monitor + "\n</body>", 1)
+html = html.replace("</body>", monitor + '\n<script src="./branding/lis-ui.js"></script>\n</body>', 1)
 
 index.write_text(html, encoding="utf-8")
 PY
@@ -131,9 +132,11 @@ PY
 test -s "$OUTPUT/index.html"
 test -s "$OUTPUT/app.min.js"
 test -s "$OUTPUT/branding/lis-language.css"
+test -s "$OUTPUT/branding/lis-ui.js"
 test -s "$OUTPUT/branding/lis-fox.svg"
 test -s "$OUTPUT/branding/lis-fox.png"
 grep -q 'branding/lis-language.css' "$OUTPUT/index.html"
+grep -q 'branding/lis-ui.js' "$OUTPUT/index.html"
 grep -q 'lis-welcome__content' "$OUTPUT/index.html"
 grep -q 'lis-fox.png' "$OUTPUT/index.html"
 if grep -Fq '\n' "$OUTPUT/index.html"; then
