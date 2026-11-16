@@ -111,15 +111,15 @@ html = html.replace('content="Lampa - Каталог фильмов и сери�
 # Remove Lampa's separate fixed progress labels; LIS owns the loading UI.
 monitor = """<script>
 (function () {
-    function removeProgress() {
+    function showProgress() {
         document.querySelectorAll('.lp-step, .lp-status').forEach(function (node) {
-            var wrapper = node.parentElement;
-            if (wrapper && wrapper.parentElement === document.body) wrapper.remove();
-            else if (wrapper) wrapper.style.setProperty('display', 'none', 'important');
+            node.style.setProperty('display', 'block', 'important');
+            node.style.setProperty('color', '#b8b8b8', 'important');
+            node.style.setProperty('text-shadow', 'none', 'important');
         });
     }
-    removeProgress();
-    new MutationObserver(removeProgress).observe(document.body, {childList: true, subtree: true});
+    showProgress();
+    new MutationObserver(showProgress).observe(document.body, {childList: true, subtree: true});
 })();
 </script>"""
 if "</body>" not in html:
