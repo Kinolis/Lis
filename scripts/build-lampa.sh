@@ -71,7 +71,7 @@ import sys
 
 index = Path(sys.argv[1])
 html = index.read_text(encoding="utf-8")
-tag = '    <link rel="stylesheet" href="./branding/lis-language.css">\\n'
+tag = '    <link rel="stylesheet" href="./branding/lis-language.css">\n'
 if tag.strip() not in html:
     if "</head>" not in html:
         raise SystemExit("Could not find </head> in packaged Lampa index.html")
@@ -103,4 +103,10 @@ test -s "$OUTPUT/branding/lis-language.css"
 test -s "$OUTPUT/branding/lis-fox.svg"
 test -s "$OUTPUT/branding/lis-fox.png"
 grep -q 'branding/lis-language.css' "$OUTPUT/index.html"
+grep -q 'lis-welcome__content' "$OUTPUT/index.html"
+grep -q 'lis-fox.png' "$OUTPUT/index.html"
+if grep -Fq '\\n' "$OUTPUT/index.html"; then
+  echo "Unexpected literal \\n sequence found in generated index.html" >&2
+  exit 1
+fi
 echo "Built original Lampa with the isolated LIS language-screen skin into $OUTPUT"
